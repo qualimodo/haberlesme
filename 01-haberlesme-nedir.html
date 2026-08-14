@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Haberleşme Nedir?</title>
+<style>
+  :root{
+    --bg:#070a10; --panel:#0e131d; --panel2:#131b28; --line:#1e2736;
+    --ink:#e8eef7; --dim:#9aabc2; --dim2:#5d6d85; --acc:#7cf5c4;
+    --err:#ff9d4d;
+    --l1:#cde2fb; --l2:#86b6ef; --l3:#3987e5;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);line-height:1.6;padding-bottom:60px;
+    font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:960px;margin:0 auto;padding:0 22px}
+
+  header{padding:46px 0 20px;
+    background:radial-gradient(900px 300px at 16% -12%,rgba(42,120,214,.16),transparent 62%)}
+  .kick{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);font-weight:700}
+  h1{font-size:38px;font-weight:700;letter-spacing:-.03em;margin:12px 0 12px;line-height:1.1}
+  header p{color:var(--dim);font-size:16px;max-width:600px}
+
+  /* ---------- sahne ---------- */
+  .scene{background:var(--panel);border:1px solid var(--line);border-radius:16px;
+    margin-top:24px;padding:6px 6px 0}
+  canvas{display:block;width:100%;height:250px;border-radius:12px}
+
+  .knob{display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+    padding:16px 16px 18px;border-top:1px solid var(--line);margin-top:6px}
+  .knob label{font-size:13px;color:var(--dim);white-space:nowrap;font-weight:500}
+  input[type=range]{-webkit-appearance:none;appearance:none;flex:1;min-width:150px;height:4px;
+    border-radius:3px;background:#25324a;outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;
+    border-radius:50%;background:var(--acc);cursor:pointer;box-shadow:0 0 0 4px rgba(124,245,196,.15)}
+  input[type=range]::-moz-range-thumb{width:18px;height:18px;border:none;border-radius:50%;
+    background:var(--acc);cursor:pointer}
+  .lvl{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;color:var(--acc);
+    min-width:74px;text-align:right;font-weight:600}
+  input[type=text]{background:var(--panel2);border:1px solid var(--line);border-radius:9px;
+    padding:9px 13px;color:var(--ink);font:inherit;font-size:14px;outline:none;width:190px;
+    letter-spacing:.06em;text-transform:uppercase}
+  input[type=text]:focus{border-color:#33445f}
+  .sep{width:1px;height:24px;background:var(--line)}
+
+  .say{margin-top:14px;font-size:15px;color:var(--dim);text-align:center}
+  .say b{color:#fff;font-weight:640}
+  .say .bad{color:var(--err)}
+
+  /* ---------- dört parça ---------- */
+  h2{font-size:22px;font-weight:660;letter-spacing:-.02em;margin:44px 0 6px}
+  .lead{color:var(--dim);font-size:15px;margin-bottom:18px}
+  .parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(206px,1fr));gap:12px}
+  .part{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:16px;
+    cursor:pointer;transition:.16s;border-top:3px solid var(--pc)}
+  .part:hover{background:var(--panel2);border-color:#2c3b53}
+  .part.on{background:var(--panel2);border-color:var(--pc)}
+  .part .n{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--dim2);font-weight:600}
+  .part h3{font-size:16px;font-weight:660;margin:6px 0 7px;color:var(--pc)}
+  .part p{font-size:13.5px;color:#c0cddf;line-height:1.62}
+
+  /* ---------- katmanlar ---------- */
+  .tabs{display:flex;gap:6px;margin:44px 0 16px}
+  .tabs button{flex:1;font:inherit;font-size:13px;font-weight:600;color:var(--dim);
+    background:var(--panel2);border:1px solid var(--line);padding:11px;border-radius:10px;
+    cursor:pointer;transition:.15s}
+  .tabs button:hover{color:var(--ink);border-color:#33445f}
+  .tabs button.on.t1{background:rgba(205,226,251,.13);border-color:rgba(205,226,251,.5);color:var(--l1)}
+  .tabs button.on.t2{background:rgba(134,182,239,.13);border-color:rgba(134,182,239,.5);color:var(--l2)}
+  .tabs button.on.t3{background:rgba(57,135,229,.17);border-color:rgba(57,135,229,.55);color:var(--l3)}
+  #metin{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
+  #metin h4{font-size:19px;font-weight:660;letter-spacing:-.015em;margin-bottom:12px}
+  #metin p{font-size:15.5px;color:#c8d5e6;line-height:1.75;margin-bottom:13px}
+  #metin p:last-child{margin-bottom:0}
+  #metin b{color:#fff;font-weight:640}
+  #metin .not{font-size:14px;color:var(--acc);border-left:2px solid var(--acc);
+    padding-left:14px;margin-top:16px;line-height:1.7}
+
+  footer{margin-top:38px;padding-top:20px;border-top:1px solid var(--line);
+    font-size:13px;color:var(--dim2);line-height:1.75}
+
+  @media (max-width:640px){
+    h1{font-size:27px} .wrap{padding:0 15px}
+    canvas{height:220px}
+    input[type=text]{width:100%}
+    .knob{gap:12px} .sep{display:none}
+  }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="kick">101 Konuda Haberleşme · Konu 01</div>
+  <h1>Haberleşme nedir?</h1>
+  <p>Bir yerdeki bilginin başka bir yere ulaşmasına haberleşme denir. Aşağıdaki sürgüyü
+     çekerek yolda ne olduğunu görebilirsin.</p>
+</header>
+
+<main class="wrap">
+
+  <div class="scene">
+    <canvas id="cv"></canvas>
+    <div class="knob">
+      <label for="g">Gürültü</label>
+      <input type="range" id="g" min="0" max="100" value="18">
+      <span class="lvl" id="gl">az</span>
+      <div class="sep"></div>
+      <label for="msg">Mesaj</label>
+      <input type="text" id="msg" value="MERHABA" maxlength="11" spellcheck="false">
+    </div>
+  </div>
+  <div class="say" id="say"></div>
+
+  <h2>Her haberleşmede dört parça bulunur</h2>
+  <p class="lead">Bir karta dokunduğunda o parça yukarıdaki resimde işaretlenir.</p>
+  <div class="parts">
+    <div class="part" data-p="0" style="--pc:#cde2fb">
+      <div class="n">01</div><h3>Mesaj</h3>
+      <p>Söylemek istediğin şeyin kendisidir. Burada <b>MERHABA</b> kelimesi mesajdır.</p>
+    </div>
+    <div class="part" data-p="1" style="--pc:#7cf5c4">
+      <div class="n">02</div><h3>Sinyal</h3>
+      <p>Mesajı taşıyan şeydir. Konuşurken ses, telefonda ise elektromanyetik dalga sinyal olur.</p>
+    </div>
+    <div class="part" data-p="2" style="--pc:#86b6ef">
+      <div class="n">03</div><h3>Kanal</h3>
+      <p>Sinyalin içinden geçtiği yoldur. Hava, bakır kablo ve cam fiber birer kanaldır.</p>
+    </div>
+    <div class="part" data-p="3" style="--pc:#ff9d4d">
+      <div class="n">04</div><h3>Gürültü</h3>
+      <p>Yolda sinyale karışan istenmeyen her şeydir. Gürültü mesajın bir kısmını bozar.</p>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="t1 on" data-l="1">L1 · Herkes</button>
+    <button class="t2" data-l="2">L2 · Meraklı</button>
+    <button class="t3" data-l="3">L3 · Mühendis</button>
+  </div>
+  <div id="metin"></div>
+
+  <footer>
+    Bu sayfadaki bozulmalar gerçekten rastgele üretilir. Sürgüyü her oynattığında her harf,
+    seçtiğin olasılıkla bağımsız olarak bozulma riski taşır. Aynı ayarda iki gönderim
+    birbirinin aynısı olmaz.
+  </footer>
+</main>
+
+<script>
+"use strict";
+/* ===========================================================================
+   KONU 01 — HABERLEŞME NEDİR?
+   Amaç: dört temel parçayı (mesaj, sinyal, kanal, gürültü) tek bir sahnede
+   göstermek. Bilerek sade tutuldu; matematiksel model 48-51. konulara ait.
+   =========================================================================== */
+const $ = id => document.getElementById(id);
+const cv = $('cv'), ctx = cv.getContext('2d');
+const ALFABE = 'ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ';
+
+let mesaj = 'MERHABA';
+let gurultu = 0.18;         // harf başına bozulma olasılığı
+let vurgu = -1;             // hangi parça işaretli (-1 yok)
+let katman = 1;
+let harfler = [];           // uçmakta olan harfler
+let alinan = [];            // karşıya varmış harfler
+let sonGonderim = 0, tur = 0;
+let benekler = [];
+let W = 0, H = 0, dpr = 1;
+
+/* ---------------- ölçüler ---------------- */
+function olcu(){
+  dpr = Math.min(2, devicePixelRatio || 1);
+  W = cv.clientWidth; H = cv.clientHeight;
+  cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+const kutuG = () => Math.min(238, W*0.29);
+const solX  = () => 16;
+const sagX  = () => W - kutuG() - 16;
+const kanalX0 = () => solX() + kutuG() + 14;
+const kanalX1 = () => sagX() - 14;
+const orta = () => H*0.52;
+
+/* ---------------- gönderim ---------------- */
+function gonder(){
+  harfler = []; alinan = []; tur++;
+  const n = mesaj.length;
+  for(let i=0;i<n;i++){
+    const dogru = mesaj[i];
+    const bozuk = Math.random() < gurultu && dogru !== ' ';
+    let gelen = dogru;
+    if(bozuk){
+      do { gelen = ALFABE[Math.floor(Math.random()*ALFABE.length)]; } while(gelen === dogru);
+    }
+    harfler.push({
+      dogru, gelen, bozuk, i,
+      t: -i*0.145,                        // aralarında boşluk kalsın, üst üste binmesinler
+      vurus: 0.30 + Math.random()*0.45,   // gürültünün çarptığı an
+      carpti: false
+    });
+  }
+}
+
+/* ---------------- çizim ---------------- */
+function yuvarlakKutu(x,y,w,h,r,dolgu,cizgi){
+  ctx.beginPath(); ctx.roundRect(x,y,w,h,r);
+  if(dolgu){ ctx.fillStyle = dolgu; ctx.fill(); }
+  if(cizgi){ ctx.strokeStyle = cizgi; ctx.lineWidth = 1.4; ctx.stroke(); }
+}
+
+function harfKutusu(x, y, ch, boy, renk, zemin){
+  const w = boy*0.78, h = boy*1.02;
+  yuvarlakKutu(x-w/2, y-h/2, w, h, boy*0.2, zemin, null);
+  ctx.fillStyle = renk;
+  ctx.font = `650 ${boy*0.6}px ui-monospace, Menlo, Consolas, monospace`;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(ch, x, y+1);
+}
+
+function etiket(metin, x, y, renk, vurgulu){
+  ctx.font = `700 ${vurgulu?11.5:10.5}px system-ui, sans-serif`;
+  ctx.textAlign = 'center'; ctx.textBaseline = 'alphabetic';
+  ctx.fillStyle = renk;
+  ctx.letterSpacing = '1.6px';
+  ctx.fillText(metin, x, y);
+  ctx.letterSpacing = '0px';
+}
+
+function ciz(zaman){
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = '#080c14'; ctx.fillRect(0,0,W,H);
+
+  const y = orta(), kw = kutuG(), kh = Math.min(96, H*0.30);
+  const k0 = kanalX0(), k1 = kanalX1();
+  const boy = Math.min(30, (kw-24)/Math.max(6, mesaj.length) * 1.25);
+
+  /* --- kanal şeridi --- */
+  const kanalVurgu = vurgu === 2;
+  yuvarlakKutu(k0, y-kh*0.62, k1-k0, kh*1.24, 14,
+    kanalVurgu ? 'rgba(134,182,239,.10)' : 'rgba(255,255,255,.018)',
+    kanalVurgu ? 'rgba(134,182,239,.55)' : 'rgba(255,255,255,.07)');
+
+  // hafif taşıyıcı dalgası
+  ctx.strokeStyle = vurgu===1 ? 'rgba(124,245,196,.75)' : 'rgba(124,245,196,.30)';
+  ctx.lineWidth = vurgu===1 ? 2.2 : 1.6;
+  ctx.beginPath();
+  for(let x=k0+8; x<=k1-8; x+=3){
+    const yy = y + Math.sin((x*0.055) - zaman*0.004) * (kh*0.20);
+    x===k0+8 ? ctx.moveTo(x,yy) : ctx.lineTo(x,yy);
+  }
+  ctx.stroke();
+
+  /* --- gürültü benekleri --- */
+  const hedef = Math.round(gurultu * 230);
+  while(benekler.length < hedef) benekler.push({
+    x: k0 + Math.random()*(k1-k0), y: y + (Math.random()-0.5)*kh*1.1,
+    r: 0.8 + Math.random()*1.9, o: Math.random(), h: 0.3+Math.random()*0.9 });
+  while(benekler.length > hedef) benekler.pop();
+  const gVurgu = vurgu === 3;
+  for(const b of benekler){
+    b.o += 0.055*b.h;
+    const a = (0.28 + 0.45*Math.abs(Math.sin(b.o))) * (gVurgu ? 1.7 : 1);
+    ctx.fillStyle = `rgba(255,157,77,${Math.min(0.95,a)})`;
+    ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, 6.2832); ctx.fill();
+  }
+
+  /* --- gönderen kutusu --- */
+  const mVurgu = vurgu === 0;
+  yuvarlakKutu(solX(), y-kh/2, kw, kh, 14, '#0e1622',
+    mVurgu ? 'rgba(205,226,251,.65)' : 'rgba(255,255,255,.09)');
+  const adim = Math.min(boy*0.86, (kw-26)/Math.max(1,mesaj.length));
+  const bas = solX() + kw/2 - adim*(mesaj.length-1)/2;
+  for(let i=0;i<mesaj.length;i++)
+    harfKutusu(bas + i*adim, y, mesaj[i], boy, '#cde2fb', 'rgba(205,226,251,.10)');
+
+  /* --- alan kutusu --- */
+  yuvarlakKutu(sagX(), y-kh/2, kw, kh, 14, '#0e1622', 'rgba(255,255,255,.09)');
+  const bas2 = sagX() + kw/2 - adim*(mesaj.length-1)/2;
+  for(const h of alinan){
+    const r = h.bozuk ? '#ff9d4d' : '#cde2fb';
+    const z = h.bozuk ? 'rgba(255,157,77,.14)' : 'rgba(205,226,251,.10)';
+    harfKutusu(bas2 + h.i*adim, y, h.gelen, boy, r, z);
+  }
+
+  /* --- uçan harfler --- */
+  for(const h of harfler){
+    if(h.t < 0 || h.t > 1) continue;
+    const x = (k0+boy*0.5) + ((k1-boy*0.5)-(k0+boy*0.5))*h.t;
+    if(h.bozuk && h.t > h.vurus) h.carpti = true;
+    const bozukGoster = h.carpti;
+    const ch = bozukGoster ? h.gelen : h.dogru;
+    const r = bozukGoster ? '#ff9d4d' : '#cde2fb';
+    // çarpma parlaması
+    const d = Math.abs(h.t - h.vurus);
+    if(h.bozuk && d < 0.10){
+      const g2 = 1 - d/0.10;
+      ctx.strokeStyle = `rgba(255,157,77,${0.85*g2})`;
+      ctx.lineWidth = 2*g2;
+      ctx.beginPath(); ctx.arc(x, y, boy*(0.62 + 0.75*(1-g2)), 0, 6.2832); ctx.stroke();
+    }
+    harfKutusu(x, y, ch, boy*0.92, r, bozukGoster?'rgba(38,20,10,.94)':'rgba(12,18,28,.94)');
+  }
+
+  /* --- etiketler --- */
+  const alt = y + kh*0.62 + 20;
+  etiket('MESAJ',  solX()+kw/2, y-kh/2-14, vurgu===0?'#cde2fb':'rgba(154,171,194,.7)', vurgu===0);
+  etiket('ALINAN MESAJ', sagX()+kw/2, y-kh/2-14, 'rgba(154,171,194,.7)', false);
+  etiket('KANAL',  (k0+k1)/2, y-kh*0.62-14, vurgu===2?'#86b6ef':'rgba(154,171,194,.7)', vurgu===2);
+  etiket('SİNYAL', k0 + (k1-k0)*0.24, alt, vurgu===1?'#7cf5c4':'rgba(124,245,196,.45)', vurgu===1);
+  etiket('GÜRÜLTÜ',k0 + (k1-k0)*0.76, alt, vurgu===3?'#ff9d4d':'rgba(255,157,77,.5)', vurgu===3);
+}
+
+/* ---------------- döngü ---------------- */
+function kare(zaman){
+  if(zaman - sonGonderim > 4400){ sonGonderim = zaman; gonder(); }
+  const hiz = 0.0100;
+  for(const h of harfler){
+    if(h.t <= 1){
+      h.t += hiz;
+      if(h.t > 1 && !alinan.includes(h)) alinan.push(h);
+    }
+  }
+  ciz(zaman);
+  requestAnimationFrame(kare);
+}
+
+/* ---------------- sayaç ---------------- */
+function sayacYaz(){
+  const n = mesaj.replace(/ /g,'').length;
+  const yanlis = alinan.filter(h=>h.bozuk).length;
+  const s = $('say');
+  if(yanlis === 0) s.innerHTML = `<b>${n}</b> harfin tamamı doğru geldi.`;
+  else s.innerHTML = `<b>${n}</b> harften <b class="bad">${yanlis}</b> tanesi yanlış geldi.`;
+}
+setInterval(sayacYaz, 260);
+
+/* ---------------- kontroller ---------------- */
+const SEVIYE = [[0.06,'yok denecek kadar az'],[0.16,'az'],[0.34,'orta'],[0.55,'çok'],[1.01,'çok fazla']];
+$('g').oninput = e => {
+  gurultu = +e.target.value/100 * 0.65;
+  $('gl').textContent = SEVIYE.find(s => gurultu < s[0])[1];
+  gonder(); sonGonderim = performance.now();
+};
+$('msg').oninput = e => {
+  const t = e.target.value.toLocaleUpperCase('tr-TR').replace(/[^A-ZÇĞİÖŞÜ ]/g,'');
+  e.target.value = t;
+  mesaj = t.trim() === '' ? 'MERHABA' : t;
+  gonder(); sonGonderim = performance.now();
+};
+document.querySelectorAll('.part').forEach(el => el.onclick = () => {
+  const p = +el.dataset.p;
+  vurgu = (vurgu === p) ? -1 : p;
+  document.querySelectorAll('.part').forEach(x => x.classList.toggle('on', +x.dataset.p === vurgu));
+});
+
+/* ---------------- katman metinleri ---------------- */
+const METIN = {
+1:{ b:'Bir mesaj yola çıkıyor',
+    p:[`Haberleşme, bir yerdeki bilginin başka bir yere ulaşmasıdır. Annenin mutfaktan
+        seslenmesi de bir uydunun uzaydan fotoğraf göndermesi de haberleşmedir.
+        Aradaki tek fark mesafedir.`,
+       `Yukarıdaki resimde <b>MERHABA</b> kelimesi soldan sağa gidiyor. Yolda turuncu
+        noktalar var. Bu noktalar <b>gürültü</b> denilen şeydir. Bir harf turuncu bir
+        noktaya çarparsa yanlış harfe dönüşür.`,
+       `Sürgüyü sağa çektiğinde turuncu noktalar çoğalır ve daha çok harf bozulur.
+        Sonunda kelime okunamaz hale gelir.`],
+    n:'Kendi kelimeni de yazabilirsin. Kutuya adını yaz ve sürgüyü sonuna kadar çek.'},
+
+2:{ b:'Gürültü neden vazgeçilmez bir sorundur?',
+    p:[`Gürültü bir arıza değildir. Bir kablonun içindeki elektronlar sıcaklık yüzünden
+        sürekli titreşir ve bu titreşim küçük bir elektriksel dalgalanma üretir. Bu
+        dalgalanma her devrede, her sıcaklıkta bulunur. Yalnızca mutlak sıfır sıcaklıkta
+        yok olur; o sıcaklığa da ulaşmak mümkün değildir.`,
+       `Alıcı taraf, kendisine gelen sinyale bakarak bir karar vermek zorundadır.
+        Gürültü büyüdükçe bu karar zorlaşır ve alıcı zaman zaman yanılır. Yukarıdaki
+        turuncu harfler bu yanılmaları temsil eder.`,
+       `Mühendislik burada devreye girer. Gürültüyü ortadan kaldıramayız, ama sinyali
+        güçlendirebilir, daha dayanıklı bir sinyal biçimi seçebilir veya mesaja
+        koruma amaçlı fazlalık ekleyebiliriz. Serinin geri kalanı büyük ölçüde bu üç
+        yolun ayrıntısıdır.`],
+    n:'En basit korunma yöntemi, aynı mesajı üç kez gönderip üçünden ikisine bakmaktır. Bu fikri 52. konuda ayrıntısıyla ele alacağız.'},
+
+3:{ b:'Kavramların yerli yerine oturması',
+    p:[`Claude Shannon 1948 yılında yayımladığı çalışmada haberleşmeyi beş bileşenli bir
+        zincir olarak tanımladı: kaynak, verici, kanal, alıcı ve hedef. Gürültü ise
+        kanala dışarıdan eklenen bağımsız bir bileşendir. Bu sayfadaki dört parça, o
+        modelin sadeleştirilmiş halidir.`,
+       `Shannon'ın asıl katkısı, bilgiyi ölçülebilir bir büyüklük haline getirmesiydi.
+        Bir olayın taşıdığı bilgi miktarı, o olayın ne kadar beklenmedik olduğuyla
+        orantılıdır. Bu tanım sayesinde "bir kanaldan en fazla ne kadar bilgi
+        geçebilir" sorusunun kesin bir cevabı vardır.`,
+       `Bu sayfadaki benzetim, harf başına bağımsız ve eşit olasılıklı bir bozulma
+        varsayar. Gerçek kanallar böyle davranmaz; bozulmalar çoğu zaman öbekler
+        halinde gelir ve harfler arasında bağımlılık bulunur. Gerçekçi kanal
+        modellerini ve hata olasılığının kesin ifadesini 48-51. konularda kuracağız.`],
+    n:'Sıradaki konu, dört parçadan ikincisi olan sinyaldir. Bir mesajın taşınabilir hale nasıl geldiğini inceleyeceğiz.'},
+};
+function metinYaz(){
+  const m = METIN[katman];
+  $('metin').innerHTML = `<h4>${m.b}</h4>` + m.p.map(x=>`<p>${x}</p>`).join('') +
+    `<div class="not">${m.n}</div>`;
+}
+document.querySelectorAll('[data-l]').forEach(b => b.onclick = () => {
+  document.querySelectorAll('[data-l]').forEach(x => x.classList.remove('on'));
+  b.classList.add('on'); katman = +b.dataset.l; metinYaz();
+});
+
+/* ---------------- başlat ---------------- */
+if(!CanvasRenderingContext2D.prototype.roundRect){
+  CanvasRenderingContext2D.prototype.roundRect = function(x,y,w,h,r){
+    this.moveTo(x+r,y); this.arcTo(x+w,y,x+w,y+h,r); this.arcTo(x+w,y+h,x,y+h,r);
+    this.arcTo(x,y+h,x,y,r); this.arcTo(x,y,x+w,y,r); this.closePath(); return this; };
+}
+addEventListener('resize', olcu);
+olcu(); metinYaz(); gonder(); sayacYaz();
+requestAnimationFrame(kare);
+</script>
+</body>
+</html>
