@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sayfa bulunamadı — 101 Konuda Haberleşme</title>
+<style>
+  :root{
+    --bg:#070a10; --panel:#0e131d; --panel2:#131b28; --line:#1e2736;
+    --ink:#e8eef7; --dim:#9aabc2; --dim2:#5d6d85; --acc:#7cf5c4; --err:#ff9d4d;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{background:var(--bg);color:var(--ink);line-height:1.6;
+    font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    display:flex;align-items:center;justify-content:center;padding:40px 22px;
+    background-image:radial-gradient(760px 340px at 50% 4%,rgba(42,120,214,.15),transparent 66%)}
+  .kutu{max-width:560px;width:100%;text-align:center}
+
+  .kod{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:96px;font-weight:700;
+    letter-spacing:-.05em;line-height:1;color:#1c2740;user-select:none}
+  .kod span{color:var(--err);opacity:.55}
+
+  h1{font-size:29px;font-weight:680;letter-spacing:-.025em;margin:22px 0 12px;line-height:1.2}
+  p{color:var(--dim);font-size:15.5px;margin-bottom:10px}
+  p:last-of-type{margin-bottom:0}
+
+  /* seri temasına göndermeli küçük dokunuş */
+  .harfler{display:flex;gap:5px;justify-content:center;margin:30px 0 6px;flex-wrap:wrap}
+  .h{width:29px;height:36px;border-radius:7px;background:rgba(205,226,251,.09);
+    display:flex;align-items:center;justify-content:center;
+    font-family:ui-monospace,Menlo,Consolas,monospace;font-size:16px;font-weight:650;color:#cde2fb}
+  .h.bad{background:rgba(255,157,77,.13);color:var(--err)}
+  .alt{font-size:12.5px;color:var(--dim2);margin-top:12px}
+
+  a.don{display:inline-block;margin-top:32px;text-decoration:none;
+    font-size:14.5px;font-weight:600;color:#04140d;background:var(--acc);
+    padding:13px 24px;border-radius:11px;transition:.16s}
+  a.don:hover{filter:brightness(1.08);transform:translateY(-1px)}
+
+  @media (max-width:520px){ .kod{font-size:70px} h1{font-size:24px} .h{width:25px;height:32px;font-size:14px} }
+</style>
+</head>
+<body>
+  <div class="kutu">
+    <div class="kod">4<span>0</span>4</div>
+    <h1>Bu mesaj hedefine ulaşamadı</h1>
+    <p>Aradığın sayfa burada yok. Adres yanlış yazılmış ya da sayfa taşınmış olabilir.</p>
+
+    <div class="harfler">
+      <div class="h">S</div><div class="h">A</div><div class="h bad">Z</div><div class="h">F</div>
+      <div class="h">A</div><div class="h bad">K</div><div class="h">U</div><div class="h">L</div>
+      <div class="h">U</div><div class="h">N</div><div class="h bad">Ş</div><div class="h">M</div>
+      <div class="h">A</div><div class="h">D</div><div class="h">I</div>
+    </div>
+    <div class="alt">Turuncu harfler yolda bozulanlar. Konu 01'de tam olarak bunu anlatıyoruz.</div>
+
+    <a class="don" href="/haberlesme/">Ana sayfaya dön</a>
+  </div>
+</body>
+</html>
