@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kablolu mu, Kablosuz mu?</title>
+<style>
+  :root{
+    --bg:#070a10; --panel:#0e131d; --panel2:#131b28; --line:#1e2736;
+    --ink:#e8eef7; --dim:#9aabc2; --dim2:#5d6d85; --acc:#7cf5c4; --err:#ff9d4d;
+    --kablo:#d99a5a; --hava:#7cf5c4;
+    --l1:#cde2fb; --l2:#86b6ef; --l3:#3987e5;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);line-height:1.6;padding-bottom:60px;
+    font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:960px;margin:0 auto;padding:0 22px}
+
+  header{background:radial-gradient(900px 300px at 16% -12%,rgba(42,120,214,.16),transparent 62%)}
+  header.wrap{padding-top:84px;padding-bottom:22px}
+  .kick{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);font-weight:700}
+  h1{font-size:38px;font-weight:700;letter-spacing:-.03em;margin:18px 0 13px;line-height:1.1}
+  header p{color:var(--dim);font-size:16px;max-width:620px}
+
+  .scene{background:var(--panel);border:1px solid var(--line);border-radius:16px;
+    margin-top:26px;padding:6px 6px 0}
+  canvas{display:block;width:100%;height:330px;border-radius:12px}
+
+  .knob{display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+    padding:16px 16px 18px;border-top:1px solid var(--line);margin-top:6px}
+  .knob label{font-size:13px;color:var(--dim);white-space:nowrap;font-weight:500}
+  input[type=range]{-webkit-appearance:none;appearance:none;flex:1;min-width:170px;height:4px;
+    border-radius:3px;background:#25324a;outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;
+    border-radius:50%;background:var(--acc);cursor:pointer;box-shadow:0 0 0 4px rgba(124,245,196,.15)}
+  input[type=range]::-moz-range-thumb{width:18px;height:18px;border:none;border-radius:50%;
+    background:var(--acc);cursor:pointer}
+  .lvl{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;color:var(--acc);
+    min-width:96px;text-align:right;font-weight:600}
+  input[type=text]{background:var(--panel2);border:1px solid var(--line);border-radius:9px;
+    padding:9px 13px;color:var(--ink);font:inherit;font-size:14px;outline:none;width:170px;
+    letter-spacing:.06em;text-transform:uppercase}
+  input[type=text]:focus{border-color:#33445f}
+  .sep{width:1px;height:24px;background:var(--line)}
+
+  .skor{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  .kart{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--kc);
+    border-radius:13px;padding:15px 17px}
+  .kart .b{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--kc);font-weight:700}
+  .kart .d{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:26px;font-weight:680;
+    margin:7px 0 2px;letter-spacing:-.02em}
+  .kart .a{font-size:12.5px;color:var(--dim2)}
+  .kart .o{font-size:13px;color:#c2cfe1;margin-top:9px;padding-top:9px;border-top:1px solid #1a2333}
+
+  h2{font-size:22px;font-weight:660;letter-spacing:-.02em;margin:46px 0 6px}
+  .lead{color:var(--dim);font-size:15px;margin-bottom:18px}
+  .parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(216px,1fr));gap:12px}
+  .part{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:17px;
+    border-top:3px solid var(--pc)}
+  .part h3{font-size:16px;font-weight:660;margin-bottom:8px;color:var(--pc)}
+  .part p{font-size:13.5px;color:#c0cddf;line-height:1.65;margin-bottom:8px}
+  .part p:last-child{margin-bottom:0}
+  .part b{color:#fff;font-weight:640}
+
+  .tabs{display:flex;gap:6px;margin:46px 0 16px}
+  .tabs button{flex:1;font:inherit;font-size:13px;font-weight:600;color:var(--dim);
+    background:var(--panel2);border:1px solid var(--line);padding:11px;border-radius:10px;
+    cursor:pointer;transition:.15s}
+  .tabs button:hover{color:var(--ink);border-color:#33445f}
+  .tabs button.on.t1{background:rgba(205,226,251,.13);border-color:rgba(205,226,251,.5);color:var(--l1)}
+  .tabs button.on.t2{background:rgba(134,182,239,.13);border-color:rgba(134,182,239,.5);color:var(--l2)}
+  .tabs button.on.t3{background:rgba(57,135,229,.17);border-color:rgba(57,135,229,.55);color:var(--l3)}
+  #metin{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
+  #metin h4{font-size:19px;font-weight:660;letter-spacing:-.015em;margin-bottom:12px}
+  #metin p{font-size:15.5px;color:#c8d5e6;line-height:1.75;margin-bottom:13px}
+  #metin p:last-child{margin-bottom:0}
+  #metin b{color:#fff;font-weight:640}
+  #metin .not{font-size:14px;color:var(--acc);border-left:2px solid var(--acc);
+    padding-left:14px;margin-top:16px;line-height:1.7}
+
+  footer{margin-top:38px;padding-top:20px;border-top:1px solid var(--line);
+    font-size:13px;color:var(--dim2);line-height:1.75}
+
+  @media (max-width:640px){
+    h1{font-size:27px} .wrap{padding:0 15px} header.wrap{padding-top:58px;padding-bottom:18px}
+    canvas{height:290px} .skor{grid-template-columns:1fr}
+    input[type=text]{width:100%} .knob{gap:12px} .sep{display:none}
+  }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="kick">101 Konuda Haberleşme · Konu 03</div>
+  <h1>Kablolu mu, kablosuz mu?</h1>
+  <p>Aynı mesajı iki yoldan aynı anda gönderiyoruz. Sonra ortama başka kullanıcılar
+     ekliyoruz. Birinde hiçbir şey değişmiyor, diğerinde her şey değişiyor.</p>
+</header>
+
+<main class="wrap">
+
+  <div class="scene">
+    <canvas id="cv"></canvas>
+    <div class="knob">
+      <label for="k">Aynı ortamdaki kullanıcı</label>
+      <input type="range" id="k" min="1" max="12" step="1" value="1">
+      <span class="lvl" id="kl">1 kişi</span>
+      <div class="sep"></div>
+      <label for="msg">Mesaj</label>
+      <input type="text" id="msg" value="MERHABA" maxlength="11" spellcheck="false">
+    </div>
+  </div>
+
+  <div class="skor">
+    <div class="kart" style="--kc:var(--kablo)">
+      <div class="b">Kablolu</div>
+      <div class="d" id="dK">0 hata</div>
+      <div class="a" id="aK">hız payın %100</div>
+      <div class="o">Kablon senin. Kaç kişi eklenirse eklensin, senin hattından
+        başkası geçmiyor.</div>
+    </div>
+    <div class="kart" style="--kc:var(--hava)">
+      <div class="b">Kablosuz</div>
+      <div class="d" id="dW">0 hata</div>
+      <div class="a" id="aW">hız payın %100</div>
+      <div class="o" id="oW">Şu an ortamda başka kimse yok, o yüzden hava tamamen senin.</div>
+    </div>
+  </div>
+
+  <h2>Aynı işi iki farklı şekilde yapmak</h2>
+  <p class="lead">Sürgüyü sağa çek ve iki şeridi karşılaştır.</p>
+  <div class="parts">
+    <div class="part" style="--pc:#d99a5a">
+      <h3>Kablolu: kanal senindir</h3>
+      <p>Her kullanıcının kendi kablosu vardır. Ortamda kaç kişi olursa olsun senin
+        hattından başka kimse geçmez.</p>
+      <p>Bu yüzden sonuç <b>öngörülebilirdir</b>. Dün ne kadar hızlıysa bugün de o kadar hızlıdır.</p>
+    </div>
+    <div class="part" style="--pc:#7cf5c4">
+      <h3>Kablosuz: kanal ortaktır</h3>
+      <p>Hava tek ve herkese açıktır. Aynı anda iki kişi konuşursa ikisi de bozulur.
+        Buna <b>çarpışma</b> denir.</p>
+      <p>Kullanıcı sayısı arttıkça hem çarpışma artar hem de kapasite bölünür. İki fark
+        aynı anda çalışır.</p>
+    </div>
+    <div class="part" style="--pc:#86b6ef">
+      <h3>Kablo ne zaman kazanır?</h3>
+      <p>Veri merkezleri, ses stüdyoları, borsa sistemleri ve uçak kumandaları hâlâ
+        kablo kullanır.</p>
+      <p>Sebep hız değil, <b>güvenilirlik</b>. Bu sistemlerde "bazen gecikir" kabul
+        edilebilir bir cevap değildir.</p>
+    </div>
+    <div class="part" style="--pc:#cde2fb">
+      <h3>Kablosuz ne zaman kazanır?</h3>
+      <p>Hareket etmen gerekiyorsa, kablo çekmek imkânsızsa veya kullanıcı sayısı önceden
+        belli değilse kablosuz kazanır.</p>
+      <p>Cep telefonu kablolu olsaydı çalışmazdı. Mesele hız değil, <b>hareket</b>.</p>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="t1 on" data-l="1">L1 · Herkes</button>
+    <button class="t2" data-l="2">L2 · Meraklı</button>
+    <button class="t3" data-l="3">L3 · Mühendis</button>
+  </div>
+  <div id="metin"></div>
+
+  <footer>
+    Çarpışma olasılığı, her kullanıcının bağımsız ve %10 olasılıkla yayın yaptığı
+    varsayımıyla hesaplanıyor. Gerçek sistemler bu çarpışmaları azaltmak için çoklu erişim
+    protokolleri kullanır, dolayısıyla buradaki model gerçeğinden daha kötümserdir.
+    Amacı, koordinasyon olmadığında ne olacağını göstermektir.
+  </footer>
+</main>
+
+<script>
+"use strict";
+/* ===========================================================================
+   KONU 03 — KABLOLU MU, KABLOSUZ MU?
+   Ana fikir: kablosuz ortam paylaşılır, kablolu ortam paylaşılmaz.
+   Çarpışma modeli: p = 1 - (1-a)^(N-1),  a = 0.10 (kullanıcı başına yayın oranı)
+   Hız payı: kablolu %100 (her kullanıcının kendi hattı), kablosuz %100/N
+   =========================================================================== */
+const $ = id => document.getElementById(id);
+const cv = $('cv'), ctx = cv.getContext('2d');
+const ALFABE = 'ABCÇDEFGĞHIİJKLMNOÖPRSŞTUÜVYZ';
+const AKTIFLIK = 0.10;
+
+let N = 1, mesaj = 'MERHABA', katman = 1;
+let hK = [], hW = [], aK = [], aW = [];
+let digerleri = [];              // kablosuz ortamdaki diğer kullanıcıların trafiği
+let sonGonderim = 0, W=0, H=0, dpr=1;
+
+const carpisma = () => 1 - Math.pow(1-AKTIFLIK, N-1);
+
+function olcu(){
+  dpr = Math.min(2, devicePixelRatio||1);
+  W = cv.clientWidth; H = cv.clientHeight;
+  cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+const kutuG = () => Math.min(196, W*0.24);
+const solX  = () => 14;
+const sagX  = () => W - kutuG() - 14;
+const k0 = () => solX()+kutuG()+12;
+const k1 = () => sagX()-12;
+const yUst = () => H*0.30;      // kablolu şerit merkezi
+const yAlt = () => H*0.72;      // kablosuz şerit merkezi
+
+function gonder(){
+  const p = carpisma();
+  hK = []; hW = []; aK = []; aW = [];
+  for(let i=0;i<mesaj.length;i++){
+    const c = mesaj[i];
+    hK.push({dogru:c, gelen:c, bozuk:false, i, t:-i*0.145, vurus:9, carpti:false});
+    const bozuk = Math.random() < p && c !== ' ';
+    let gelen = c;
+    if(bozuk){ do { gelen = ALFABE[Math.floor(Math.random()*ALFABE.length)]; } while(gelen===c); }
+    hW.push({dogru:c, gelen, bozuk, i, t:-i*0.145, vurus:0.28+Math.random()*0.48, carpti:false});
+  }
+  // diğer kullanıcıların trafiği
+  digerleri = [];
+  for(let u=1;u<N;u++)
+    for(let j=0;j<3;j++)
+      digerleri.push({t:Math.random(), hiz:0.006+Math.random()*0.008, y:(Math.random()-0.5),
+                      ch:ALFABE[Math.floor(Math.random()*ALFABE.length)]});
+}
+
+function yk(x,y,w,h,r,dolgu,cizgi){
+  ctx.beginPath(); ctx.roundRect(x,y,w,h,r);
+  if(dolgu){ctx.fillStyle=dolgu;ctx.fill()}
+  if(cizgi){ctx.strokeStyle=cizgi;ctx.lineWidth=1.4;ctx.stroke()}
+}
+function harf(x,y,ch,boy,renk,zemin){
+  const w=boy*0.78,h=boy*1.02;
+  yk(x-w/2,y-h/2,w,h,boy*0.2,zemin,null);
+  ctx.fillStyle=renk; ctx.font=`650 ${boy*0.6}px ui-monospace,Menlo,monospace`;
+  ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(ch,x,y+1);
+}
+function etiket(m,x,y,renk,boy){
+  ctx.font=`700 ${boy||10.5}px system-ui,sans-serif`; ctx.textAlign='center';
+  ctx.textBaseline='alphabetic'; ctx.fillStyle=renk;
+  ctx.letterSpacing='1.6px'; ctx.fillText(m,x,y); ctx.letterSpacing='0px';
+}
+
+function ciz(zaman){
+  ctx.fillStyle='#080c14'; ctx.fillRect(0,0,W,H);
+  const kw=kutuG(), boy=Math.min(24,(kw-20)/Math.max(6,mesaj.length)*1.25);
+  const adim=Math.min(boy*0.86,(kw-22)/Math.max(1,mesaj.length));
+  const A=k0(), B=k1(), serit=H*0.20;
+
+  /* ---------- KABLOLU ---------- */
+  const yU=yUst();
+  // her kullanıcı için ayrı hat; seninki ortada ve parlak
+  for(let u=0;u<N;u++){
+    const off=(u-(N-1)/2)*(serit/Math.max(3,N));
+    const benim=(u===Math.floor((N-1)/2));
+    ctx.strokeStyle = benim?'rgba(217,154,90,.55)':'rgba(217,154,90,.16)';
+    ctx.lineWidth = benim?2:1.2;
+    ctx.beginPath(); ctx.moveTo(A,yU+off); ctx.lineTo(B,yU+off); ctx.stroke();
+  }
+  yk(solX(),yU-serit*0.34,kw,serit*0.68,11,'#0e1622','rgba(255,255,255,.09)');
+  yk(sagX(),yU-serit*0.34,kw,serit*0.68,11,'#0e1622','rgba(255,255,255,.09)');
+  let b1=solX()+kw/2-adim*(mesaj.length-1)/2, b2=sagX()+kw/2-adim*(mesaj.length-1)/2;
+  for(let i=0;i<mesaj.length;i++) harf(b1+i*adim,yU,mesaj[i],boy,'#cde2fb','rgba(205,226,251,.10)');
+  for(const h of aK) harf(b2+h.i*adim,yU,h.gelen,boy,'#cde2fb','rgba(205,226,251,.10)');
+  for(const h of hK){
+    if(h.t<0||h.t>1) continue;
+    harf(A+boy*0.5+((B-boy*0.5)-(A+boy*0.5))*h.t, yU, h.dogru, boy*0.92, '#cde2fb','rgba(12,18,28,.94)');
+  }
+  etiket('KABLOLU',(A+B)/2,yU-serit*0.62,'rgba(217,154,90,.9)',11);
+  etiket('MESAJ',solX()+kw/2,yU-serit*0.34-11,'rgba(154,171,194,.6)');
+  etiket('ALINAN',sagX()+kw/2,yU-serit*0.34-11,'rgba(154,171,194,.6)');
+
+  /* ---------- KABLOSUZ ---------- */
+  const yA=yAlt();
+  yk(A,yA-serit*0.62,B-A,serit*1.24,13,'rgba(124,245,196,.045)','rgba(124,245,196,.22)');
+  // diğer kullanıcıların trafiği
+  for(const d of digerleri){
+    d.t+=d.hiz; if(d.t>1) d.t=0;
+    const x=A+(B-A)*d.t, y=yA+d.y*serit*0.78;
+    harf(x,y,d.ch,boy*0.66,'rgba(124,245,196,.30)','rgba(124,245,196,.05)');
+  }
+  yk(solX(),yA-serit*0.34,kw,serit*0.68,11,'#0e1622','rgba(255,255,255,.09)');
+  yk(sagX(),yA-serit*0.34,kw,serit*0.68,11,'#0e1622','rgba(255,255,255,.09)');
+  for(let i=0;i<mesaj.length;i++) harf(b1+i*adim,yA,mesaj[i],boy,'#cde2fb','rgba(205,226,251,.10)');
+  for(const h of aW) harf(b2+h.i*adim,yA,h.gelen,boy,h.bozuk?'#ff9d4d':'#cde2fb',
+                          h.bozuk?'rgba(255,157,77,.14)':'rgba(205,226,251,.10)');
+  for(const h of hW){
+    if(h.t<0||h.t>1) continue;
+    const x=A+boy*0.5+((B-boy*0.5)-(A+boy*0.5))*h.t;
+    if(h.bozuk && h.t>h.vurus) h.carpti=true;
+    const d0=Math.abs(h.t-h.vurus);
+    if(h.bozuk && d0<0.10){
+      const g=1-d0/0.10;
+      ctx.strokeStyle=`rgba(255,157,77,${0.85*g})`; ctx.lineWidth=2*g;
+      ctx.beginPath(); ctx.arc(x,yA,boy*(0.62+0.75*(1-g)),0,6.2832); ctx.stroke();
+    }
+    harf(x,yA,h.carpti?h.gelen:h.dogru,boy*0.92,h.carpti?'#ff9d4d':'#cde2fb',
+         h.carpti?'rgba(38,20,10,.94)':'rgba(12,18,28,.94)');
+  }
+  etiket('KABLOSUZ — ORTAK HAVA',(A+B)/2,yA-serit*0.62-11,'rgba(124,245,196,.9)',11);
+}
+
+function kare(zaman){
+  if(zaman-sonGonderim>4400){ sonGonderim=zaman; gonder(); }
+  for(const h of hK){ if(h.t<=1){ h.t+=0.010; if(h.t>1&&!aK.includes(h)) aK.push(h);} }
+  for(const h of hW){ if(h.t<=1){ h.t+=0.010; if(h.t>1&&!aW.includes(h)) aW.push(h);} }
+  ciz(zaman); requestAnimationFrame(kare);
+}
+
+function panoYaz(){
+  const y=aW.filter(h=>h.bozuk).length;
+  $('dK').textContent='0 hata';
+  $('dK').style.color='#cde2fb';
+  $('aK').textContent='hız payın %100';
+  $('dW').textContent=y+' hata';
+  $('dW').style.color = y===0?'#cde2fb' : (y<=2?'#eda100':'#ff9d4d');
+  $('aW').textContent='hız payın %'+Math.round(100/N);
+  $('oW').textContent = N===1
+    ? 'Şu an ortamda başka kimse yok, o yüzden hava tamamen senin.'
+    : `Ortamda ${N} kişi var. Çarpışma olasılığı %${Math.round(carpisma()*100)}, kapasite ${N} kişiye bölünüyor.`;
+}
+setInterval(panoYaz, 260);
+
+const METIN = {
+1:{b:'İki yol, tek fark',
+   p:[`Yukarıda aynı mesaj iki ayrı yoldan gidiyor. Üstteki kablodan, alttaki havadan.
+       Sürgü <b>1 kişi</b>deyken ikisi de kusursuz çalışıyor.`,
+      `Şimdi sürgüyü sağa çek. Ortama başka kullanıcılar giriyor. Üstteki şeritte hiçbir şey
+       değişmiyor, çünkü <b>herkesin kendi kablosu var</b>. Alttaki şeritte ise harfler
+       birbirine giriyor ve bozulmaya başlıyor.`,
+      `Sebep basit: <b>hava tek ve ortak.</b> Aynı anda iki kişi konuşursa ikisi de anlaşılmaz.
+       Kalabalık bir odada herkesin aynı anda konuşması gibi.`],
+   n:'Kafede Wi-Fi\'ın akşam saatlerinde yavaşlamasının sebebi tam olarak budur. Sinyalin zayıflamaz, sadece havayı paylaşman gereken kişi sayısı artar.'},
+
+2:{b:'İki ayrı şey aynı anda bozuluyor',
+   p:[`Kullanıcı sayısı arttığında kablosuz tarafta <b>iki bağımsız sorun</b> birden büyür.`,
+      `Birincisi <b>çarpışma</b>. İki kişi aynı anda yayın yaparsa ikisinin de sinyali bozulur ve
+       her ikisi de baştan göndermek zorunda kalır. Sağdaki kutuda gördüğün turuncu harfler bunlar.`,
+      `İkincisi <b>kapasite bölünmesi</b>. Çarpışma hiç olmasa bile, ortamı N kişi paylaşıyorsa
+       herkesin payına ortalama 1/N düşer. Sağdaki "hız payın" satırı bunu gösteriyor.`,
+      `Kablolu tarafta ikisi de yaşanmaz, çünkü her kullanıcının kendi fiziksel yolu vardır.
+       Bir kabloya kaç kişi bağlanırsa bağlansın, senin kablondan yalnızca senin verin geçer.`],
+   n:'Bu yüzden veri merkezlerinde ve ses stüdyolarında hâlâ kablo kullanılır. Mesele hız değil, sonucun her seferinde aynı çıkmasıdır.'},
+
+3:{b:'Koordinasyon olmazsa ne olur?',
+   p:[`Buradaki model kasten koordinasyonsuzdur: her kullanıcı canı istediğinde yayın yapar.
+       Bu, haberleşme tarihinin gerçek bir uğrağıdır. 1971'de Hawaii Üniversitesi'nde kurulan
+       <b>ALOHAnet</b> tam olarak böyle çalışıyordu.`,
+      `Sonuç matematiksel olarak bellidir. Saf ALOHA'da kanalın kullanılabilir verimi en fazla
+       <b>1/2e ≈ %18.4</b>'e çıkar. Zamanı dilimlere bölüp herkesi dilim başında konuşmaya
+       zorlarsan (dilimli ALOHA) bu değer <b>1/e ≈ %36.8</b> olur. Yani kanalın üçte ikisi
+       yine boşa gider.`,
+      `Modern sistemler bu yüzden dinleyip konuşur. Wi-Fi, yayın yapmadan önce havayı dinler
+       ve boşsa gönderir; doluysa rastgele bir süre bekler. Hücresel şebekelerde ise baz
+       istasyonu kimin ne zaman konuşacağını merkezi olarak dağıtır.`,
+      `Sayfadaki çarpışma olasılığı <b>p = 1 − (1−a)<sup>N−1</sup></b> bağıntısından geliyor;
+       burada a, kullanıcı başına yayın oranıdır ve 0.10 alındı.`],
+   n:'Çoklu erişim yöntemlerini (FDMA, TDMA, CDMA, OFDMA) serinin 67 ve 68. konularında ayrıntısıyla kuracağız.'},
+};
+function metinYaz(){
+  const m=METIN[katman];
+  $('metin').innerHTML=`<h4>${m.b}</h4>`+m.p.map(x=>`<p>${x}</p>`).join('')+`<div class="not">${m.n}</div>`;
+}
+document.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('[data-l]').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); katman=+b.dataset.l; metinYaz();
+});
+
+$('k').oninput = e => {
+  N=+e.target.value; $('kl').textContent=N+(N===1?' kişi':' kişi');
+  gonder(); sonGonderim=performance.now(); panoYaz();
+};
+$('msg').oninput = e => {
+  const t=e.target.value.toLocaleUpperCase('tr-TR').replace(/[^A-ZÇĞİÖŞÜ ]/g,'');
+  e.target.value=t; mesaj = t.trim()===''?'MERHABA':t;
+  gonder(); sonGonderim=performance.now();
+};
+
+if(!CanvasRenderingContext2D.prototype.roundRect){
+  CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,h,r){
+    this.moveTo(x+r,y); this.arcTo(x+w,y,x+w,y+h,r); this.arcTo(x+w,y+h,x,y+h,r);
+    this.arcTo(x,y+h,x,y,r); this.arcTo(x,y,x+w,y,r); this.closePath(); return this;};
+}
+addEventListener('resize', olcu);
+olcu(); metinYaz(); gonder(); panoYaz();
+requestAnimationFrame(kare);
+</script>
+</body>
+</html>
