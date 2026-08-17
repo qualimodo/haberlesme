@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ateşten 5G'ye kısa tarih</title>
+<meta name="description" content="Bir fotoğrafı göndermek 764 yıl sürerdi. Bugün 1.2 milisaniye sürüyor.">
+<meta property="og:site_name" content="101 Konuda Haberleşme">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ateşten 5G'ye kısa tarih · 101 Konuda Haberleşme">
+<meta property="og:description" content="Bir fotoğrafı göndermek 764 yıl sürerdi. Bugün 1.2 milisaniye sürüyor.">
+<meta property="og:url" content="https://qualimodo.github.io/haberlesme/05-atesten-5g-ye-kisa-tarih.html">
+<meta property="og:image" content="https://qualimodo.github.io/haberlesme/og-05.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ateşten 5G'ye kısa tarih · 101 Konuda Haberleşme">
+<meta name="twitter:description" content="Bir fotoğrafı göndermek 764 yıl sürerdi. Bugün 1.2 milisaniye sürüyor.">
+<meta name="twitter:image" content="https://qualimodo.github.io/haberlesme/og-05.png">
+<style>
+  :root{
+    --bg:#070a10; --panel:#0e131d; --panel2:#131b28; --line:#1e2736;
+    --ink:#e8eef7; --dim:#9aabc2; --dim2:#5d6d85; --acc:#7cf5c4;
+    --ates:#ffc061; --tel:#5598e7;
+    --l1:#cde2fb; --l2:#86b6ef; --l3:#3987e5;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);line-height:1.6;padding-bottom:60px;
+    font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:960px;margin:0 auto;padding:0 22px}
+
+  header{background:radial-gradient(900px 300px at 16% -12%,rgba(42,120,214,.16),transparent 62%)}
+  header.wrap{padding-top:84px;padding-bottom:22px}
+  .kick{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);font-weight:700}
+  h1{font-size:38px;font-weight:700;letter-spacing:-.03em;margin:18px 0 13px;line-height:1.1}
+  header p{color:var(--dim);font-size:16px;max-width:640px}
+
+  .scene{background:var(--panel);border:1px solid var(--line);border-radius:16px;
+    margin-top:26px;padding:6px 6px 0}
+  canvas{display:block;width:100%;height:350px;border-radius:12px}
+
+  .knob{display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+    padding:16px 16px 18px;border-top:1px solid var(--line);margin-top:6px}
+  .knob label{font-size:13px;color:var(--dim);white-space:nowrap;font-weight:500}
+  input[type=range]{-webkit-appearance:none;appearance:none;flex:1;min-width:180px;height:4px;
+    border-radius:3px;background:#25324a;outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;
+    border-radius:50%;background:var(--acc);cursor:pointer;box-shadow:0 0 0 4px rgba(124,245,196,.15)}
+  input[type=range]::-moz-range-thumb{width:18px;height:18px;border:none;border-radius:50%;
+    background:var(--acc);cursor:pointer}
+  .lvl{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;color:var(--acc);
+    min-width:210px;text-align:right;font-weight:600}
+  .sep{width:1px;height:24px;background:var(--line)}
+  .hiz{display:flex;gap:6px;flex-wrap:wrap}
+  .hiz button{font:inherit;font-size:12px;font-weight:600;color:var(--dim);background:var(--panel2);
+    border:1px solid var(--line);padding:7px 11px;border-radius:8px;cursor:pointer;transition:.15s;
+    white-space:nowrap}
+  .hiz button:hover{color:var(--ink);border-color:#33445f}
+
+  .skor{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  .kart{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--kc);
+    border-radius:13px;padding:15px 17px}
+  .kart .b{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--kc);font-weight:700}
+  .kart .d{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:26px;font-weight:680;
+    margin:7px 0 2px;letter-spacing:-.02em}
+  .kart .a{font-size:12.5px;color:var(--dim2)}
+  .kart .o{font-size:13px;color:#c2cfe1;margin-top:9px;padding-top:9px;border-top:1px solid #1a2333}
+
+  h2{font-size:22px;font-weight:660;letter-spacing:-.02em;margin:46px 0 6px}
+  .lead{color:var(--dim);font-size:15px;margin-bottom:18px}
+  .parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(216px,1fr));gap:12px}
+  .part{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:17px;
+    border-top:3px solid var(--pc)}
+  .part h3{font-size:16px;font-weight:660;margin-bottom:8px;color:var(--pc)}
+  .part p{font-size:13.5px;color:#c0cddf;line-height:1.65;margin-bottom:8px}
+  .part p:last-child{margin-bottom:0}
+  .part b{color:#fff;font-weight:640}
+
+  .tabs{display:flex;gap:6px;margin:46px 0 16px}
+  .tabs button{flex:1;font:inherit;font-size:13px;font-weight:600;color:var(--dim);
+    background:var(--panel2);border:1px solid var(--line);padding:11px;border-radius:10px;
+    cursor:pointer;transition:.15s}
+  .tabs button:hover{color:var(--ink);border-color:#33445f}
+  .tabs button.on.t1{background:rgba(205,226,251,.13);border-color:rgba(205,226,251,.5);color:var(--l1)}
+  .tabs button.on.t2{background:rgba(134,182,239,.13);border-color:rgba(134,182,239,.5);color:var(--l2)}
+  .tabs button.on.t3{background:rgba(57,135,229,.17);border-color:rgba(57,135,229,.55);color:var(--l3)}
+  #metin{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
+  #metin h4{font-size:19px;font-weight:660;letter-spacing:-.015em;margin-bottom:12px}
+  #metin p{font-size:15.5px;color:#c8d5e6;line-height:1.75;margin-bottom:13px}
+  #metin p:last-child{margin-bottom:0}
+  #metin b{color:#fff;font-weight:640}
+  #metin .not{font-size:14px;color:var(--acc);border-left:2px solid var(--acc);
+    padding-left:14px;margin-top:16px;line-height:1.7}
+  #metin .form{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;color:#dbe6f5;
+    background:var(--panel2);border:1px solid var(--line);border-radius:10px;
+    padding:12px 15px;margin:4px 0 14px;overflow-x:auto;white-space:nowrap}
+
+  table{width:100%;border-collapse:collapse;margin:6px 0 14px;font-size:14px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px solid #1a2333}
+  th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim2);font-weight:700}
+  td.s{font-family:ui-monospace,Menlo,Consolas,monospace;color:#dbe6f5;white-space:nowrap}
+  .tblwrap{overflow-x:auto}
+
+  footer{margin-top:38px;padding-top:20px;border-top:1px solid var(--line);
+    font-size:13px;color:var(--dim2);line-height:1.75}
+  footer a{color:#7d8daa}
+
+  @media (max-width:640px){
+    h1{font-size:27px} .wrap{padding:0 15px} header.wrap{padding-top:58px;padding-bottom:18px}
+    canvas{height:320px} .skor{grid-template-columns:1fr}
+    .knob{gap:12px} .sep{display:none} .lvl{min-width:0;flex:1;text-align:left}
+  }
+  .gez{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:54px}
+  .gez a,.gez .yok{display:flex;flex-direction:column;gap:6px;text-decoration:none;
+    background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;
+    transition:.16s}
+  .gez a:hover{background:var(--panel2);border-color:#33455f;transform:translateY(-1px)}
+  .gez .e{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim2);font-weight:700}
+  .gez .b{font-size:17px;font-weight:660;color:var(--ink);letter-spacing:-.012em;line-height:1.3}
+  .gez a:hover .b{color:var(--acc)}
+  .gez .son{text-align:right}
+  .gez .yok{opacity:.42} .gez .yok .b{color:var(--dim)}
+  .tumu{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+  .tumu a{flex:1;min-width:210px;text-align:center;text-decoration:none;font-size:14px;
+    font-weight:600;color:var(--dim);background:var(--panel2);border:1px solid var(--line);
+    border-radius:12px;padding:14px;transition:.15s}
+  .tumu a:hover{color:var(--acc);border-color:#33455f}
+  @media (max-width:640px){ .gez{grid-template-columns:1fr} .gez .son{text-align:right} }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="kick">101 Konuda Haberleşme · Konu 05</div>
+  <h1>Ateşten 5G'ye kısa tarih</h1>
+  <p>Önceki konuda bilgiyi ölçmeyi öğrendik. Şimdi aynı ölçüyü tarihe tutuyoruz:
+     insanlık saniyede kaç bit taşıyabildi? Sürgüyü çek ve merdivene bak.</p>
+</header>
+
+<main class="wrap">
+
+  <div class="scene">
+    <canvas id="cv"></canvas>
+    <div class="knob">
+      <label for="d">Tarih</label>
+      <input type="range" id="d" min="0" max="8" step="1" value="0">
+      <span class="lvl" id="dl">9. yüzyıl · Bizans ateş zinciri</span>
+      <div class="sep"></div>
+      <div class="hiz">
+        <button data-i="0">Ateş</button>
+        <button data-i="2">Telgraf</button>
+        <button data-i="5">Modem</button>
+        <button data-i="8">5G</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="skor">
+    <div class="kart" style="--kc:var(--ates)">
+      <div class="b">Taşıma hızı</div>
+      <div class="d" id="dH">0.001 bit/s</div>
+      <div class="a" id="aH">Bizans ateş zinciri · 9. yüzyıl</div>
+      <div class="o" id="oH">Dağ tepelerinde ateş yakılıyor. On iki farklı mesaj var, hepsi
+        önceden anlaşılmış.</div>
+    </div>
+    <div class="kart" style="--kc:var(--acc)">
+      <div class="b">Bir telefon fotoğrafı</div>
+      <div class="d" id="dT">764 yıl</div>
+      <div class="a">3 MB, yani 24 milyon bit</div>
+      <div class="o" id="oT">Bu hızla gönderirsen fotoğraf, torunlarının torunlarına ulaşır.</div>
+    </div>
+  </div>
+
+  <h2>Ekranda ne var?</h2>
+  <p class="lead">Sürgüyü sağa çek ve noktaların nasıl tırmandığını izle.</p>
+  <div class="parts">
+    <div class="part" style="--pc:#ffc061">
+      <h3>Merdiven neden düz?</h3>
+      <p>Düşey eksende her çizgi <b>bin kat</b> demektir. Böyle bir eksende düz bir tırmanış,
+        katlanarak büyüme anlamına gelir.</p>
+      <p>Toplam artış 20 trilyon kat, yani <b>13 basamak</b>.</p>
+    </div>
+    <div class="part" style="--pc:#5598e7">
+      <h3>Kazanç her zaman hız değildi</h3>
+      <p>1866'da Atlantik'e kablo döşendi, 1901'de Marconi okyanusu telsizle geçti. İkisinde
+        de hız neredeyse aynı kaldı.</p>
+      <p>Kazanılan şey <b>erişimdi</b>: yeni yerlere ulaşmak, kablodan kurtulmak.</p>
+    </div>
+    <div class="part" style="--pc:#7cf5c4">
+      <h3>Bu sayılar nereden geldi?</h3>
+      <p>Önceki konunun formülüyle: bir sembolün taşıdığı bilgi <b>log₂(seçenek sayısı)</b>
+        kadardır.</p>
+      <p>Ateş zincirinde 12 mesaj vardı, yani 3.58 bit. Chappe semaforunda 92 sembol vardı,
+        yani 6.52 bit.</p>
+    </div>
+    <div class="part" style="--pc:#cde2fb">
+      <h3>Tepe hız senin hızın değil</h3>
+      <p>Buradaki 4G ve 5G değerleri ITU şartnamesinin <b>tepe</b> değerleridir.</p>
+      <p>Telefonunda gördüğün hız çok daha düşüktür. ITU'nun 5G için kullanıcı hedefi
+        saniyede 100 megabit.</p>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="t1 on" data-l="1">L1 · Herkes</button>
+    <button class="t2" data-l="2">L2 · Meraklı</button>
+    <button class="t3" data-l="3">L3 · Mühendis</button>
+  </div>
+  <div id="metin"></div>
+  <nav class="gez">
+    <a href="04-bilgi-nedir.html"><span class="e">← Önceki konu</span><span class="b">Bilgi nedir?</span></a>
+    <span class="yok son"><span class="e">Sıradaki konu · yakında</span><span class="b">Dalga nedir?</span></span>
+  </nav>
+  <div class="tumu">
+    <a href="index.html">Yayındaki bütün konular</a>
+    <a href="yol-haritasi.html">101 konuluk yol haritası</a>
+  </div>
+
+
+
+  <footer>
+    Yatay eksen sırayı gösterir, ölçekli zamanı göstermez. Ateş zinciri ve semafor hızları,
+    o sistemlerin sembol sayısından ve bilinen sembol hızından hesaplandı; sembollerin eşit
+    olasılıklı olduğu varsayıldı, dolayısıyla bu değerler üst sınırdır. Modem, ADSL, 4G ve 5G
+    değerleri ilgili standartların tepe hızlarıdır. Kaynaklar: Bizans ateş zinciri (12 mesaj,
+    720 km, yaklaşık 1 saat), Chappe semaforu (92 kullanılabilir sembol, 2–3 sembol/dakika),
+    Morse (deneyimli operatör 20 kelime/dakika), Teleks (50 baud), Bell 103 (300 bit/s),
+    ITU-T V.34 (28.8 kbit/s), ITU-T G.992.1 (8 Mbit/s), ITU-R M.2134 (1 Gbit/s),
+    ITU-R M.2410 (20 Gbit/s).
+  </footer>
+</main>
+
+<script>
+"use strict";
+/* ===========================================================================
+   KONU 05 — ATEŞTEN 5G'YE KISA TARİH
+   Her hız bit/s olarak tek bir eksende. Sembol başına bilgi log2(N) ile bulundu.
+   Doğrulandı: log2(12)=3.585 · log2(92)=6.524 · log2(27)=4.755
+   0.000996 → 2.0e10 bit/s  =  13.3 basamak  =  20 trilyon kat
+   =========================================================================== */
+const $ = id => document.getElementById(id);
+const cv = $('cv'), ctx = cv.getContext('2d');
+const log2 = x => Math.log(x)/Math.LN2;
+
+const FOTO = 24e6;          // 3 MB'lık telefon fotoğrafı, bit
+const EKS0 = -3.5, EKS1 = 10.5;   // düşey eksen sınırları (log10 bit/s)
+
+const D = [
+ { yil:'9. yüzyıl', kisa:'9. yy', ad:'Bizans ateş zinciri', h: log2(12)/3600, ates:1,
+   ac:'Dağ tepelerinde ateş yakılıyor. On iki farklı mesaj var, hepsi önceden anlaşılmış.' },
+ { yil:'1794', ad:'Chappe semaforu', h: 2.5*log2(92)/60, ates:1,
+   ac:'Kule tepelerindeki kollar 92 ayrı şekil alıyor. Paris\'ten Lille\'e bir mesaj yarım saatte gidiyor.' },
+ { yil:'1844', ad:'Morse telgrafı', h: 20*5*log2(27)/60, ates:0,
+   ac:'Bilgi ilk kez tele biniyor. Deneyimli bir operatör dakikada yirmi kelime gönderiyor.' },
+ { yil:'1933', ad:'Teleks', h: 50, ates:0,
+   ac:'Operatör ortadan kalkıyor. Makine karşı taraftaki makineye doğrudan yazıyor.' },
+ { yil:'1962', ad:'Bell 103 modem', h: 300, ates:0,
+   ac:'Bilgisayarlar telefon hattından konuşmaya başlıyor. Sesin taşıdığı şey artık veri.' },
+ { yil:'1994', ad:'V.34 modem', h: 28800, ates:0,
+   ac:'Aynı telefon hattı, otuz iki yılda yüz kat hızlanıyor. Hat değişmedi, matematik gelişti.' },
+ { yil:'1999', ad:'ADSL', h: 8e6, ates:0,
+   ac:'Telefon kablosunun konuşma için kullanılmayan frekansları veriye açılıyor.' },
+ { yil:'2010', ad:'4G', h: 1e9, ates:0,
+   ac:'Hız artık cebe giriyor. Kablo yok, ama hava herkesle paylaşılıyor.' },
+ { yil:'2019', ad:'5G', h: 20e9, ates:0,
+   ac:'Şartname tepe değeri saniyede 20 gigabit. Ateş zincirinin 20 trilyon katı.' },
+];
+
+let i = 0, W=0, H=0, dpr=1, gecis=0, hedef=0;
+
+function olcu(){
+  dpr = Math.min(2, devicePixelRatio||1);
+  W = cv.clientWidth; H = cv.clientHeight;
+  if(W<10||H<10) return;
+  cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+
+const PADL = 16, PADR = 16;
+const yTaban = () => H*0.715;
+const yTepe  = () => H*0.130;
+const yLog = v => yTaban() + (v-EKS0)/(EKS1-EKS0)*(yTepe()-yTaban());
+let LX=0, RX=0;                                    // ciz() içinde güncellenir
+const xNok = k => LX + k*(RX-LX)/(D.length-1);
+
+/* ---- biçimlendirme ---- */
+function hizYaz(h){
+  if(h<0.01) return h.toFixed(3)+' bit/s';
+  if(h<1)    return h.toFixed(2)+' bit/s';
+  if(h<1e3)  return (h<10?h.toFixed(1):h.toFixed(0))+' bit/s';
+  if(h<1e6)  { const k=h/1e3; return (k<100?k.toFixed(1):k.toFixed(0))+' kbit/s'; }
+  if(h<1e9)  return (h/1e6).toFixed(0)+' Mbit/s';
+  return (h/1e9).toFixed(0)+' Gbit/s';
+}
+function sure(sn){
+  if(sn<1e-3)  return (sn*1e6).toFixed(0)+' mikrosaniye';
+  if(sn<1)     { const m=sn*1e3; return (m<10?m.toFixed(1):m.toFixed(0))+' milisaniye'; }
+  if(sn<90)    return (sn<10?sn.toFixed(1):sn.toFixed(0))+' saniye';
+  if(sn<5400)  return (sn/60).toFixed(0)+' dakika';
+  if(sn<172800)return (sn/3600).toFixed(0)+' saat';
+  if(sn<7.8e6) { const g=sn/86400; return (g<10?g.toFixed(1):g.toFixed(0))+' gün'; }
+  const y=sn/3.156e7; return (y<10?y.toFixed(1):y.toFixed(0))+' yıl';
+}
+
+/* ---- çizim yardımcıları ---- */
+function yk(x,y,w,h,r,dolgu,cizgi,kal){
+  ctx.beginPath(); ctx.roundRect(x,y,w,h,r);
+  if(dolgu){ctx.fillStyle=dolgu;ctx.fill()}
+  if(cizgi){ctx.strokeStyle=cizgi;ctx.lineWidth=kal||1.3;ctx.stroke()}
+}
+function yaz(m,x,y,renk,boy,hiza,kalin,aralik,tek){
+  ctx.font=`${kalin||700} ${boy}px ${tek?'ui-monospace,Menlo,monospace':'system-ui,-apple-system,sans-serif'}`;
+  ctx.textAlign=hiza||'left'; ctx.textBaseline='alphabetic';
+  ctx.fillStyle=renk; ctx.letterSpacing=(aralik||0)+'px';
+  ctx.fillText(m,x,y); ctx.letterSpacing='0px';
+  return ctx.measureText(m).width;
+}
+const genislik=(m,boy,kalin,aralik,tek)=>{
+  ctx.font=`${kalin||700} ${boy}px ${tek?'ui-monospace,Menlo,monospace':'system-ui,-apple-system,sans-serif'}`;
+  ctx.letterSpacing=(aralik||0)+'px'; const w=ctx.measureText(m).width; ctx.letterSpacing='0px'; return w;
+};
+
+const IZGARA = [[-3,'0.001 bit/s'],[0,'1 bit/s'],[3,'1 kbit/s'],[6,'1 Mbit/s'],[9,'1 Gbit/s']];
+
+function ciz(){
+  if(W<10||H<10) return;
+  ctx.fillStyle='#080c14'; ctx.fillRect(0,0,W,H);
+  const d=D[i], akt=gecis, dar=W<560;
+  const etGen = Math.max(...IZGARA.map(([,e])=>genislik(e,9.5,600,.6)))+PADL+12;
+  LX = etGen+10; RX = W-PADR-26;
+
+  /* ---- ızgara ---- */
+  for(const [v] of IZGARA){
+    const y=yLog(v);
+    ctx.strokeStyle='rgba(120,145,180,.11)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(PADL,y); ctx.lineTo(W-PADR,y); ctx.stroke();
+  }
+  yaz('HER ÇİZGİ BİN KAT', W-PADR-2, yTepe()-14, 'rgba(154,171,194,.52)', 9.5, 'right', 700, 1.4);
+
+  /* ---- bağlantı çizgisi ---- */
+  ctx.strokeStyle='rgba(85,152,231,.42)'; ctx.lineWidth=2; ctx.lineJoin='round';
+  ctx.beginPath();
+  D.forEach((k,n)=>{ const x=xNok(n), y=yLog(Math.log10(k.h));
+    n?ctx.lineTo(x,y):ctx.moveTo(x,y); });
+  ctx.stroke();
+
+  /* ---- etkin seviyenin kesikli çizgisi ---- */
+  const yA=yLog(Math.log10(d.h)), xA=xNok(i);
+  ctx.setLineDash([5,4]); ctx.strokeStyle='rgba(124,245,196,.62)'; ctx.lineWidth=1.4;
+  ctx.beginPath(); ctx.moveTo(PADL,yA); ctx.lineTo(xA,yA); ctx.stroke();
+  ctx.setLineDash([]);
+
+  /* ---- noktalar ---- */
+  D.forEach((k,n)=>{
+    const x=xNok(n), y=yLog(Math.log10(k.h)), et=(n===i);
+    const renk = k.ates ? '#ffc061' : '#5598e7';
+    if(et){
+      const g=1-Math.min(1,akt);
+      ctx.strokeStyle=`rgba(124,245,196,${0.75*g+0.12})`; ctx.lineWidth=1.6;
+      ctx.beginPath(); ctx.arc(x,y,7+13*(1-g),0,6.2832); ctx.stroke();
+    }
+    ctx.fillStyle = et ? '#7cf5c4' : renk;
+    ctx.beginPath(); ctx.arc(x,y,et?6:4,0,6.2832); ctx.fill();
+    if(et){ ctx.strokeStyle='rgba(8,12,20,.9)'; ctx.lineWidth=2;
+      ctx.beginPath(); ctx.arc(x,y,6,0,6.2832); ctx.stroke();
+      ctx.fillStyle='#7cf5c4'; ctx.beginPath(); ctx.arc(x,y,3.4,0,6.2832); ctx.fill(); }
+    /* yıl etiketi */
+    if(et || !dar)
+      yaz(k.kisa||k.yil, x, yTaban()+30, et?'#e8eef7':'rgba(154,171,194,.44)',
+          et?10.5:9.5,'center',et?700:600,.5,1);
+  });
+
+  /* ---- eksen etiketleri (çizgilerin üstüne) ---- */
+  for(const [v,et] of IZGARA){
+    const y=yLog(v), ew=genislik(et,9.5,600,.6)+9;
+    yk(PADL, y-13, ew, 15, 4, 'rgba(8,12,20,.88)', null);
+    yaz(et, PADL+4, y-3, 'rgba(150,172,200,.62)', 9.5, 'left', 600, .6);
+  }
+
+  /* ---- etkin nokta kartı ---- */
+  const s1=d.ad, s2=hizYaz(d.h);
+  const w1=genislik(s1,13,660), w2=genislik(s2,12.5,700,0,1);
+  const kw=Math.max(w1,w2)+24, kh=46;
+  let kx=xA+16, ky=yA-kh-14;
+  if(kx+kw>W-PADR) kx=xA-kw-16;
+  if(kx<etGen) kx=Math.min(etGen, Math.max(PADL, W-PADR-kw));
+  if(ky<yTepe()-10) ky=yA+16;
+  yk(kx,ky,kw,kh,10,'rgba(11,22,20,.95)','rgba(124,245,196,.40)',1.2);
+  yaz(s1, kx+12, ky+19, '#e8eef7', 13, 'left', 660);
+  yaz(s2, kx+12, ky+37, '#7cf5c4', 12.5, 'left', 700, 0, 1);
+
+  /* ---- alt başlık ---- */
+  const yB=yTaban()+52;
+  ctx.strokeStyle='rgba(255,192,97,.34)'; ctx.lineWidth=1.4;
+  ctx.beginPath(); ctx.moveTo(xNok(0)-8,yB); ctx.lineTo(xNok(1)+8,yB); ctx.stroke();
+  yaz(dar?'ATEŞ':'ELEKTRİK ÖNCESİ',(xNok(0)+xNok(1))/2, yB+15,'rgba(255,192,97,.72)',9,'center',700,1.2);
+  ctx.strokeStyle='rgba(85,152,231,.34)';
+  ctx.beginPath(); ctx.moveTo(xNok(2)-8,yB); ctx.lineTo(xNok(8)+8,yB); ctx.stroke();
+  yaz(dar?'ELEKTRİK':'ELEKTRİK VE RADYO',(xNok(2)+xNok(8))/2, yB+15,'rgba(85,152,231,.78)',9,'center',700,1.2);
+}
+
+function kare(z){
+  if(gecis<1) gecis=Math.min(1,gecis+0.045);
+  ciz(); requestAnimationFrame(kare);
+}
+
+function panoYaz(){
+  const d=D[i];
+  $('dl').textContent = d.yil+' · '+d.ad;
+  $('dH').textContent = hizYaz(d.h);
+  $('dH').style.color = d.ates ? '#ffc061' : '#cde2fb';
+  $('aH').textContent = d.ad+' · '+d.yil;
+  $('oH').textContent = d.ac;
+  $('dT').textContent = sure(FOTO/d.h);
+  $('dT').style.color = $('dH').style.color;
+  $('oT').textContent = i===0
+    ? 'Bu hızla gönderirsen fotoğraf, torunlarının torunlarına ulaşır.'
+    : (()=>{ const kat=d.h/D[i-1].h;
+        return `Önceki adıma göre ${kat<10?kat.toFixed(1):Math.round(kat).toLocaleString('tr-TR')} kat hızlı. ` +
+               (i===D.length-1 ? 'Merdivenin bugünkü son basamağı bu.'
+                               : 'Sürgüyü çekmeye devam et.'); })();
+}
+
+/* ---- katman metinleri ---- */
+const METIN = {
+1:{b:'Ateş, tel, sonra görünmez dalgalar',
+   p:[`İnsanlar binlerce yıl boyunca haberi <b>ateşle</b> yolladı. Dağ tepelerinde nöbetçiler
+       vardı; biri ateşi görünce kendi ateşini yakardı. Haber tepe tepe ilerlerdi.`,
+      `Bu yöntemin bir sorunu vardı: ateşle ancak <b>önceden anlaştığın</b> birkaç şeyi
+       söyleyebilirsin. Bizans'ta on iki mesaj vardı, hepsi bu. "Düşman geliyor" diyebilirdin,
+       "kaç kişi" diyemezdin.`,
+      `Sonra bilgi <b>tele</b> bindi. Telgraf, ilk kez harf harf yazmayı mümkün kıldı. Artık
+       önceden anlaşmaya gerek kalmadı; ne istersen yazabildin.`,
+      `En sonunda tel de gitti. Bilgi <b>görünmez dalgalara</b> bindi ve cebine girdi.`,
+      `Sürgüyü baştan sona çek. Her nokta bir buluş, her tırmanış daha çok bilgi demek.`],
+   n:'Bir telefon fotoğrafını ateş zinciriyle göndermek 764 yıl sürerdi. Aynı fotoğraf bugün 1.2 milisaniyede gidiyor.'},
+
+2:{b:'Merdiveni okumak',
+   p:[`Düşey eksen alışılmış bir eksen değildir. Üzerindeki her çizgi bir öncekinin
+       <b>bin katıdır</b>. Böyle bir eksen olmadan bu dokuz noktayı aynı ekrana sığdırmak
+       mümkün değildi, çünkü aradaki fark 20 trilyon kat.`,
+      `Bu tür bir eksende <b>düz bir tırmanış katlanarak büyüme demektir</b>. Merdiven
+       kabaca düz; yani hız her adımda sabit bir miktar değil, sabit bir <b>oranla</b> arttı.
+       Ortalama adım 1.66 basamak, yani her buluş öncekinin yaklaşık kırk katı.`,
+      `Sayılar önceki konunun formülünden geliyor. Bir sembolün taşıdığı en fazla bilgi
+       <b>log₂(seçenek sayısı)</b> kadardır:`,
+      `<div class="form">ateş zinciri: log₂(12) = 3.58 bit · semafor: log₂(92) = 6.52 bit</div>`,
+      `Ateş zinciri bu 3.58 biti bir saatte taşıyordu, yani saniyede 0.001 bit. Chappe
+       semaforu dakikada 2–3 sembol gönderiyordu, yani saniyede 0.27 bit. Morse'ta deneyimli
+       bir operatör dakikada yirmi kelime yazıyordu, yani saniyede yaklaşık 8 bit.`,
+      `Dikkat edilecek bir nokta var: <b>hız her zaman asıl kazanç değildi.</b> 1866'da
+       Atlantik'e telgraf kablosu döşendi, 1901'de Marconi okyanusu telsizle geçti. İkisinde de
+       hız neredeyse aynı kaldı; kazanılan şey erişim oldu.`],
+   n:'Buradaki 4G ve 5G değerleri şartname tepe hızlarıdır. Telefonunda gördüğün hız çok daha düşüktür — ITU\'nun 5G için kullanıcı deneyimi hedefi saniyede 100 megabittir.'},
+
+3:{b:'Hız nereden geldi: bant genişliği mi, verimlilik mi?',
+   p:[`Bir kanalın hızını iki çarpan belirler: <b>bant genişliği</b> ve <b>spektral
+       verimlilik</b> (bit/s/Hz). Tarihe bu iki çarpanla bakıldığında sonuç şaşırtıcıdır.`,
+      `<div class="form">tepe hız = spektral verimlilik × bant genişliği</div>`,
+      `V.34 modem 1994'te 3.4 kHz'lik bir telefon kanalında 28.8 kbit/s taşıyordu; bu
+       <b>8.5 bit/s/Hz</b> eder. ITU'nun 5G için koyduğu asgari tepe spektral verimlilik ise
+       <b>30 bit/s/Hz</b>'dir. Yani yirmi beş yılda verimlilik yalnızca <b>3.5 kat</b> arttı.`,
+      `Buna karşılık ham hız 28.8 kbit/s'den 20 Gbit/s'ye, yani <b>694 000 kat</b> çıktı.
+       Aradaki farkın tamamı iki yerden geliyor: kanal genişliğinin kilohertz'den yüzlerce
+       megahertz'e çıkması ve <b>MIMO</b> ile aynı bandın uzayda birden çok kez kullanılması.`,
+      `Sebep açık. Spektral verimliliğin bir üst sınırı var ve bu sınırı 1948'de Shannon
+       koydu; sınır güç ve gürültü tarafından belirlenir, mühendislik hüneriyle aşılmaz.
+       Bant genişliğinin ve anten sayısının ise böyle bir sınırı yok — para ve spektrum
+       lisansı yeterli.`,
+      `Kuramsal temel de aynı dönemde kuruldu: Nyquist 1924'te bir kanalın taşıyabileceği
+       sembol hızını, Hartley 1928'de bilgi ile bant genişliği arasındaki bağıntıyı,
+       Shannon 1948'de ise ikisini birleştiren kapasite bağıntısını verdi.`],
+   n:'Kanal kapasitesini ve Shannon–Hartley bağıntısını serinin 49 ve 50. konularında kuracağız. MIMO ise 74. konuda.'},
+};
+let katman=1;
+function metinYaz(){
+  const m=METIN[katman];
+  $('metin').innerHTML=`<h4>${m.b}</h4>`+
+    m.p.map(x=> x.startsWith('<div') ? x : `<p>${x}</p>`).join('')+
+    `<div class="not">${m.n}</div>`;
+}
+document.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('[data-l]').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); katman=+b.dataset.l; metinYaz();
+});
+
+function ayarla(n){
+  if(n===i) return;
+  i=n; $('d').value=n; gecis=0; panoYaz();
+}
+$('d').oninput = e => ayarla(+e.target.value);
+document.querySelectorAll('.hiz button').forEach(b=>b.onclick=()=>ayarla(+b.dataset.i));
+
+if(!CanvasRenderingContext2D.prototype.roundRect){
+  CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,h,r){
+    this.moveTo(x+r,y); this.arcTo(x+w,y,x+w,y+h,r); this.arcTo(x+w,y+h,x,y+h,r);
+    this.arcTo(x,y+h,x,y,r); this.arcTo(x,y,x+w,y,r); this.closePath(); return this;};
+}
+addEventListener('resize', olcu);
+olcu(); metinYaz(); panoYaz();
+requestAnimationFrame(kare);
+</script>
+</body>
+</html>

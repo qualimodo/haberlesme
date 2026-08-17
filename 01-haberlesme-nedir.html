@@ -4,6 +4,20 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Haberleşme Nedir?</title>
+<meta name="description" content="Bir kelime yola çıkıyor. Gürültüyü sen açıyorsun, harflerin nasıl bozulduğunu görüyorsun.">
+<meta property="og:site_name" content="101 Konuda Haberleşme">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Haberleşme nedir? · 101 Konuda Haberleşme">
+<meta property="og:description" content="Bir kelime yola çıkıyor. Gürültüyü sen açıyorsun, harflerin nasıl bozulduğunu görüyorsun.">
+<meta property="og:url" content="https://qualimodo.github.io/haberlesme/01-haberlesme-nedir.html">
+<meta property="og:image" content="https://qualimodo.github.io/haberlesme/og-01.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Haberleşme nedir? · 101 Konuda Haberleşme">
+<meta name="twitter:description" content="Bir kelime yola çıkıyor. Gürültüyü sen açıyorsun, harflerin nasıl bozulduğunu görüyorsun.">
+<meta name="twitter:image" content="https://qualimodo.github.io/haberlesme/og-01.png">
 <style>
   :root{
     --bg:#070a10; --panel:#0e131d; --panel2:#131b28; --line:#1e2736;
@@ -87,6 +101,22 @@
     input[type=text]{width:100%}
     .knob{gap:12px} .sep{display:none}
   }
+  .gez{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:54px}
+  .gez a,.gez .yok{display:flex;flex-direction:column;gap:6px;text-decoration:none;
+    background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;
+    transition:.16s}
+  .gez a:hover{background:var(--panel2);border-color:#33455f;transform:translateY(-1px)}
+  .gez .e{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim2);font-weight:700}
+  .gez .b{font-size:17px;font-weight:660;color:var(--ink);letter-spacing:-.012em;line-height:1.3}
+  .gez a:hover .b{color:var(--acc)}
+  .gez .son{text-align:right}
+  .gez .yok{opacity:.42} .gez .yok .b{color:var(--dim)}
+  .tumu{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+  .tumu a{flex:1;min-width:210px;text-align:center;text-decoration:none;font-size:14px;
+    font-weight:600;color:var(--dim);background:var(--panel2);border:1px solid var(--line);
+    border-radius:12px;padding:14px;transition:.15s}
+  .tumu a:hover{color:var(--acc);border-color:#33455f}
+  @media (max-width:640px){ .gez{grid-template-columns:1fr} .gez .son{text-align:right} }
 </style>
 </head>
 <body>
@@ -140,6 +170,16 @@
     <button class="t3" data-l="3">L3 · Mühendis</button>
   </div>
   <div id="metin"></div>
+  <nav class="gez">
+    <a href="index.html"><span class="e">← Başlangıç</span><span class="b">Bütün konular</span></a>
+    <a class="son" href="02-mesaj-sinyal-kanal-gurultu.html"><span class="e">Sıradaki konu →</span><span class="b">Mesaj, sinyal, kanal, gürültü</span></a>
+  </nav>
+  <div class="tumu">
+    <a href="index.html">Yayındaki bütün konular</a>
+    <a href="yol-haritasi.html">101 konuluk yol haritası</a>
+  </div>
+
+
 
   <footer>
     Bu sayfadaki bozulmalar gerçekten rastgele üretilir. Sürgüyü her oynattığında her harf,

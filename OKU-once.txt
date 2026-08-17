@@ -1,0 +1,37 @@
+GITHUB'A NE YÜKLENECEK
+======================
+
+Bu klasördeki BÜTÜN dosyaları depoya (repo kökü) yükle. 14 dosya var:
+
+  index.html                         ← ana sayfa (her seferinde yenilenir)
+  01-haberlesme-nedir.html
+  02-mesaj-sinyal-kanal-gurultu.html
+  03-kablolu-mu-kablosuz-mu.html
+  04-bilgi-nedir.html
+  05-atesten-5g-ye-kisa-tarih.html
+  yol-haritasi.html                  ← YENİ: 101 konuluk harita artık sitede
+  404.html
+  og-kapak.png                       ← YENİ: bağlantı önizleme görselleri
+  og-01.png … og-05.png
+
+Yükleme adımları
+----------------
+1. github.com/qualimodo/haberlesme sayfasını aç
+2. "Add file" → "Upload files"
+3. Bu klasördeki dosyaların HEPSİNİ sürükle (aynı adlı olanlar üzerine yazılır)
+4. "Commit changes"
+
+Neden hepsi?
+------------
+Konu sayfalarının hepsine iki şey eklendi:
+  · paylaşım etiketleri (link atınca görsel çıksın diye)
+  · sayfa altına "önceki konu / sıradaki konu" gezinmesi
+Bu yüzden eski dosyaların da yenisiyle değişmesi gerekiyor.
+
+Kontrol
+-------
+Yükledikten 1-2 dakika sonra:
+  https://qualimodo.github.io/haberlesme/?v=6
+Bağlantıyı WhatsApp'ta kendine gönder — artık görsel çıkması lazım.
+(Not: WhatsApp ve X önizlemeyi önbelleğe alır. Eskiden paylaştığın link
+ hemen güncellenmeyebilir, yeni paylaşımlarda görünür.)

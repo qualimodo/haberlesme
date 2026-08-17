@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>101 Konuda Haberleşme — İçerik Yol Haritası</title>
+<style>
+  :root{
+    --bg:#070a10; --panel:#0e131d; --panel2:#121926; --line:#1e2736;
+    --ink:#e8eef7; --dim:#9aabc2; --dim2:#5d6d85; --acc:#7cf5c4;
+    --l1:#cde2fb; --l2:#86b6ef; --l3:#3987e5;
+    --ok:#1baf7a; --wip:#c98500;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);
+    font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;line-height:1.5;padding-bottom:80px}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+
+  /* ---- üst başlık ---- */
+  header{padding:52px 0 26px;border-bottom:1px solid var(--line);
+    background:radial-gradient(1200px 380px at 12% -8%,rgba(42,120,214,.16),transparent 62%)}
+  .kick{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);font-weight:700}
+  h1{font-size:38px;font-weight:700;letter-spacing:-.03em;margin:12px 0 10px;line-height:1.08}
+  h1 span{color:var(--acc)}
+  header p{color:var(--dim);font-size:15px;max-width:640px}
+  .stats{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:13px 17px;min-width:112px}
+  .stat b{display:block;font-size:25px;font-weight:680;letter-spacing:-.02em;
+    font-family:ui-monospace,Menlo,Consolas,monospace;line-height:1.1}
+  .stat span{font-size:11px;color:var(--dim2);letter-spacing:.03em}
+
+  /* ---- katman açıklaması ---- */
+  .layers{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin:26px 0 0}
+  .layer{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:15px 17px;
+    border-left:3px solid var(--lc)}
+  .layer h4{font-size:13.5px;font-weight:660;margin-bottom:5px;color:var(--lc)}
+  .layer p{font-size:12.5px;color:var(--dim);line-height:1.55}
+
+  /* ---- filtre çubuğu ---- */
+  .bar{position:sticky;top:0;z-index:20;background:rgba(7,10,16,.94);backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);padding:12px 0;margin-bottom:30px}
+  .bar .wrap{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  input[type=search]{flex:1;min-width:190px;background:var(--panel2);border:1px solid var(--line);
+    border-radius:10px;padding:9px 13px;color:var(--ink);font:inherit;font-size:13.5px;outline:none}
+  input[type=search]:focus{border-color:#33445f}
+  input[type=search]::placeholder{color:var(--dim2)}
+  .chips{display:flex;gap:5px}
+  button{font:inherit;font-size:12px;color:var(--dim);background:var(--panel2);border:1px solid var(--line);
+    padding:8px 12px;border-radius:9px;cursor:pointer;transition:.15s;white-space:nowrap}
+  button:hover{border-color:#33445f;color:var(--ink)}
+  button.on{background:rgba(124,245,196,.12);border-color:rgba(124,245,196,.45);color:var(--acc)}
+  button.lv1.on{background:rgba(205,226,251,.13);border-color:rgba(205,226,251,.5);color:var(--l1)}
+  button.lv2.on{background:rgba(134,182,239,.13);border-color:rgba(134,182,239,.5);color:var(--l2)}
+  button.lv3.on{background:rgba(57,135,229,.16);border-color:rgba(57,135,229,.55);color:var(--l3)}
+
+  /* ---- bölüm ---- */
+  section{margin-bottom:34px;scroll-margin-top:76px}
+  .shead{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px;padding-bottom:13px;
+    border-bottom:1px solid var(--line)}
+  .snum{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;color:var(--dim2);
+    background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 9px;flex:none;font-weight:600}
+  .shead h2{font-size:20px;font-weight:660;letter-spacing:-.02em;line-height:1.25}
+  .shead p{font-size:12.5px;color:var(--dim2);margin-top:3px}
+  .prog{margin-left:auto;flex:none;text-align:right;padding-top:2px}
+  .prog .n{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--dim2)}
+  .prog .track{width:96px;height:4px;background:#1a2334;border-radius:3px;margin-top:5px;overflow:hidden}
+  .prog .fill{height:100%;background:var(--ok);border-radius:3px;transition:width .3s}
+
+  /* ---- konu satırı ---- */
+  .topic{display:flex;gap:14px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;
+    background:var(--panel);margin-bottom:8px;transition:.15s}
+  .topic:hover{border-color:#2c3b53;background:var(--panel2)}
+  .tn{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;font-weight:600;color:var(--dim2);
+    flex:none;width:30px;padding-top:2px}
+  .tbody{flex:1;min-width:0}
+  .ttop{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .ttl2{font-size:15px;font-weight:640;letter-spacing:-.01em}
+  .ten{font-size:11.5px;color:var(--dim2);font-family:ui-monospace,Menlo,Consolas,monospace}
+  .tl1{font-size:13.5px;color:#c8d5e6;margin-top:6px;line-height:1.55}
+  .thk{font-size:12.5px;color:var(--dim2);margin-top:7px;line-height:1.55;
+    padding-left:12px;border-left:2px solid #1d2735}
+  .tside{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:7px;padding-top:1px}
+  .lvs{display:flex;gap:3px}
+  .lv{font-size:9.5px;font-weight:700;font-family:ui-monospace,Menlo,monospace;
+    padding:2px 5px;border-radius:5px;letter-spacing:.02em}
+  .lv.a1{color:var(--l1);background:rgba(205,226,251,.12)}
+  .lv.a2{color:var(--l2);background:rgba(134,182,239,.12)}
+  .lv.a3{color:var(--l3);background:rgba(57,135,229,.16)}
+  .ix{font-size:10px;color:var(--dim2);border:1px solid var(--line);border-radius:6px;padding:2px 6px}
+  .st{font-size:10.5px;font-weight:600;border-radius:6px;padding:3px 8px;cursor:pointer;
+    border:1px solid transparent;white-space:nowrap;transition:.15s}
+  .st.s0{color:var(--dim2);background:#151d2b;border-color:#212c3e}
+  .st.s1{color:var(--wip);background:rgba(201,133,0,.13);border-color:rgba(201,133,0,.4)}
+  .st.s2{color:var(--ok);background:rgba(27,175,122,.13);border-color:rgba(27,175,122,.42)}
+  .hide{display:none !important}
+  .empty{color:var(--dim2);font-size:13.5px;padding:30px 0;text-align:center}
+
+  /* ---- mitler ---- */
+  .myth{border-left:3px solid #d95926}
+  .myth .ttl2::before{content:'MİT · ';font-size:10px;letter-spacing:.1em;color:#d95926;font-weight:700}
+
+  /* ---- dışa aktarma kutusu ---- */
+  .modal{position:fixed;inset:0;background:rgba(4,6,10,.82);z-index:60;display:none;
+    align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(6px)}
+  .modal.on{display:flex}
+  .mbox{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px;
+    max-width:820px;width:100%;max-height:82vh;display:flex;flex-direction:column;gap:12px}
+  .mbox h3{font-size:16px;font-weight:660}
+  .mbox p{font-size:12.5px;color:var(--dim2)}
+  textarea{flex:1;min-height:320px;background:#080c14;border:1px solid var(--line);border-radius:10px;
+    color:#b9c8dc;padding:14px;font:12px/1.6 ui-monospace,Menlo,Consolas,monospace;resize:vertical;outline:none}
+  .mrow{display:flex;gap:8px;justify-content:flex-end}
+
+  footer{border-top:1px solid var(--line);margin-top:44px;padding-top:22px;
+    font-size:12px;color:var(--dim2);line-height:1.7}
+
+  @media (max-width:720px){
+    .wrap{padding:0 15px}
+    h1{font-size:27px}
+    .topic{flex-direction:column;gap:9px}
+    .tside{flex-direction:row;align-items:center;width:100%;justify-content:flex-start}
+    .tn{width:auto}
+    .prog{display:none}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="kick">İçerik Yol Haritası</div>
+    <h1>101 Konuda <span>Haberleşme</span></h1>
+    <p>Haberleşme ve RF alanının tamamı, sıfırdan başlayıp ileri konulara kadar. Her konu üç
+       katmanda anlatılabilecek şekilde yazıldı — aynı konu, üç farklı derinlik.</p>
+
+    <div class="stats">
+      <div class="stat"><b>101</b><span>konu</span></div>
+      <div class="stat"><b>12</b><span>bölüm</span></div>
+      <div class="stat"><b id="sDone">0</b><span>yayına hazır</span></div>
+      <div class="stat"><b id="sIx">0</b><span>interaktif olabilir</span></div>
+      <div class="stat"><b id="sL1">0</b><span>L1'e uygun</span></div>
+    </div>
+
+    <div class="layers">
+      <div class="layer" style="--lc:var(--l1)">
+        <h4>L1 · Herkes</h4>
+        <p>Beş yaşındaki bir çocuğun anlayacağı dil. Benzetme var, formül yok. Sosyal medyada
+           paylaşılan katman bu.</p>
+      </div>
+      <div class="layer" style="--lc:var(--l2)">
+        <h4>L2 · Meraklı</h4>
+        <p>Mekanizma anlatılır: "neden böyle oluyor?" En fazla bir basit formül. Lise seviyesi
+           yeterli.</p>
+      </div>
+      <div class="layer" style="--lc:var(--l3)">
+        <h4>L3 · Mühendis</h4>
+        <p>Denklemler, tasarım ödünleşmeleri, gerçek sayılar. İnteraktif sayfaların derin
+           katmanı burası.</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="bar">
+  <div class="wrap">
+    <input type="search" id="q" placeholder="Konu ara — örn. anten, gürültü, modülasyon, GPS…">
+    <div class="chips">
+      <button class="lv1" data-lv="1">L1</button>
+      <button class="lv2" data-lv="2">L2</button>
+      <button class="lv3" data-lv="3">L3</button>
+    </div>
+    <div class="chips">
+      <button data-f="ix">İnteraktif</button>
+      <button data-f="todo">Yapılacak</button>
+      <button id="compact">Kompakt</button>
+    </div>
+    <button id="export">Planı dışa aktar</button>
+  </div>
+</div>
+
+<main class="wrap" id="main"></main>
+
+<div class="wrap">
+  <footer>
+    <b style="color:var(--dim)">Nasıl kullanılır:</b> Bir konunun sağındaki durum etiketine tıklayınca
+    <i>planlandı → hazırlanıyor → yayına hazır</i> arasında döner. Durumları işaretledikten sonra
+    <b>Planı dışa aktar</b> ile Markdown olarak kopyalayıp kaydedebilirsin (bu sayfa durumu kalıcı
+    olarak saklamaz).<br>
+    Sıralama bir öneridir, zorunluluk değil — her bölüm kendi başına da anlatılabilir. Ama 0. bölümden
+    başlayıp sırayla gitmek, izleyicinin hiçbir yerde kopmamasını sağlar.
+  </footer>
+</div>
+
+<div class="modal" id="modal">
+  <div class="mbox">
+    <h3>Yol haritası — Markdown</h3>
+    <p>Aşağıdaki metni kopyalayıp not uygulamana, Notion'a veya bir dosyaya yapıştırabilirsin.</p>
+    <textarea id="mtext" readonly></textarea>
+    <div class="mrow">
+      <button id="copy">Panoya kopyala</button>
+      <button id="close">Kapat</button>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+const DATA = {"BOLUMLER":[{"id":0,"ad":"Başlangıç — Haberleşme nedir?","ozet":"Hiçbir şey bilmeyen birine ilk anlatılacaklar. Serinin giriş kapısı.","konular":[{"n":1,"t":"Haberleşme nedir?","en":"Communication","l1":"Bir yerdeki bir şeyi, başka bir yerdeki birinin de bilmesini sağlamak.","hk":"Odanın öbür ucundan \"yemek hazır!\" diye bağırmak da haberleşmedir. Telefon da. Aradaki fark sadece mesafe ve araç.","lv":[1,2,3],"ix":1,"st":2},{"n":2,"t":"Mesaj, sinyal, kanal, gürültü","en":"Message, signal, channel, noise","l1":"Söylemek istediğin şey, onu taşıyan şey, gittiği yol ve yolda karışan patırtı.","hk":"Kalabalık bir kafede arkadaşınla konuşurken dördü de aynı anda oradadır. Tüm haberleşme mühendisliği bu dört kelimenin etrafında döner.","lv":[1,2,3],"ix":1,"st":2},{"n":3,"t":"Kablolu mu, kablosuz mu?","en":"Wired vs wireless","l1":"Bilgiyi ya bir ipin üstünde yürütürsün, ya da havaya atarsın.","hk":"Kablolu kulaklıkla Bluetooth kulaklık arasındaki fark: biri güvenli bir patika, diğeri açık deniz.","lv":[1,2,3],"ix":1,"st":2},{"n":4,"t":"Bilgi nedir?","en":"Information","l1":"Bilgi, bilmediğin şeyin azalmasıdır.","hk":"\"Yarın güneşli\" cümlesi çölde neredeyse hiçbir şey söylemez, Londra'da çok şey söyler. Sürprizin ölçüsü bilgidir.","lv":[1,2,3],"ix":1,"st":2},{"n":5,"t":"Ateşten 5G'ye kısa tarih","en":"History of communication","l1":"İnsanlar önce dumanla, sonra telle, sonra görünmez dalgalarla haberleşti.","hk":"Duman işareti de bir modülasyondu — sadece saniyede binde bir bit hızında.","lv":[1,2,3],"ix":1,"st":2}]},{"id":1,"ad":"Dalga — Her şeyin taşıyıcısı","ozet":"Kablosuz haberleşmenin tek taşıyıcısı var: dalga. Önce onu tanıyalım.","konular":[{"n":6,"t":"Dalga nedir?","en":"Wave","l1":"Su ilerlemez; ilerleyen şey suyun üstündeki harekettir. İşte o harekete dalga denir.","hk":"Denizdeki şamandıra kıyıya doğru gitmez, sadece iner çıkar. Dalga enerjiyi taşır, maddeyi değil.","lv":[1,2,3],"ix":1,"st":0},{"n":7,"t":"Frekans, dalga boyu, genlik, faz","en":"Frequency, wavelength, amplitude, phase","l1":"Ne kadar sık, ne kadar uzun, ne kadar güçlü ve ne zaman başlamış.","hk":"Salıncakta: sallanma hızın frekans, ne kadar yükseldiğin genlik. Bu dört kelimeyle her dalgayı tarif edebilirsin.","lv":[1,2,3],"ix":1,"st":0},{"n":8,"t":"Elektromanyetik dalga","en":"Electromagnetic wave","l1":"Işığın görünmeyen kardeşleri. Hepsi aynı şey, sadece salınma hızları farklı.","hk":"Radyo dalgası, mikrodalga, görünür ışık, röntgen — hepsi tek bir ailenin üyeleri. Aradaki tek fark frekans.","lv":[1,2,3],"ix":1,"st":0},{"n":9,"t":"Işık hızı ve gecikme","en":"Speed of light, propagation delay","l1":"Evrenin en hızlı şeyi bile bir yerden bir yere gitmek için zamana ihtiyaç duyar.","hk":"Aya mesaj atsan cevabı 2.5 saniyeden önce gelemez. Fizik kuralı — hiçbir teknoloji bunu aşamaz.","lv":[1,2,3],"ix":1,"st":0},{"n":10,"t":"Spektrum","en":"Spectrum","l1":"Görünmez bir gökkuşağı. Her rengi başka bir işe ayrılmış.","hk":"Radyonun kanal düğmesini çevirmek, aslında bu gökkuşağında gezinmektir.","lv":[1,2,3],"ix":1,"st":0},{"n":11,"t":"Frekans bantları (VLF–EHF)","en":"Frequency bands","l1":"Gökkuşağının mahalleleri. Her mahallede farklı komşular oturur.","hk":"Denizaltı ile haberleşme bir mahallede, Wi-Fi bambaşka bir mahallede. Komşuluk kuralları da farklı.","lv":[2,3],"ix":1,"st":0},{"n":12,"t":"Neden farklı frekans farklı iş yapar?","en":"Frequency trade-offs","l1":"Alçak frekans duvarı deler ama yavaştır; yüksek frekans hızlıdır ama duvara çarpar.","hk":"Alt kattaki komşunun bas sesini duyarsın ama sözleri duymazsın. Kalın ses duvarı geçer, ince ses geçemez.","lv":[1,2,3],"ix":1,"st":0}]},{"id":2,"ad":"Sinyal — Sesi ve görüntüyü sayıya çevirmek","ozet":"Konuşma dalga değil. Onu önce taşınabilir bir şeye dönüştürmek gerek.","konular":[{"n":13,"t":"Analog ve sayısal","en":"Analog vs digital","l1":"Analog bir rampadır, sayısal bir merdiven.","hk":"Plak analogtur, Spotify sayısal. Merdiven biraz kabadır ama kopyalayınca hiç bozulmaz — sayısalın tüm üstünlüğü bundan gelir.","lv":[1,2,3],"ix":1,"st":0},{"n":14,"t":"Örnekleme ve Nyquist","en":"Sampling, Nyquist rate","l1":"Bir şarkıyı saniyede on binlerce kez fotoğraflamak.","hk":"Filmde araba tekerleğinin geriye dönüyormuş gibi görünmesi, yetersiz örneklemenin ta kendisidir.","lv":[2,3],"ix":1,"st":0},{"n":15,"t":"Nicemleme ve bit derinliği","en":"Quantization, bit depth","l1":"Çektiğin her fotoğrafı en yakın basamağa yuvarlamak.","hk":"Terazi 68.4 kg'ı \"68\" diye gösterirse o 0.4 sonsuza dek kaybolmuştur. Ucuz ses kartlarının cızırtısı budur.","lv":[2,3],"ix":1,"st":0},{"n":16,"t":"Bit, sembol, baud","en":"Bit, symbol, baud","l1":"Bit tek bir evet/hayır. Sembol ise bir seferde kaç tane evet/hayır gönderdiğin.","hk":"Tek el hareketiyle bir harf mi anlatıyorsun, dört harf mi? Modem hızı tartışmalarının kaynağı bu ayrımdır.","lv":[2,3],"ix":1,"st":0},{"n":17,"t":"Sıkıştırma","en":"Source coding, compression","l1":"Aynı şeyi daha az kelimeyle anlatmak.","hk":"Gökyüzü fotoğrafında 10.000 mavi pikseli tek tek yazmak yerine \"buradan buraya mavi\" demek.","lv":[1,2,3],"ix":1,"st":0},{"n":18,"t":"Bant genişliği","en":"Bandwidth","l1":"Yolun kaç şeritli olduğu.","hk":"\"İnternetim yavaş\" dediğin şeyin yarısı budur — diğer yarısı gecikme, ki çok farklı bir şeydir.","lv":[1,2,3],"ix":1,"st":0}]},{"id":3,"ad":"Modülasyon — Bilgiyi dalgaya bindirmek","ozet":"Sesin kendi başına uçamaz. Uçabilen bir şeyin sırtına binmesi gerekir.","konular":[{"n":19,"t":"Neden modülasyon gerekir?","en":"Why modulate","l1":"Mektup uçamaz, güvercin uçar. Mektubu güvercine bağlarsın.","hk":"İnsan sesi 3 kHz civarındadır; bu frekansta bir anten kilometrelerce uzun olurdu. Bu yüzden sesi yüksek frekansa bindiririz.","lv":[1,2,3],"ix":1,"st":0},{"n":20,"t":"AM — genlik modülasyonu","en":"Amplitude modulation","l1":"Taşıyıcının sesini kısıp açarak konuşmak.","hk":"El fenerini yakıp söndürerek mesaj vermek gibi. Basit ama gürültüye açık — AM radyonun cızırtısının sebebi.","lv":[1,2,3],"ix":1,"st":0},{"n":21,"t":"FM — frekans modülasyonu","en":"Frequency modulation","l1":"Taşıyıcının tizliğini oynatarak konuşmak.","hk":"Gürültü genliği bozar, tizliği pek bozmaz. FM radyonun AM'den temiz çıkmasının tek sebebi bu.","lv":[1,2,3],"ix":1,"st":0},{"n":22,"t":"Faz modülasyonu","en":"Phase modulation","l1":"Dalganın adımını ileri geri kaydırmak.","hk":"Yürürken adımını yarım kaydırırsın: hızın da boyun da aynı kaldı, ama yanındaki fark eder.","lv":[2,3],"ix":1,"st":0},{"n":23,"t":"Sayısal modülasyon: ASK, FSK, PSK","en":"Digital modulation","l1":"Aynı üç oyun, ama artık sadece iki oyuncu var: 0 ve 1.","hk":"Eski modem sesleri (FSK) ve bugünkü her kablosuz sistem — hepsi buradan başlar.","lv":[2,3],"ix":1,"st":0},{"n":24,"t":"QAM ve konstelasyon diyagramı","en":"QAM, constellation diagram","l1":"Genlikle fazı aynı anda oynatıp bir seferde çok bit taşımak. Ekranda yıldız haritası gibi görünür.","hk":"Modem arayüzünde gördüğün o nokta bulutu. Ne kadar dağınıksa hattın o kadar kötüdür.","lv":[2,3],"ix":1,"st":0},{"n":25,"t":"Neden 256-QAM daha kırılgan?","en":"Modulation order vs robustness","l1":"Yıldızlar birbirine yaklaştıkça, ufacık bir gürültü seni yanlış yıldıza düşürür.","hk":"Sinyal zayıflayınca telefonun otomatik olarak daha seyrek haritaya geçer; hız düşer ama bağlantı kopmaz.","lv":[2,3],"ix":1,"st":0},{"n":26,"t":"OFDM","en":"Orthogonal frequency-division multiplexing","l1":"Bir geniş yolu binlerce dar şeride bölmek. Biri tıkanırsa diğerleri akmaya devam eder.","hk":"Wi-Fi, 4G, 5G, dijital TV, hatta ADSL — hepsinin altında bu var. Modern kablosuzun belkemiği.","lv":[2,3],"ix":1,"st":0},{"n":27,"t":"Yayılı spektrum ve CDMA","en":"Spread spectrum, CDMA","l1":"Fısıltıyı çok geniş bir alana yayıp, sadece şifreyi bilenin duyabilmesi.","hk":"Kalabalık bir salonda sadece kendi adını duymana benzer. Hem GPS hem askeri haberleşme bunu kullanır.","lv":[2,3],"ix":1,"st":0}]},{"id":4,"ad":"Anten — Elektriği dalgaya çeviren tercüman","ozet":"Serinin ilk üretilen bölümü buradan çıktı. Geri kalanı da tamamlanacak.","konular":[{"n":28,"t":"Anten nedir?","en":"Antenna","l1":"Teldeki elektriği havadaki dalgaya, havadaki dalgayı teldeki elektriğe çeviren tercüman.","hk":"Aynı parça hem konuşur hem dinler. Kulak ve ağız aynı organ olsaydı.","lv":[1,2,3],"ix":1,"st":0},{"n":29,"t":"Işıma nasıl olur — dalganın kopuşu","en":"Radiation mechanism","l1":"Alan çizgileri antenden kopar ve bir daha geri dönemez. Işıma budur.","hk":"Zaten üretildi: interaktif alan çizgisi animasyonu.","lv":[1,2,3],"ix":1,"st":2},{"n":30,"t":"Yakın alan ve uzak alan","en":"Near field, far field","l1":"Antene çok yakında enerji gidip geri döner; belli bir mesafeden sonra artık dönemez.","hk":"Kablosuz şarj yakın alanla, telefon görüşmesi uzak alanla çalışır. Aynı fizik, iki farklı bölge.","lv":[2,3],"ix":1,"st":2},{"n":31,"t":"Işıma deseni, lob ve sıfırlar","en":"Radiation pattern, lobes, nulls","l1":"Anten her yöne aynı şekilde bağırmaz. Bazı yönlere hiç bağırmaz.","hk":"Telefonu belli bir açıda tutunca çekimin düşmesi tam olarak budur.","lv":[1,2,3],"ix":1,"st":2},{"n":32,"t":"Yönlülük ve kazanç (dBi, dBd)","en":"Directivity and gain","l1":"Anten fazladan güç üretmez; aynı gücü daha dar bir yöne sıkıştırır.","hk":"El feneri ile mum aynı ampulü kullanabilir; fark sadece ışığın nereye gittiğidir.","lv":[2,3],"ix":1,"st":2},{"n":33,"t":"Polarizasyon","en":"Polarization","l1":"Dalganın hangi yönde sallandığı. İki anten aynı yönde sallanmıyorsa birbirini zor duyar.","hk":"Çatı antenlerinin bazısı yatay bazısı dikeydir — sebebi bu. Uydu antenlerinde de aynı mesele.","lv":[2,3],"ix":1,"st":0},{"n":34,"t":"Empedans uyumu ve SWR","en":"Impedance matching, SWR","l1":"Verdiğin gücün ne kadarı gerçekten dışarı çıktı, ne kadarı sana geri tepti?","hk":"Hortumun ucunu ezersen su geri teper. Uyumsuz anten vericiyi yakabilir.","lv":[2,3],"ix":1,"st":0},{"n":35,"t":"Anten tipleri","en":"Antenna types","l1":"Her iş için başka şekil: çubuk, ızgara, tabak, yama.","hk":"Çatıdaki balık kılçığı (Yagi), telefondaki görünmez yama (patch), uydu çanağı — hepsinin sebebi var.","lv":[1,2,3],"ix":1,"st":0},{"n":36,"t":"Anten dizileri ve hüzme yönlendirme","en":"Arrays, beamforming","l1":"Birçok küçük anteni birlikte konuşturup ışığı istediğin yere tutmak — hiçbir şeyi döndürmeden.","hk":"5G baz istasyonu seni takip eden görünmez bir el feneri gibidir. Serinin en etkileyici görselleştirmesi burada çıkar.","lv":[1,2,3],"ix":1,"st":0},{"n":37,"t":"MIMO","en":"Multiple-input multiple-output","l1":"Aynı anda birden çok yoldan konuşmak.","hk":"Router'ın üstündeki dört çubuk süs değil. Çok yolluluk normalde düşmandır; MIMO onu dosta çevirir.","lv":[2,3],"ix":1,"st":0},{"n":38,"t":"Rezonans ve neden λ/2","en":"Resonance, half-wave","l1":"Anten, üstündeki akımın rahat oturabileceği boyda olmalı.","hk":"Zaten üretildi: 3B ışıma deseni görselleştirmesi.","lv":[2,3],"ix":1,"st":2}]},{"id":5,"ad":"Yayılım — Dalga yolda neler yaşar","ozet":"Antenden çıktıktan sonra dünya dalgaya iyi davranmaz.","konular":[{"n":39,"t":"Serbest uzay kaybı","en":"Free-space path loss","l1":"Dalga yorulmaz, sadece yayılır — aynı boya daha büyük bir duvara sürülür.","hk":"Mesafe iki katına çıkınca sinyal dörtte bire iner. Hiçbir teknoloji bunu değiştiremez.","lv":[2,3],"ix":1,"st":0},{"n":40,"t":"Yansıma, kırılma, kırınım, saçılma","en":"Reflection, refraction, diffraction, scattering","l1":"Dalganın yolda bir şeye çarpınca yapabileceği dört şey.","hk":"Köşeyi döndüğünde hâlâ çekmesinin sebebi kırınımdır. Dalga köşeden hafifçe bükülür.","lv":[2,3],"ix":1,"st":0},{"n":41,"t":"Çok yollu yayılım","en":"Multipath","l1":"Aynı sinyal sana birden fazla yoldan, farklı zamanlarda gelir.","hk":"Dağda yankı gibi. Eski analog TV'lerdeki \"hayalet görüntü\" tam olarak buydu.","lv":[2,3],"ix":1,"st":0},{"n":42,"t":"Sönümleme","en":"Fading (Rayleigh, Rician)","l1":"İki yoldan gelen dalga birbirini iptal ederse sinyal aniden ölür.","hk":"Arabada radyo bazı noktalarda cızırdar, bir metre ilerleyince düzelir. Tesadüf değil, girişim deseni.","lv":[2,3],"ix":1,"st":0},{"n":43,"t":"Doppler kayması","en":"Doppler shift","l1":"Yaklaşan ambulansın sesi tiz, uzaklaşırken kalın gelir. Dalga da öyle davranır.","hk":"Hızlı trende telefonun neden zorlandığı, ve radarın hızını nasıl ölçtüğü aynı olayla açıklanır.","lv":[1,2,3],"ix":1,"st":0},{"n":44,"t":"Yer dalgası, gök dalgası, iyonosfer","en":"Ground wave, sky wave, ionosphere","l1":"Bazı dalgalar yerden sürünür, bazıları gökyüzünden sekerek okyanus aşar.","hk":"Geceleri çok uzak ülkelerin AM radyosunu duyabilmenin sebebi: iyonosfer geceleri daha iyi ayna olur.","lv":[2,3],"ix":1,"st":0},{"n":45,"t":"Fresnel bölgesi ve görüş hattı","en":"Fresnel zone, line of sight","l1":"İki anten arasında sadece düz çizgi değil, etrafındaki görünmez boru da boş olmalı.","hk":"Tam yolun ortasındaki bir ağaç, göründüğünden çok daha fazla zarar verir.","lv":[2,3],"ix":1,"st":0},{"n":46,"t":"Bina içi yayılım","en":"Indoor propagation","l1":"Duvar, cam, insan — her biri sinyalden bir parça yer.","hk":"Asansörde çekmemesi: metal kutu bir Faraday kafesidir. Isıcam da beklediğinden çok daha fazla keser.","lv":[1,2,3],"ix":1,"st":0},{"n":47,"t":"Link bütçesi","en":"Link budget","l1":"Baştan sona muhasebe: ne kadar güç verdim, yolda ne kaybettim, elime ne kaldı?","hk":"RF mühendisinin günlük hayatta en çok yaptığı tek hesap budur.","lv":[3],"ix":1,"st":0}]},{"id":6,"ad":"Gürültü, hata ve fiziğin koyduğu sınır","ozet":"Evren sessiz değil. Ve ne yaparsan yap aşamayacağın bir hız sınırı var.","konular":[{"n":48,"t":"Gürültü nedir, nereden gelir?","en":"Noise (thermal, shot, phase)","l1":"Evrenin fısıltısı. Hiçbir şey yapmasan bile sıfır olmaz.","hk":"Sıcaklık bile gürültü üretir. Uzay teleskoplarının alıcılarını soğutmasının sebebi tam olarak budur.","lv":[2,3],"ix":1,"st":0},{"n":49,"t":"SNR ve desibel dünyası","en":"Signal-to-noise ratio","l1":"Sesin, gürültüden ne kadar yüksek olduğu.","hk":"Kalabalık kafede anlaşılabilmen, sesinin gürültüden yeterince yüksek olmasına bağlıdır. Her şey bu orana bakar.","lv":[1,2,3],"ix":1,"st":0},{"n":50,"t":"Shannon kapasitesi","en":"Shannon capacity","l1":"Fizik der ki: bu yoldan saniyede en fazla şu kadar bilgi geçebilir. Nokta.","hk":"Tüm teknoloji yarışı, 1948'de çizilmiş bu sınıra biraz daha yaklaşma yarışıdır.","lv":[2,3],"ix":1,"st":0},{"n":51,"t":"BER ve Eb/N0","en":"Bit error rate, energy per bit","l1":"Kaç bit yanlış gitti, ve bir biti doğru göndermek kaça mal oldu?","hk":"Modem arayüzündeki \"hata sayısı\" satırının arkasındaki büyüklük.","lv":[3],"ix":1,"st":0},{"n":52,"t":"Hata tespiti: parite, CRC","en":"Error detection","l1":"Bir şeyin yanlış geldiğini anlamak.","hk":"Kredi kartı numarasının son hanesi bir kontrol hanesidir; yanlış yazarsan sistem anında anlar.","lv":[2,3],"ix":1,"st":0},{"n":53,"t":"Hata düzeltme: Hamming, Reed-Solomon","en":"Error correction","l1":"Yanlış geldiğini anlayıp, tekrar sormadan düzeltmek.","hk":"Çizik bir CD'nin hâlâ çalmasının sebebi. QR kodun yarısını karalasan bile okunur.","lv":[2,3],"ix":1,"st":0},{"n":54,"t":"Modern kodlar: Turbo, LDPC, Polar","en":"Modern channel codes","l1":"Shannon'ın sınırına en çok sokulmayı başaran kodlar.","hk":"5G'nin veri kanalında LDPC, kontrol kanalında Polar kod var. Türkçe konuşan biri için ek bir not: Polar kodu Erdal Arıkan buldu.","lv":[3],"ix":0,"st":0},{"n":55,"t":"Girişim ile gürültü aynı şey değil","en":"Interference vs noise","l1":"Gürültü rastgeledir; girişim başka birinin düzgün konuşmasıdır.","hk":"Komşunun Wi-Fi'ı seninkiyle aynı kanaldaysa yaşadığın şey gürültü değil, girişimdir. Çözümü de bambaşkadır.","lv":[2,3],"ix":1,"st":0}]},{"id":7,"ad":"Alıcı-verici — Kutunun içinde ne var?","ozet":"Telefonun içindeki RF zinciri, baştan sona.","konular":[{"n":56,"t":"Verici zinciri baştan sona","en":"Transmitter chain","l1":"Sesin antenden çıkana kadar hangi odalardan geçiyor?","hk":"Mikrofon → kodlayıcı → modülatör → yükseltici → anten. Her kutunun bir görevi var.","lv":[2,3],"ix":1,"st":0},{"n":57,"t":"Alıcı zinciri baştan sona","en":"Receiver chain","l1":"Havadaki milyonda bir watt'lık fısıltı, kulağına gelene kadar ne yaşıyor?","hk":"Alıcı tarafı vericiden çok daha zordur: aradığın sinyal, yanındaki sinyalden milyar kat zayıf olabilir.","lv":[2,3],"ix":1,"st":0},{"n":58,"t":"Karıştırıcı ve frekans çevirme","en":"Mixer, frequency conversion","l1":"İki frekansı çarpınca ortaya toplamları ve farkları çıkar. Bu da taşımanın anahtarıdır.","hk":"Radyoyu bir kanaldan diğerine geçirirken içeride olan şey budur.","lv":[3],"ix":1,"st":0},{"n":59,"t":"Süperheterodin alıcı","en":"Superheterodyne receiver","l1":"Hangi kanalı dinlersen dinle, önce hep aynı ara frekansa çevir; sonra tek bir iyi filtre yeter.","hk":"1918'de bulundu, bugün hâlâ cebindeki telefonun içinde. Elektroniğin en uzun ömürlü fikirlerinden.","lv":[3],"ix":1,"st":0},{"n":60,"t":"Osilatör, PLL, frekans sentezleyici","en":"Oscillator, PLL","l1":"Devrenin metronomu. Kaymazsa her şey yolunda gider.","hk":"Telefonun \"hangi frekanstayım\" sorusunu milyarda bir hassasiyetle cevaplayan parça.","lv":[3],"ix":1,"st":0},{"n":61,"t":"Filtreler","en":"Filters","l1":"İstemediğin frekansları kapıda durduran fedai.","hk":"Baz istasyonunun yanındaki evde telefonun hâlâ çalışıyorsa, sebebi filtrelerdir.","lv":[2,3],"ix":1,"st":0},{"n":62,"t":"LNA ve gürültü figürü","en":"Low-noise amplifier, noise figure","l1":"Zincirin ilk halkası kötüyse, sonrakiler ne yaparsa yapsın kurtaramaz.","hk":"Friis formülü bunun matematiğidir ve neden LNA'nın antene mümkün olduğunca yakın olduğunu açıklar.","lv":[3],"ix":1,"st":0},{"n":63,"t":"Güç yükselteci","en":"Power amplifier","l1":"Sinyali dışarı fırlatacak kadar güçlendiren parça.","hk":"Telefonun konuşurken ısınmasının başlıca sebebi. Verimlilik ile doğrusallık arasındaki savaş burada geçer.","lv":[3],"ix":1,"st":0},{"n":64,"t":"ADC ve DAC","en":"Data converters","l1":"Gerçek dünya ile bilgisayarın arasındaki çevirmen.","hk":"Modern telsizlerin ne kadarının yazılım olabileceğini belirleyen tek bileşen.","lv":[2,3],"ix":1,"st":0},{"n":65,"t":"SDR — yazılım tanımlı telsiz","en":"Software-defined radio","l1":"Radyoyu lehimle değil, kodla yapmak.","hk":"30 dolarlık bir USB çubukla uçakların konum yayınını dinleyebilirsin. Serinin en pratik bölümü burası olabilir.","lv":[1,2,3],"ix":1,"st":0},{"n":66,"t":"Duplekser, sirkülatör, anahtarlama","en":"Duplexer, circulator","l1":"Tek antenden aynı anda hem bağırıp hem dinleyebilmek.","hk":"Kendi bağırışını duymadan karşıdakini duymak — düşündüğünden çok daha zor bir problem.","lv":[3],"ix":1,"st":0}]},{"id":8,"ad":"Çoklu erişim ve ağlar","ozet":"Bir odada 50 kişi aynı anda nasıl konuşur? Modern ağların asıl sorusu.","konular":[{"n":67,"t":"Aynı anda çok kullanıcı sorunu","en":"Multiple access problem","l1":"Herkes aynı anda konuşursa kimse kimseyi duyamaz. Peki ne yapmalı?","hk":"Bir baz istasyonu aynı anda binlerce telefona hizmet eder. Bunun tek bir sihirli çözümü yok, dört tane var.","lv":[1,2,3],"ix":1,"st":0},{"n":68,"t":"FDMA, TDMA, CDMA, OFDMA","en":"Multiple access schemes","l1":"Ya herkese ayrı frekans, ya ayrı zaman dilimi, ya ayrı şifre — ya da hepsinin karışımı.","hk":"Farklı odalara dağılmak, sırayla konuşmak, farklı dil konuşmak. Üçü de işe yarar.","lv":[2,3],"ix":1,"st":0},{"n":69,"t":"Dupleks: FDD ve TDD","en":"Duplexing","l1":"Aynı anda mı konuşuluyor, yoksa sırayla mı?","hk":"Telsizde \"tamam\" demenin sebebi TDD'dir. Telefonda demene gerek yoktur, çünkü FDD kullanır.","lv":[2,3],"ix":1,"st":0},{"n":70,"t":"Hücresel yapı ve frekans tekrar kullanımı","en":"Cellular structure, frequency reuse","l1":"Şehri arı peteğine böl, aynı frekansı yeterince uzaktaki petekte tekrar kullan.","hk":"Cep telefonunu mümkün kılan tek fikir budur. 1947'de bulundu, uygulanması 30 yıl aldı.","lv":[2,3],"ix":1,"st":0},{"n":71,"t":"El değiştirme","en":"Handover / handoff","l1":"Araba giderken görüşmenin kopmadan bir kuleden diğerine devredilmesi.","hk":"Tünelde konuşman kopuyorsa, çoğu zaman suçlu handover'dır — kule değil.","lv":[2,3],"ix":1,"st":0},{"n":72,"t":"Güç kontrolü","en":"Power control","l1":"Herkesin sadece yetecek kadar bağırması.","hk":"Baz istasyonuna yakınken telefonun daha az güç harcar, pili daha uzun gider. Saniyede yüzlerce kez ayarlanır.","lv":[2,3],"ix":1,"st":0},{"n":73,"t":"Protokol katmanları","en":"OSI / TCP-IP layers","l1":"İşi katlara bölmek: üst kat, alt katın nasıl çalıştığını bilmek zorunda değil.","hk":"Wi-Fi'dan 4G'ye geçtiğinde WhatsApp'ın hiçbir şey fark etmemesinin sebebi bu.","lv":[2,3],"ix":1,"st":0},{"n":74,"t":"Paket ve devre anahtarlama","en":"Packet vs circuit switching","l1":"Mektubu parçalara bölüp ayrı ayrı yollamak, sonra karşıda birleştirmek.","hk":"Eski telefon şebekesi bir hattı sana ayırırdı; internet öyle çalışmaz. Aradaki fark her şeyi değiştirdi.","lv":[2,3],"ix":1,"st":0},{"n":75,"t":"Gecikme, jitter, verim","en":"Latency, jitter, throughput","l1":"Ne kadar sürede geldi, düzenli mi geldi, saniyede ne kadar geldi?","hk":"Oyun oynarken önemli olan hız değil gecikmedir. Bu üçünü karıştırmak en yaygın hata.","lv":[1,2,3],"ix":1,"st":0}]},{"id":9,"ad":"Sistemler — Günlük hayattaki karşılıkları","ozet":"Buraya kadarki her şeyin gerçek dünyada nereye oturduğu.","konular":[{"n":76,"t":"Radyo yayıncılığı: AM, FM, DAB","en":"Radio broadcasting","l1":"Tek bir kuleden milyonlarca kulağa, karşılık beklemeden.","hk":"Tek yönlü yayın hâlâ en verimli haberleşmedir: bir milyon dinleyici, sıfır ek maliyet.","lv":[1,2],"ix":0,"st":0},{"n":77,"t":"Televizyon yayıncılığı","en":"TV broadcasting, DVB","l1":"Sesin yanına görüntüyü de koymak — çok daha fazla veri demek.","hk":"Analogdan sayısala geçiş, spektrumda büyük bir yer açtı; o yer mobil operatörlere satıldı.","lv":[1,2],"ix":0,"st":0},{"n":78,"t":"Cep telefonu nesilleri: 1G'den 6G'ye","en":"Cellular generations","l1":"Her nesil bir önceki neslin çözemediği tek bir sorunu çözdü.","hk":"1G ses, 2G mesaj, 3G internet, 4G video, 5G gecikme ve cihaz yoğunluğu. 6G için 3GPP Haziran 2026'da Release 21 takvimini kesinleştirdi.","lv":[1,2,3],"ix":1,"st":0},{"n":79,"t":"Wi-Fi","en":"Wi-Fi / IEEE 802.11","l1":"Evin içindeki küçük baz istasyonu.","hk":"Wi-Fi 8 (802.11bn) hız yerine güvenilirliğe odaklanıyor — kalabalık ortamda kopmamak, ham hızdan daha değerli hale geldi.","lv":[1,2,3],"ix":1,"st":0},{"n":80,"t":"Bluetooth ve BLE","en":"Bluetooth, BLE","l1":"Çok yakın mesafede, çok az enerjiyle konuşmak.","hk":"Kulaklık pilinin günlerce gitmesi BLE'nin marifetidir: konuşmadığı zaman gerçekten uyur.","lv":[1,2],"ix":1,"st":0},{"n":81,"t":"NFC ve RFID","en":"NFC, RFID","l1":"Pilsiz kart, okuyucunun verdiği enerjiyle cevap verir.","hk":"Kredi kartını okuttuğunda kartın içinde pil yoktur. Enerjiyi okuyucudan alır — yakın alan tam olarak burada işe yarar.","lv":[1,2,3],"ix":1,"st":0},{"n":82,"t":"GPS ve GNSS","en":"GPS / GNSS","l1":"Dört uydunun \"bende saat kaç\" demesiyle nerede olduğunu bulmak.","hk":"Telefonun konumu bilmesi için hiçbir şey göndermesi gerekmez, sadece dinler. Ve görelilik düzeltmesi olmadan günde 10 km sapardı.","lv":[1,2,3],"ix":1,"st":0},{"n":83,"t":"Uydu haberleşmesi ve LEO takımyıldızları","en":"Satellite comms, LEO constellations","l1":"Gökyüzüne asılmış baz istasyonları.","hk":"Yüksek yörünge geniş kapsar ama gecikme yüksektir; alçak yörünge tersi. Bu yüzden binlerce küçük uydu fırlatılıyor.","lv":[1,2,3],"ix":1,"st":0},{"n":84,"t":"Radar","en":"Radar","l1":"Karanlıkta bağırıp yankıyı dinleyerek görmek.","hk":"Hız radarı Doppler kullanır, hava radarı yankı gecikmesini. İkisi de aynı ailedendir.","lv":[1,2,3],"ix":1,"st":0},{"n":85,"t":"Fiber optik","en":"Fiber optics","l1":"Camdan bir borunun içinde ışıkla konuşmak.","hk":"Kablosuz görünen internetin neredeyse tamamı, bir yerde bir fiber kabloya bağlanır. Okyanus altındaki kablolar dünyayı taşır.","lv":[1,2,3],"ix":1,"st":0},{"n":86,"t":"IoT: LoRa, NB-IoT, Zigbee","en":"IoT protocols","l1":"Az veri, uzun pil ömrü, uzun mesafe — üçünü aynı anda isteyen cihazlar.","hk":"Su sayacı yılda birkaç yüz bayt gönderir ama pili 10 yıl gitmelidir. Bambaşka bir tasarım problemi.","lv":[2,3],"ix":1,"st":0},{"n":87,"t":"Telsiz, denizcilik, havacılık bantları","en":"PMR, marine VHF, aviation","l1":"Hayat kurtaran haberleşme neden hâlâ basit ve analog?","hk":"Havacılık hâlâ AM kullanır — çünkü iki kişi aynı anda konuşursa ikisi de duyulur. Bu bir hata değil, tasarım kararı.","lv":[2,3],"ix":0,"st":0}]},{"id":10,"ad":"Ölçüm ve pratik","ozet":"Teoriden alete geçiş. Bu bölüm seriyi \"gerçek\" yapar.","konular":[{"n":88,"t":"dB ailesi: dB, dBm, dBi, dBd, dBc","en":"Decibel family","l1":"Çok büyük ve çok küçük sayıları aynı cetvele sığdırmanın yolu.","hk":"RF dünyasında çarpma işlemi toplamaya döner. Bir kez anlarsan her şey kolaylaşır — anlamazsan hiçbir şey oturmaz.","lv":[1,2,3],"ix":1,"st":0},{"n":89,"t":"Spektrum analizörü","en":"Spectrum analyzer","l1":"Havada hangi frekansta ne olduğunu gözle görmek.","hk":"Görünmez olanı görünür yapan alet. İlk kez bakan herkes şaşırır: hava dolu.","lv":[2,3],"ix":1,"st":0},{"n":90,"t":"VNA ve S-parametreleri","en":"Vector network analyzer, S-parameters","l1":"Devreye bir dalga gönderip ne kadarının geri geldiğini ölçmek.","hk":"Anten tasarımının vazgeçilmez aleti. Artık 50 dolara masaüstü VNA alınabiliyor.","lv":[3],"ix":1,"st":0},{"n":91,"t":"Osiloskop ve göz diyagramı","en":"Oscilloscope, eye diagram","l1":"Sinyalin \"gözü\" ne kadar açıksa, o kadar sağlıklıdır.","hk":"Tek bir bakışta hattın iyi mi kötü mü olduğunu söyleyen görsel. Çok fotojenik bir konu.","lv":[3],"ix":1,"st":0},{"n":92,"t":"Anten ölçümü ve yankısız oda","en":"Antenna measurement, anechoic chamber","l1":"Duvarların sinyali yuttuğu, dünyanın en sessiz odaları.","hk":"Sivri köpük duvarlı o odaların fotoğrafı her zaman ilgi çeker; ne işe yaradığını çok az kişi bilir.","lv":[2,3],"ix":0,"st":0},{"n":93,"t":"EMC ve EMI","en":"Electromagnetic compatibility","l1":"Cihazın hem başkasını rahatsız etmemesi, hem de rahatsız edilmemesi.","hk":"CE işaretinin arkasındaki testlerin çoğu budur. Ürün geliştiren herkesin er geç çarptığı duvar.","lv":[2,3],"ix":1,"st":0},{"n":94,"t":"Spektrum regülasyonu","en":"Spectrum regulation (ITU, BTK)","l1":"Hava herkesin ama frekanslar değil. Kim nerede yayın yapabilir, kurala bağlı.","hk":"Operatörlerin frekans ihalelerine milyarlarca lira ödemesinin sebebi: spektrum, bitmeyen ama çoğalmayan bir kaynak.","lv":[1,2,3],"ix":1,"st":0},{"n":95,"t":"Evde SDR ile ilk deney","en":"Hands-on SDR project","l1":"30 dolarlık bir çubukla gökyüzündeki uçakları haritada görmek.","hk":"Seriyi izleyen birinin kendi eliyle yapabileceği ilk şey. Dönüşüm oranı en yüksek içerik türü budur.","lv":[1,2,3],"ix":1,"st":0}]},{"id":11,"ad":"Gelecek ve ileri konular","ozet":"Alanın nereye gittiği. Bu bölüm seriyi güncel tutar.","konular":[{"n":96,"t":"mmWave ve THz","en":"Millimeter wave, terahertz","l1":"Çok yüksek frekans: inanılmaz hızlı, ama elini önüne koysan keser.","hk":"5G'nin en çok konuşulan ama en az kullanılan kısmı. Neden? Fiziği çok zor.","lv":[2,3],"ix":1,"st":0},{"n":97,"t":"Massive MIMO ve akıllı yüzeyler","en":"Massive MIMO, RIS","l1":"Yüzlerce anten; ve duvarları kontrol edilebilir aynaya çeviren yüzeyler.","hk":"Sinyal gitmiyorsa duvarı değiştir. Fikir kulağa bilim kurgu gibi geliyor ama laboratuvarda çalışıyor.","lv":[3],"ix":1,"st":0},{"n":98,"t":"Uydudan doğrudan telefona","en":"Direct-to-device satellite","l1":"Baz istasyonu olmayan yerde telefonun doğrudan uyduyla konuşması.","hk":"Sıradan bir telefonun 500 km yukarıdaki bir uyduya ulaşması, on yıl önce imkânsız sayılıyordu.","lv":[1,2,3],"ix":1,"st":0},{"n":99,"t":"Yapay zekâ destekli haberleşme","en":"AI-native air interface","l1":"Alıcının, kanalı öğrenerek kendini ayarlaması.","hk":"6G tartışmalarının merkezinde bu var: elle tasarlanmış alıcı yerine öğrenen alıcı.","lv":[3],"ix":0,"st":0},{"n":100,"t":"Kuantum haberleşme ve QKD","en":"Quantum communication, QKD","l1":"Dinlendiğini anlayabildiğin bir hat.","hk":"Şifreyi kırılmaz yapmaz; kırılmaya çalışıldığını fark etmeni sağlar. Aradaki fark önemli.","lv":[3],"ix":1,"st":0},{"n":101,"t":"6G ne vaat ediyor?","en":"6G","l1":"Haberleşme ile algılamanın aynı sinyalde birleşmesi.","hk":"3GPP Haziran 2026 genel kurulunda Release 21 takvimi kesinleşti; ilk ticari sistemler 2030 civarı bekleniyor.","lv":[2,3],"ix":1,"st":0}]}],"MITLER":[{"t":"\"5G radyasyonu zararlı mı?\"","l1":"Radyo dalgası ile röntgen aynı aile ama çok farklı güçte. Biri molekül koparır, diğeri koparamaz.","hk":"İyonlaştırıcı ve iyonlaştırıcı olmayan radyasyon ayrımı — tek bir grafikle anlatılabilir ve tartışmanın çoğunu bitirir."},{"t":"Çubuk sayısı ne anlatır?","l1":"Çubuklar sinyalin gücünü gösterir, hızını değil.","hk":"Dört çubukla internet sürünüyorsa sebep sinyal değil, aynı kuleye bağlı kişi sayısıdır."},{"t":"Wi-Fi ile mikrodalga fırın aynı frekansta mı?","l1":"Evet, ikisi de 2.4 GHz. Ama biri fısıldıyor, diğeri bağırıyor.","hk":"Fırın çalışırken Wi-Fi'ın yavaşlaması gerçek bir olaydır. Güç farkı yaklaşık bir milyon kat."},{"t":"Uçak modu gerçekten gerekli mi?","l1":"Telefon, uzaktaki kuleyi bulamayınca sesini sonuna kadar açar.","hk":"Asıl mesele uçağın düşmesi değil; yerdeki hücresel şebekenin 10 km yukarıdan gelen sinyalle karışmasıdır."},{"t":"Alüminyum folyo sinyali artırır mı?","l1":"Bazen evet — ama nedeni sandığın gibi değil.","hk":"Folyo yansıtıcı olarak yönlülük ekleyebilir. Yanlış yere koyarsan sinyali tamamen kesersin. Denenebilir bir deney."},{"t":"\"Daha büyük anten daha iyidir\"","l1":"Değil. Belli bir boydan sonra desen parçalanır.","hk":"Zaten çürütüldü: 3B ışıma deseni görselleştirmesi 1.5λ'da ana lobun ikiye ayrıldığını gösteriyor."}]};
+const { BOLUMLER, MITLER } = DATA;
+const $ = id => document.getElementById(id);
+const ST = ['planlandı','hazırlanıyor','yayına hazır'];
+
+let filt = { q:'', lv:new Set(), ix:false, todo:false, compact:false };
+
+/* ---------- oluşturma ---------- */
+function render(){
+  const m = $('main');
+  m.innerHTML = BOLUMLER.map(b => `
+    <section data-sec="${b.id}">
+      <div class="shead">
+        <div class="snum">${String(b.id).padStart(2,'0')}</div>
+        <div>
+          <h2>${b.ad}</h2>
+          <p>${b.ozet}</p>
+        </div>
+        <div class="prog">
+          <div class="n" data-prognum="${b.id}"></div>
+          <div class="track"><div class="fill" data-progfill="${b.id}" style="width:0%"></div></div>
+        </div>
+      </div>
+      ${b.konular.map(k => topicHTML(k)).join('')}
+    </section>`).join('') + `
+    <section data-sec="myth">
+      <div class="shead">
+        <div class="snum">+</div>
+        <div>
+          <h2>Yanlış bilinenler</h2>
+          <p>Numarasız bonus izlek. Etkileşimi en yüksek içerik türü — ve alanın en çok
+             yanlış anlaşılan tarafı.</p>
+        </div>
+      </div>
+      ${MITLER.map(k => `
+        <div class="topic myth" data-myth="1">
+          <div class="tn">·</div>
+          <div class="tbody">
+            <div class="ttop"><span class="ttl2">${esc(k.t)}</span></div>
+            <div class="tl1">${esc(k.l1)}</div>
+            <div class="thk">${esc(k.hk)}</div>
+          </div>
+        </div>`).join('')}
+    </section>`;
+  m.querySelectorAll('.st').forEach(el => el.onclick = () => {
+    const k = findK(+el.dataset.n); k.st = (k.st+1)%3;
+    el.className = 'st s'+k.st; el.textContent = ST[k.st];
+    updateStats(); applyFilter();
+  });
+  updateStats(); applyFilter();
+}
+
+function topicHTML(k){
+  return `<div class="topic" data-n="${k.n}"
+       data-txt="${esc((k.t+' '+k.en+' '+k.l1+' '+k.hk).toLowerCase())}"
+       data-lv="${k.lv.join(',')}" data-ix="${k.ix}">
+    <div class="tn">${String(k.n).padStart(2,'0')}</div>
+    <div class="tbody">
+      <div class="ttop">
+        <span class="ttl2">${esc(k.t)}</span>
+        <span class="ten">${esc(k.en)}</span>
+      </div>
+      <div class="tl1">${esc(k.l1)}</div>
+      <div class="thk">${esc(k.hk)}</div>
+    </div>
+    <div class="tside">
+      <div class="lvs">${k.lv.map(v=>`<span class="lv a${v}">L${v}</span>`).join('')}</div>
+      ${k.ix?'<span class="ix">interaktif</span>':''}
+      <span class="st s${k.st}" data-n="${k.n}">${ST[k.st]}</span>
+    </div>
+  </div>`;
+}
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function findK(n){ for(const b of BOLUMLER){ const k=b.konular.find(x=>x.n===n); if(k) return k; } }
+function allK(){ return BOLUMLER.flatMap(b=>b.konular); }
+
+/* ---------- istatistik ---------- */
+function updateStats(){
+  const ks = allK();
+  $('sDone').textContent = ks.filter(k=>k.st===2).length;
+  $('sIx').textContent   = ks.filter(k=>k.ix).length;
+  $('sL1').textContent   = ks.filter(k=>k.lv.includes(1)).length;
+  for(const b of BOLUMLER){
+    const d = b.konular.filter(k=>k.st===2).length, t = b.konular.length;
+    const n = document.querySelector(`[data-prognum="${b.id}"]`);
+    const f = document.querySelector(`[data-progfill="${b.id}"]`);
+    if(n) n.textContent = d+' / '+t;
+    if(f) f.style.width = (100*d/t)+'%';
+  }
+}
+
+/* ---------- filtre ---------- */
+function applyFilter(){
+  let shown = 0;
+  document.querySelectorAll('.topic').forEach(el => {
+    if(el.dataset.myth){                       // mitler yalnız arama filtresine tabi
+      const ok = !filt.q && !filt.lv.size && !filt.ix && !filt.todo;
+      el.classList.toggle('hide', !ok);
+      return;
+    }
+    const k = findK(+el.dataset.n);
+    let ok = true;
+    if(filt.q && !el.dataset.txt.includes(filt.q)) ok = false;
+    if(ok && filt.lv.size && ![...filt.lv].every(v=>k.lv.includes(v))) ok = false;
+    if(ok && filt.ix && !k.ix) ok = false;
+    if(ok && filt.todo && k.st===2) ok = false;
+    el.classList.toggle('hide', !ok);
+    if(ok) shown++;
+  });
+  document.querySelectorAll('section').forEach(s => {
+    const any = [...s.querySelectorAll('.topic')].some(t=>!t.classList.contains('hide'));
+    s.classList.toggle('hide', !any);
+  });
+  document.querySelectorAll('.thk').forEach(e=>e.classList.toggle('hide', filt.compact));
+  let e = $('empty');
+  if(!shown && !e){ e=document.createElement('div'); e.id='empty'; e.className='empty';
+    e.textContent='Bu filtreye uyan konu yok.'; $('main').appendChild(e); }
+  else if(shown && e) e.remove();
+}
+
+/* ---------- kontroller ---------- */
+$('q').oninput = e => { filt.q = e.target.value.trim().toLowerCase(); applyFilter(); };
+document.querySelectorAll('[data-lv]').forEach(b => b.onclick = () => {
+  const v = +b.dataset.lv;
+  filt.lv.has(v) ? filt.lv.delete(v) : filt.lv.add(v);
+  b.classList.toggle('on', filt.lv.has(v)); applyFilter();
+});
+document.querySelectorAll('[data-f]').forEach(b => b.onclick = () => {
+  const f = b.dataset.f; filt[f] = !filt[f]; b.classList.toggle('on', filt[f]); applyFilter();
+});
+$('compact').onclick = e => { filt.compact = !filt.compact; e.target.classList.toggle('on', filt.compact); applyFilter(); };
+
+/* ---------- markdown dışa aktarma ---------- */
+function toMarkdown(){
+  let s = '# 101 Konuda Haberleşme — İçerik Yol Haritası\n\n';
+  s += 'Katmanlar: **L1** Herkes (5 yaş dili) · **L2** Meraklı (mekanizma) · **L3** Mühendis (denklem)\n\n';
+  const ks = allK();
+  s += `Toplam ${ks.length} konu · ${ks.filter(k=>k.st===2).length} yayına hazır · ${ks.filter(k=>k.ix).length} interaktif olabilir\n\n---\n\n`;
+  for(const b of BOLUMLER){
+    s += `## ${String(b.id).padStart(2,'0')} · ${b.ad}\n\n_${b.ozet}_\n\n`;
+    s += '| # | Konu | Terim | L1 anlatımı | Katman | İnteraktif | Durum |\n|---|---|---|---|---|---|---|\n';
+    for(const k of b.konular){
+      s += `| ${k.n} | **${k.t}** | ${k.en} | ${k.l1} | ${k.lv.map(v=>'L'+v).join(' ')} | ${k.ix?'evet':'—'} | ${ST[k.st]} |\n`;
+    }
+    s += '\n';
+  }
+  s += '## + · Yanlış bilinenler\n\n';
+  for(const k of MITLER) s += `- **${k.t}** — ${k.l1}\n  _${k.hk}_\n`;
+  return s;
+}
+$('export').onclick = () => { $('mtext').value = toMarkdown(); $('modal').classList.add('on'); };
+$('close').onclick  = () => $('modal').classList.remove('on');
+$('modal').onclick  = e => { if(e.target.id==='modal') $('modal').classList.remove('on'); };
+$('copy').onclick   = async () => {
+  const t = $('mtext'); t.select();
+  try{ await navigator.clipboard.writeText(t.value); }catch(_){ document.execCommand('copy'); }
+  $('copy').textContent = 'Kopyalandı'; setTimeout(()=>$('copy').textContent='Panoya kopyala', 1600);
+};
+addEventListener('keydown', e => { if(e.key==='Escape') $('modal').classList.remove('on'); });
+
+render();
+</script>
+</body>
+</html>
