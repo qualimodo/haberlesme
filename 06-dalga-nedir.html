@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dalga nedir?</title>
+<meta name="description" content="Dalga kıyıya gelir, su gelmez. İlerleyen şey madde değil, şekil.">
+<meta property="og:site_name" content="101 Konuda Haberleşme">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dalga nedir? · 101 Konuda Haberleşme">
+<meta property="og:description" content="Dalga kıyıya gelir, su gelmez. İlerleyen şey madde değil, şekil.">
+<meta property="og:url" content="https://qualimodo.github.io/haberlesme/06-dalga-nedir.html">
+<meta property="og:image" content="https://qualimodo.github.io/haberlesme/og-06.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Dalga nedir? · 101 Konuda Haberleşme">
+<meta name="twitter:description" content="Dalga kıyıya gelir, su gelmez. İlerleyen şey madde değil, şekil.">
+<meta name="twitter:image" content="https://qualimodo.github.io/haberlesme/og-06.png">
+<style>
+  :root{
+    --bg:#070a10; --panel:#0e131d; --panel2:#131b28; --line:#1e2736;
+    --ink:#e8eef7; --dim:#9aabc2; --dim2:#5d6d85; --acc:#7cf5c4;
+    --nokta:#ffc061; --su:#5598e7;
+    --l1:#cde2fb; --l2:#86b6ef; --l3:#3987e5;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);line-height:1.6;padding-bottom:60px;
+    font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:960px;margin:0 auto;padding:0 22px}
+
+  header{background:radial-gradient(900px 300px at 16% -12%,rgba(42,120,214,.16),transparent 62%)}
+  header.wrap{padding-top:84px;padding-bottom:22px}
+  .kick{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);font-weight:700}
+  h1{font-size:38px;font-weight:700;letter-spacing:-.03em;margin:18px 0 13px;line-height:1.1}
+  header p{color:var(--dim);font-size:16px;max-width:640px}
+
+  .scene{background:var(--panel);border:1px solid var(--line);border-radius:16px;
+    margin-top:26px;padding:6px 6px 0}
+  canvas{display:block;width:100%;height:360px;border-radius:12px}
+
+  .knob{display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+    padding:16px 16px 18px;border-top:1px solid var(--line);margin-top:6px}
+  .knob label{font-size:13px;color:var(--dim);white-space:nowrap;font-weight:500}
+  input[type=range]{-webkit-appearance:none;appearance:none;flex:1;min-width:180px;height:4px;
+    border-radius:3px;background:#25324a;outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;
+    border-radius:50%;background:var(--acc);cursor:pointer;box-shadow:0 0 0 4px rgba(124,245,196,.15)}
+  input[type=range]::-moz-range-thumb{width:18px;height:18px;border:none;border-radius:50%;
+    background:var(--acc);cursor:pointer}
+  .lvl{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;color:var(--acc);
+    min-width:96px;text-align:right;font-weight:600}
+  .sep{width:1px;height:24px;background:var(--line)}
+  .hiz{display:flex;gap:6px;flex-wrap:wrap}
+  .hiz button{font:inherit;font-size:12px;font-weight:600;color:var(--dim);background:var(--panel2);
+    border:1px solid var(--line);padding:7px 11px;border-radius:8px;cursor:pointer;transition:.15s;
+    white-space:nowrap}
+  .hiz button:hover{color:var(--ink);border-color:#33445f}
+  .hiz button.on{background:rgba(124,245,196,.12);border-color:rgba(124,245,196,.5);color:var(--acc)}
+
+  .skor{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  .kart{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--kc);
+    border-radius:13px;padding:15px 17px}
+  .kart .b{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--kc);font-weight:700}
+  .kart .d{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:26px;font-weight:680;
+    margin:7px 0 2px;letter-spacing:-.02em}
+  .kart .a{font-size:12.5px;color:var(--dim2)}
+  .kart .o{font-size:13px;color:#c2cfe1;margin-top:9px;padding-top:9px;border-top:1px solid #1a2333}
+
+  h2{font-size:22px;font-weight:660;letter-spacing:-.02em;margin:46px 0 6px}
+  .lead{color:var(--dim);font-size:15px;margin-bottom:18px}
+  .parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(216px,1fr));gap:12px}
+  .part{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:17px;
+    border-top:3px solid var(--pc)}
+  .part h3{font-size:16px;font-weight:660;margin-bottom:8px;color:var(--pc)}
+  .part p{font-size:13.5px;color:#c0cddf;line-height:1.65;margin-bottom:8px}
+  .part p:last-child{margin-bottom:0}
+  .part b{color:#fff;font-weight:640}
+
+  .tabs{display:flex;gap:6px;margin:46px 0 16px}
+  .tabs button{flex:1;font:inherit;font-size:13px;font-weight:600;color:var(--dim);
+    background:var(--panel2);border:1px solid var(--line);padding:11px;border-radius:10px;
+    cursor:pointer;transition:.15s}
+  .tabs button:hover{color:var(--ink);border-color:#33445f}
+  .tabs button.on.t1{background:rgba(205,226,251,.13);border-color:rgba(205,226,251,.5);color:var(--l1)}
+  .tabs button.on.t2{background:rgba(134,182,239,.13);border-color:rgba(134,182,239,.5);color:var(--l2)}
+  .tabs button.on.t3{background:rgba(57,135,229,.17);border-color:rgba(57,135,229,.55);color:var(--l3)}
+  #metin{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
+  #metin h4{font-size:19px;font-weight:660;letter-spacing:-.015em;margin-bottom:12px}
+  #metin p{font-size:15.5px;color:#c8d5e6;line-height:1.75;margin-bottom:13px}
+  #metin p:last-child{margin-bottom:0}
+  #metin b{color:#fff;font-weight:640}
+  #metin .not{font-size:14px;color:var(--acc);border-left:2px solid var(--acc);
+    padding-left:14px;margin-top:16px;line-height:1.7}
+  #metin .form{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;color:#dbe6f5;
+    background:var(--panel2);border:1px solid var(--line);border-radius:10px;
+    padding:12px 15px;margin:4px 0 14px;overflow-x:auto;white-space:nowrap}
+
+  footer{margin-top:38px;padding-top:20px;border-top:1px solid var(--line);
+    font-size:13px;color:var(--dim2);line-height:1.75}
+
+  @media (max-width:640px){
+    h1{font-size:27px} .wrap{padding:0 15px} header.wrap{padding-top:58px;padding-bottom:18px}
+    canvas{height:320px} .skor{grid-template-columns:1fr}
+    .knob{gap:12px} .sep{display:none} .lvl{min-width:0;flex:1;text-align:left}
+  }
+  .gez{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:54px}
+  .gez a,.gez .yok{display:flex;flex-direction:column;gap:6px;text-decoration:none;
+    background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;
+    transition:.16s}
+  .gez a:hover{background:var(--panel2);border-color:#33455f;transform:translateY(-1px)}
+  .gez .e{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim2);font-weight:700}
+  .gez .b{font-size:17px;font-weight:660;color:var(--ink);letter-spacing:-.012em;line-height:1.3}
+  .gez a:hover .b{color:var(--acc)}
+  .gez .son{text-align:right}
+  .gez .yok{opacity:.42} .gez .yok .b{color:var(--dim)}
+  @media (max-width:640px){ .gez{grid-template-columns:1fr} .gez .son{text-align:right} }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="kick">101 Konuda Haberleşme · Konu 06</div>
+  <h1>Dalga nedir?</h1>
+  <p>Denizdeki şamandıra kıyıya doğru gitmez, sadece iner çıkar. İlerleyen şey su değil,
+     suyun üstündeki harekettir. Kablosuz haberleşmenin tek taşıyıcısı bu.</p>
+</header>
+
+<main class="wrap">
+
+  <div class="scene">
+    <canvas id="cv"></canvas>
+    <div class="knob">
+      <label for="f">Frekans</label>
+      <input type="range" id="f" min="0" max="100" step="1" value="0">
+      <span class="lvl" id="fl">100 Hz</span>
+      <div class="sep"></div>
+      <div class="hiz" id="ort"></div>
+    </div>
+  </div>
+
+  <div class="skor">
+    <div class="kart" style="--kc:var(--acc)">
+      <div class="b">Dalga boyu</div>
+      <div class="d" id="dL">3.43 m</div>
+      <div class="a" id="aL">iki tepe arasındaki mesafe</div>
+      <div class="o" id="oL">Frekansı iki katına çıkarırsan dalga boyu yarıya iner.</div>
+    </div>
+    <div class="kart" style="--kc:var(--nokta)">
+      <div class="b">Turuncu nokta ne kadar ilerledi?</div>
+      <div class="d" style="color:#ffc061">0 metre</div>
+      <div class="a">sadece yukarı ve aşağı</div>
+      <div class="o" id="oN">Aynı sürede dalganın kendisi 343 metre gitti.</div>
+    </div>
+  </div>
+
+  <h2>Ekranda ne var?</h2>
+  <p class="lead">Turuncu noktayı izle. Sonra yeşil tepe işaretini izle.</p>
+  <div class="parts">
+    <div class="part" style="--pc:#ffc061">
+      <h3>Turuncu nokta: madde</h3>
+      <p>Bu nokta suyun bir damlası. Kesikli çizgiden hiç ayrılmıyor, sadece <b>iner ve çıkar</b>.</p>
+      <p>Dalga geçip gittikten sonra da başladığı yerde durur.</p>
+    </div>
+    <div class="part" style="--pc:#7cf5c4">
+      <h3>Yeşil işaret: şekil</h3>
+      <p>Bu işaret bir tepenin üstünde duruyor ve tepeyle birlikte sağa doğru ilerliyor.</p>
+      <p>İlerleyen şey işte budur: madde değil, <b>şekil</b>.</p>
+    </div>
+    <div class="part" style="--pc:#86b6ef">
+      <h3>Sürgü: frekans</h3>
+      <p>Sürgüyü sağa çektiğinde noktalar daha sık inip çıkar, dalgalar sıklaşır.</p>
+      <p>Dikkat et: <b>hız değişmiyor</b>. Yeşil işaret her zaman aynı tempoda ilerliyor.</p>
+    </div>
+    <div class="part" style="--pc:#cde2fb">
+      <h3>Ortam düğmeleri</h3>
+      <p>Aynı frekans, farklı ortamda farklı dalga boyu verir. Çünkü her ortamda hız farklıdır.</p>
+      <p>100 Hz havada 3.43 metre, suda <b>14.8 metre</b> uzunluğundadır.</p>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="t1 on" data-l="1">L1 · Herkes</button>
+    <button class="t2" data-l="2">L2 · Meraklı</button>
+    <button class="t3" data-l="3">L3 · Mühendis</button>
+  </div>
+  <div id="metin"></div>
+  <nav class="gez">
+    <a href="05-atesten-5g-ye-kisa-tarih.html"><span class="e">← Önceki konu</span><span class="b">Ateşten 5G'ye kısa tarih</span></a>
+    <span class="yok son"><span class="e">Sıradaki konu · yakında</span><span class="b">Frekans, dalga boyu, genlik, faz</span></span>
+  </nav>
+
+
+
+  <footer>
+    Ekrandaki hareket, izlenebilsin diye çok yavaşlatılmıştır; oranlar korunur. Dalga boyu
+    ve periyot değerleri gerçektir ve λ = v ⁄ f bağıntısından hesaplanır. Kullanılan hızlar:
+    havada ses 343 m/s (20 °C), suda ses 1480 m/s (20 °C), boşlukta elektromanyetik dalga
+    299 792 458 m/s (tanım gereği tam sayı). Sudaki ve havadaki ses hızı sıcaklıkla değişir.
+    Deniz dalgaları bunlardan farklıdır: hızları dalga boyuna bağlıdır, dolayısıyla buradaki
+    sabit hız varsayımı onlar için geçerli değildir. Şamandıra benzetmesi yalnızca hareketi
+    anlatmak içindir.
+  </footer>
+</main>
+
+<script>
+"use strict";
+/* ===========================================================================
+   KONU 06 — DALGA NEDİR?
+   Tek fikir: madde ilerlemez, şekil ilerler.
+   λ = v / f   ·   T = 1 / f
+   Doğrulandı: 343/100 = 3.43 m · 1480/100 = 14.8 m · 3e8/100e6 = 3.00 m
+   =========================================================================== */
+const $ = id => document.getElementById(id);
+const cv = $('cv'), ctx = cv.getContext('2d');
+
+const ORTAM = [
+  { id:'hava',  ad:'Havada ses',  v:343,        f0:100,   f1:800,   birim:'Hz',
+    not:'20 °C kuru havada ses saniyede 343 metre gider.' },
+  { id:'su',    ad:'Suda ses',    v:1480,       f0:100,   f1:800,   birim:'Hz',
+    not:'Su daha yoğun ve daha sıkı bağlı olduğu için ses dört kattan fazla hızlı gider.' },
+  { id:'radyo', ad:'Radyo dalgası', v:299792458, f0:100e6, f1:800e6, birim:'MHz',
+    not:'Boşlukta hiçbir şey ışıktan hızlı gidemez. Radyo dalgası da ışık hızıyla gider.' },
+];
+
+let o = 0, s = 0, faz = 0, tepeK = 0, W=0, H=0, dpr=1, sonZ=0;
+
+const ort  = () => ORTAM[o];
+const frek = () => ort().f0 * Math.pow(ort().f1/ort().f0, s/100);
+const lam  = () => ort().v / frek();
+const genM = () => 2 * ort().v / ort().f0;        // ekranın gerçek genişliği, metre
+
+function olcu(){
+  dpr = Math.min(2, devicePixelRatio||1);
+  W = cv.clientWidth; H = cv.clientHeight;
+  if(W<10||H<10) return;
+  cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+
+/* ---- biçimlendirme ---- */
+function mYaz(m){
+  if(m>=1000) return (m/1000).toFixed(2)+' km';
+  if(m>=1)    return m.toFixed(2)+' m';
+  if(m>=0.01) return (m*100).toFixed(1)+' cm';
+  return (m*1000).toFixed(1)+' mm';
+}
+function fYaz(f){
+  if(f>=1e9) return (f/1e9).toFixed(2)+' GHz';
+  if(f>=1e6) return Math.round(f/1e6)+' MHz';
+  if(f>=1e3) return Math.round(f/1e3)+' kHz';
+  return Math.round(f)+' Hz';
+}
+function hYaz(v){
+  const bosluk = n => n.toLocaleString('tr-TR').replace(/\./g,'\u2009');
+  if(v>=1e6) return bosluk(Math.round(v/1e3))+' km/s';
+  return bosluk(Math.round(v))+' m/s';
+}
+function sYaz(sn){
+  if(sn>=1)    return sn.toFixed(2)+' s';
+  if(sn>=1e-3) return (sn*1e3).toFixed(2)+' ms';
+  if(sn>=1e-6) return (sn*1e6).toFixed(2)+' µs';
+  return (sn*1e9).toFixed(1)+' ns';
+}
+
+/* ---- çizim yardımcıları ---- */
+function yz(m,x,y,renk,boy,hiza,kalin,aralik,tek){
+  ctx.font=`${kalin||700} ${boy}px ${tek?'ui-monospace,Menlo,monospace':'system-ui,-apple-system,sans-serif'}`;
+  ctx.textAlign=hiza||'left'; ctx.textBaseline='alphabetic'; ctx.fillStyle=renk;
+  ctx.letterSpacing=(aralik||0)+'px'; ctx.fillText(m,x,y); ctx.letterSpacing='0px';
+}
+const gen = (m,boy,kalin,aralik)=>{
+  ctx.font=`${kalin||700} ${boy}px system-ui,-apple-system,sans-serif`;
+  ctx.letterSpacing=(aralik||0)+'px'; const w=ctx.measureText(m).width; ctx.letterSpacing='0px'; return w;
+};
+function yk(x,y,w,h,r,dolgu,cizgi,kal){
+  ctx.beginPath(); ctx.roundRect(x,y,w,h,r);
+  if(dolgu){ctx.fillStyle=dolgu;ctx.fill()}
+  if(cizgi){ctx.strokeStyle=cizgi;ctx.lineWidth=kal||1.3;ctx.stroke()}
+}
+
+const PADL = 20, PADR = 20;
+const merkez  = () => H*0.44;
+const genlik  = () => Math.min(64, H*0.17);
+const xNokta  = () => PADL + (W-PADL-PADR)*0.24;   // turuncu noktanın sabit yeri
+
+function ciz(z){
+  if(W<10||H<10) return;
+  const dt = sonZ ? Math.min(0.05,(z-sonZ)/1000) : 0; sonZ = z;
+  ctx.fillStyle='#080c14'; ctx.fillRect(0,0,W,H);
+
+  const A = PADL, B = W-PADR, gp = B-A;
+  const ppm = gp/genM();                    // piksel / metre
+  const Lp  = lam()*ppm;                    // dalga boyu, piksel
+  const my  = merkez(), g = genlik();
+
+  /* tepe 4 saniyede ekranı geçsin: hız frekanstan bağımsız */
+  faz += dt * (gp/4) / Lp;                  // dalga boyu cinsinden ilerleme
+  const yOf = x => my - g*Math.sin(2*Math.PI*((x-A)/Lp - faz));
+
+  /* denge çizgisi */
+  ctx.strokeStyle='rgba(120,145,180,.16)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(A,my); ctx.lineTo(B,my); ctx.stroke();
+
+  /* dalganın şekli: sürekli çizgi (her zaman düzgün görünsün diye sık örneklenir) */
+  ctx.strokeStyle='rgba(133,166,208,.30)'; ctx.lineWidth=1.6; ctx.lineJoin='round';
+  ctx.beginPath();
+  for(let x=A; x<=B; x+=2){ const y=yOf(x); x===A?ctx.moveTo(x,y):ctx.lineTo(x,y); }
+  ctx.stroke();
+
+  /* madde: ayrık noktalar — dalga boyu başına en az 14 nokta düşsün */
+  const aralik = Math.max(9, Math.min(26, Lp/14));
+  const say = Math.max(12, Math.round(gp/aralik));
+  const yari = Math.max(1.7, Math.min(3.0, aralik*0.16));
+  for(let i=0;i<=say;i++){
+    const x = A + gp*i/say, y = yOf(x);
+    const d = Math.abs(y-my)/g;
+    ctx.fillStyle = `rgba(205,226,251,${0.26+0.56*d})`;
+    ctx.beginPath(); ctx.arc(x,y,yari,0,6.2832); ctx.fill();
+  }
+
+  /* turuncu nokta — sadece düşey */
+  const xn = xNokta(), yn = yOf(xn);
+  ctx.setLineDash([4,5]); ctx.strokeStyle='rgba(255,192,97,.42)'; ctx.lineWidth=1.4;
+  ctx.beginPath(); ctx.moveTo(xn,my-g-16); ctx.lineTo(xn,my+g+16); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.strokeStyle='rgba(255,192,97,.55)'; ctx.lineWidth=3.5; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(xn,my-g); ctx.lineTo(xn,my+g); ctx.stroke(); ctx.lineCap='butt';
+  ctx.fillStyle='#ffc061'; ctx.beginPath(); ctx.arc(xn,yn,8,0,6.2832); ctx.fill();
+  ctx.strokeStyle='rgba(8,12,20,.85)'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.arc(xn,yn,8,0,6.2832); ctx.stroke();
+  yz('NOKTA', xn, my+g+38, 'rgba(255,192,97,.85)', 10.5, 'center', 700, 1.6);
+  yz('yalnız iner çıkar', xn, my+g+56, 'rgba(154,171,194,.55)', 10.5, 'center', 500);
+
+  /* yeşil tepe işareti — hep bir tepenin üstünde durur, tepeyle birlikte sağa gider.
+     Tepeler x = A + Lp*(faz + 0.25 + k) konumlarındadır; k bir tepeyi seçer. */
+  let xt = A + Lp*(faz + 0.25 + tepeK), sayac = 0;
+  const sicra = Math.max(1, Math.floor(gp/Lp));
+  while(xt > B - 6 && sayac++ < 400){ tepeK -= sicra; xt = A + Lp*(faz + 0.25 + tepeK); }
+  while(xt < A + 6 && sayac++ < 400){ tepeK += 1;     xt = A + Lp*(faz + 0.25 + tepeK); }
+  const yt = yOf(xt);
+  ctx.setLineDash([3,7]); ctx.strokeStyle='rgba(124,245,196,.34)'; ctx.lineWidth=1.6;
+  ctx.beginPath(); ctx.moveTo(A,my-g-26); ctx.lineTo(xt,my-g-26); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='#7cf5c4';
+  ctx.beginPath(); ctx.moveTo(xt,my-g-20); ctx.lineTo(xt-7,my-g-32); ctx.lineTo(xt+7,my-g-32);
+  ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.arc(xt,yt,7,0,6.2832); ctx.fill();
+  ctx.strokeStyle='rgba(8,12,20,.85)'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.arc(xt,yt,7,0,6.2832); ctx.stroke();
+  const et='TEPE — sağa ilerler', ew=gen(et,10.5,700,1.6)+16;
+  const ex=Math.min(B-ew, Math.max(A, xt-ew/2));
+  yk(ex, my-g-56, ew, 19, 6, 'rgba(8,20,17,.9)', null);
+  yz(et, ex+ew/2, my-g-42, 'rgba(124,245,196,.95)', 10.5, 'center', 700, 1.6);
+
+  /* dalga boyu ölçüsü */
+  const ox = Math.min(A + 0.52*gp, B - Lp - 6), oy = my + g + 92;
+  if(Lp <= gp*0.56){
+    ctx.strokeStyle='rgba(124,245,196,.55)'; ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.moveTo(ox,oy); ctx.lineTo(ox+Lp,oy); ctx.stroke();
+    for(const x of [ox, ox+Lp]){ ctx.beginPath(); ctx.moveTo(x,oy-6); ctx.lineTo(x,oy+6); ctx.stroke(); }
+    yz('λ = '+mYaz(lam()), ox+Lp/2, oy-13, '#7cf5c4', 11.5, 'center', 700);
+  }
+
+  /* ekran genişliği ölçeği */
+  const sy = H-16;
+  ctx.strokeStyle='rgba(120,145,180,.30)'; ctx.lineWidth=1.2;
+  ctx.beginPath(); ctx.moveTo(A,sy); ctx.lineTo(B,sy); ctx.stroke();
+  for(const x of [A,B]){ ctx.beginPath(); ctx.moveTo(x,sy-5); ctx.lineTo(x,sy+5); ctx.stroke(); }
+  const se='ekranın genişliği '+mYaz(genM()), sw=gen(se,10,600,.8)+14;
+  yk((A+B)/2-sw/2, sy-9, sw, 18, 6, '#080c14', null);
+  yz(se, (A+B)/2, sy+4, 'rgba(150,172,200,.62)', 10, 'center', 600, .8);
+
+  /* üst bilgi */
+  yz(ort().ad.toLocaleUpperCase('tr-TR'), A, 26, 'rgba(154,171,194,.62)', 10.5, 'left', 700, 1.8);
+  yz(fYaz(frek())+'  ·  '+hYaz(ort().v), B, 26, 'rgba(154,171,194,.62)', 10.5, 'right', 700, 1.2);
+}
+
+function kare(z){ ciz(z); requestAnimationFrame(kare); }
+
+function panoYaz(){
+  const L=lam(), T=1/frek();
+  $('fl').textContent = fYaz(frek());
+  $('dL').textContent = mYaz(L);
+  $('aL').textContent = 'periyot '+sYaz(T)+' · hız '+hYaz(ort().v);
+  $('oL').textContent = ort().not;
+  $('oN').textContent = 'Aynı sürede dalganın kendisi '+hYaz(ort().v).replace('/s','')+' yol aldı.';
+  ORTAM.forEach((x,i)=>$('o'+i).className = i===o ? 'on' : '');
+}
+
+/* ---- katman metinleri ---- */
+const METIN = {
+1:{b:'İlerleyen şey su değil',
+   p:[`Denizde bir şamandıra düşün. Dalgalar sürekli kıyıya doğru gidiyor. Peki şamandıra
+       da kıyıya gidiyor mu?`,
+      `Gitmiyor. Sadece <b>iniyor ve çıkıyor</b>. Dalga geçip gittikten sonra bile aynı yerde
+       duruyor.`,
+      `Yukarıdaki turuncu nokta o şamandıra. Kesikli çizgiden hiç ayrılmıyor. Yeşil işaret ise
+       bir tepenin üstünde duruyor ve tepeyle birlikte sağa doğru ilerliyor.`,
+      `Dalga işte bu: <b>madde durur, şekil yürür.</b> Su ilerlemez; ilerleyen şey suyun
+       üstündeki harekettir.`,
+      `Sürgüyü çektiğinde nokta daha sık inip çıkar ve dalgalar sıklaşır. Yeşil işaretin
+       hızına dikkat et: hiç değişmiyor.`],
+   n:'Kablosuz haberleşmenin tamamı bu fikrin üstüne kurulu. Antenden çıkan şey madde değil, hareketin kendisidir.'},
+
+2:{b:'Üç sayı, tek bağıntı',
+   p:[`Bir dalgayı üç sayı anlatır: <b>frekans</b> saniyede kaç kez inip çıktığı,
+       <b>dalga boyu</b> iki tepe arasındaki mesafe, <b>hız</b> ise tepenin ilerleme hızıdır.`,
+      `Üçü bağımsız değildir. Aralarındaki bağıntı şudur:`,
+      `<div class="form">dalga boyu = hız ÷ frekans      λ = v / f</div>`,
+      `Hız ortamın özelliğidir; onu sen seçmezsin. Havada ses saniyede 343 metre gider, suda
+       1480 metre. Radyo dalgası boşlukta saniyede yaklaşık <b>300 000 kilometre</b> gider.`,
+      `Bu yüzden frekansı iki katına çıkarınca dalga boyu yarıya iner. Hız sabit kaldığı için
+       başka türlüsü mümkün değildir.`,
+      `Sayılar çarpıcı olabilir. Wi-Fi'ın 2.4 GHz'lik dalgası <b>12.5 santimetre</b>
+       uzunluğundadır. La notası (440 Hz) havada <b>78 santimetre</b>. İnsanın duyabildiği
+       en tiz ses ise sadece 1.7 santimetre.`],
+   n:'Anten boyunun neden dalga boyuyla ölçüldüğünü serinin 29. konusunda göreceğiz. Cebindeki telefonun anteni birkaç santimetredir, çünkü kullandığı dalga da birkaç santimetredir.'},
+
+3:{b:'Dalga denklemi ve iki ayrı hız',
+   p:[`Tek boyutlu bir ortamda yayılan dalga, ikinci mertebeden şu denklemi sağlar:`,
+      `<div class="form">∂²u/∂t² = v² · ∂²u/∂x²</div>`,
+      `Genel çözümü <b>u(x,t) = f(x − vt) + g(x + vt)</b> biçimindedir; yani şekil bozulmadan
+       sağa ve sola ilerler. Sinüs çözümü bunun özel hâlidir ve
+       <b>u = A·sin(kx − ωt + φ)</b> ile yazılır. Burada k = 2π/λ dalga sayısı,
+       ω = 2πf açısal frekanstır; faz hızı ise <b>v = ω/k</b> olur.`,
+      `Ortamın hızı fizikten gelir. Gerilmiş bir telde v = √(T/μ), ideal gazda
+       v = √(γRT/M), boşlukta elektromanyetik dalga için <b>c = 1/√(μ₀ε₀)</b>.`,
+      `Bu sayfadaki üç ortam da <b>dağılımsızdır</b>: hız frekanstan bağımsızdır, dolayısıyla
+       λ = v/f her frekansta geçerlidir. Dağılımlı ortamlarda durum değişir ve faz hızı ile
+       <b>grup hızı</b> ayrışır: v<sub>g</sub> = dω/dk. Bilgi grup hızıyla taşınır, faz hızıyla değil.`,
+      `Deniz dalgaları bu ayrımın en tanıdık örneğidir. Derin suda v = √(gλ/2π) olduğundan
+       uzun dalgalar hızlı gider ve grup hızı faz hızının yarısıdır. Bu yüzden bir dalga
+       öbeğini izlerken tepelerin öbeğin içinde öne doğru kayıp kaybolduğunu görürsün.`,
+      `Bir ayrım daha var. Buradaki dalga <b>enine</b>dir: parçacıklar yayılma yönüne dik
+       hareket eder. Havadaki ses ise <b>boyuna</b>dır; parçacıklar yayılma yönü boyunca
+       sıkışıp seyrelir. Şekil aynı matematikle tarif edilir, hareketin yönü farklıdır.`],
+   n:'Elektromanyetik dalganın ortama ihtiyaç duymaması, bu konudaki en büyük kırılmadır. Ses için hava gerekir, ışık için hiçbir şey gerekmez. Bunu serinin 8. konusunda kuracağız.'},
+};
+let katman=1;
+function metinYaz(){
+  const m=METIN[katman];
+  $('metin').innerHTML=`<h4>${m.b}</h4>`+
+    m.p.map(x=> x.startsWith('<div') ? x : `<p>${x}</p>`).join('')+
+    `<div class="not">${m.n}</div>`;
+}
+document.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('[data-l]').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); katman=+b.dataset.l; metinYaz();
+});
+
+/* ---- ortam düğmeleri ---- */
+$('ort').innerHTML = ORTAM.map((x,i)=>`<button id="o${i}" data-o="${i}">${x.ad}</button>`).join('');
+document.querySelectorAll('[data-o]').forEach(b=>b.onclick=()=>{ o=+b.dataset.o; tepeK=0; panoYaz(); });
+$('f').oninput = e => { s=+e.target.value; tepeK=0; panoYaz(); };
+
+if(!CanvasRenderingContext2D.prototype.roundRect){
+  CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,h,r){
+    this.moveTo(x+r,y); this.arcTo(x+w,y,x+w,y+h,r); this.arcTo(x+w,y+h,x,y+h,r);
+    this.arcTo(x,y+h,x,y,r); this.arcTo(x,y,x+w,y,r); this.closePath(); return this;};
+}
+addEventListener('resize', olcu);
+olcu(); metinYaz(); panoYaz();
+requestAnimationFrame(kare);
+</script>
+</body>
+</html>
