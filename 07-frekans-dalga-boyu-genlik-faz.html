@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frekans, dalga boyu, genlik, faz</title>
+<meta name="description" content="Aynı sesi iki kez çal, sessizlik duy. İki dalga birbirini silebilir.">
+<meta property="og:site_name" content="101 Konuda Haberleşme">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Frekans, dalga boyu, genlik, faz · 101 Konuda Haberleşme">
+<meta property="og:description" content="Aynı sesi iki kez çal, sessizlik duy. İki dalga birbirini silebilir.">
+<meta property="og:url" content="https://qualimodo.github.io/haberlesme/07-frekans-dalga-boyu-genlik-faz.html">
+<meta property="og:image" content="https://qualimodo.github.io/haberlesme/og-07.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Frekans, dalga boyu, genlik, faz · 101 Konuda Haberleşme">
+<meta name="twitter:description" content="Aynı sesi iki kez çal, sessizlik duy. İki dalga birbirini silebilir.">
+<meta name="twitter:image" content="https://qualimodo.github.io/haberlesme/og-07.png">
+<style>
+  :root{
+    --bg:#070a10; --panel:#0e131d; --panel2:#131b28; --line:#1e2736;
+    --ink:#e8eef7; --dim:#9aabc2; --dim2:#5d6d85; --acc:#7cf5c4;
+    --ref:#8ba0ba; --top:#ffc061; --mor:#b79cf0;
+    --l1:#cde2fb; --l2:#86b6ef; --l3:#3987e5;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);line-height:1.6;padding-bottom:60px;
+    font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:960px;margin:0 auto;padding:0 22px}
+
+  header{background:radial-gradient(900px 300px at 16% -12%,rgba(42,120,214,.16),transparent 62%)}
+  header.wrap{padding-top:84px;padding-bottom:22px}
+  .kick{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);font-weight:700}
+  h1{font-size:38px;font-weight:700;letter-spacing:-.03em;margin:18px 0 13px;line-height:1.1}
+  header p{color:var(--dim);font-size:16px;max-width:660px}
+
+  .scene{background:var(--panel);border:1px solid var(--line);border-radius:16px;
+    margin-top:26px;padding:6px 6px 0}
+  canvas{display:block;width:100%;height:400px;border-radius:12px}
+
+  .knoblar{border-top:1px solid var(--line);margin-top:6px;padding:4px 16px 14px}
+  .knob{display:flex;align-items:center;gap:14px;padding:9px 0}
+  .knob+.knob{border-top:1px solid #161f2d}
+  .knob label{font-size:13px;color:var(--dim);white-space:nowrap;font-weight:600;
+    min-width:86px;display:flex;align-items:center;gap:8px}
+  .knob label i{width:9px;height:9px;border-radius:50%;background:var(--kc);flex:none;font-style:normal}
+  input[type=range]{-webkit-appearance:none;appearance:none;flex:1;min-width:120px;height:4px;
+    border-radius:3px;background:#25324a;outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;
+    border-radius:50%;background:var(--kc);cursor:pointer;box-shadow:0 0 0 4px rgba(124,245,196,.13)}
+  input[type=range]::-moz-range-thumb{width:18px;height:18px;border:none;border-radius:50%;
+    background:var(--kc);cursor:pointer}
+  .lvl{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px;color:var(--kc);
+    min-width:104px;text-align:right;font-weight:600}
+  .hiz{display:flex;gap:6px;flex-wrap:wrap;padding:10px 0 4px;border-top:1px solid #161f2d}
+  .hiz button{font:inherit;font-size:12px;font-weight:600;color:var(--dim);background:var(--panel2);
+    border:1px solid var(--line);padding:7px 11px;border-radius:8px;cursor:pointer;transition:.15s;
+    white-space:nowrap}
+  .hiz button:hover{color:var(--ink);border-color:#33445f}
+  .hiz button.on{background:rgba(124,245,196,.12);border-color:rgba(124,245,196,.5);color:var(--acc)}
+
+  .skor{display:grid;grid-template-columns:repeat(auto-fit,minmax(206px,1fr));gap:12px;margin-top:14px}
+  .kart{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--kc);
+    border-radius:13px;padding:15px 17px}
+  .kart .b{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--kc);font-weight:700}
+  .kart .d{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:25px;font-weight:680;
+    margin:7px 0 2px;letter-spacing:-.02em}
+  .kart .a{font-size:12.5px;color:var(--dim2)}
+  .kart .o{font-size:13px;color:#c2cfe1;margin-top:9px;padding-top:9px;border-top:1px solid #1a2333}
+
+  h2{font-size:22px;font-weight:660;letter-spacing:-.02em;margin:46px 0 6px}
+  .lead{color:var(--dim);font-size:15px;margin-bottom:18px}
+  .parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(216px,1fr));gap:12px}
+  .part{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:17px;
+    border-top:3px solid var(--pc)}
+  .part h3{font-size:16px;font-weight:660;margin-bottom:8px;color:var(--pc)}
+  .part p{font-size:13.5px;color:#c0cddf;line-height:1.65;margin-bottom:8px}
+  .part p:last-child{margin-bottom:0}
+  .part b{color:#fff;font-weight:640}
+
+  .tabs{display:flex;gap:6px;margin:46px 0 16px}
+  .tabs button{flex:1;font:inherit;font-size:13px;font-weight:600;color:var(--dim);
+    background:var(--panel2);border:1px solid var(--line);padding:11px;border-radius:10px;
+    cursor:pointer;transition:.15s}
+  .tabs button:hover{color:var(--ink);border-color:#33445f}
+  .tabs button.on.t1{background:rgba(205,226,251,.13);border-color:rgba(205,226,251,.5);color:var(--l1)}
+  .tabs button.on.t2{background:rgba(134,182,239,.13);border-color:rgba(134,182,239,.5);color:var(--l2)}
+  .tabs button.on.t3{background:rgba(57,135,229,.17);border-color:rgba(57,135,229,.55);color:var(--l3)}
+  #metin{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
+  #metin h4{font-size:19px;font-weight:660;letter-spacing:-.015em;margin-bottom:12px}
+  #metin p{font-size:15.5px;color:#c8d5e6;line-height:1.75;margin-bottom:13px}
+  #metin p:last-child{margin-bottom:0}
+  #metin b{color:#fff;font-weight:640}
+  #metin .not{font-size:14px;color:var(--acc);border-left:2px solid var(--acc);
+    padding-left:14px;margin-top:16px;line-height:1.7}
+  #metin .form{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;color:#dbe6f5;
+    background:var(--panel2);border:1px solid var(--line);border-radius:10px;
+    padding:12px 15px;margin:4px 0 14px;overflow-x:auto;white-space:nowrap}
+
+  footer{margin-top:38px;padding-top:20px;border-top:1px solid var(--line);
+    font-size:13px;color:var(--dim2);line-height:1.75}
+
+  @media (max-width:640px){
+    h1{font-size:27px} .wrap{padding:0 15px} header.wrap{padding-top:58px;padding-bottom:18px}
+    canvas{height:340px} .skor{grid-template-columns:1fr}
+    .knob label{min-width:74px;font-size:12.5px} .lvl{min-width:88px;font-size:12px}
+  }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="kick">101 Konuda Haberleşme · Konu 07</div>
+  <h1>Frekans, dalga boyu, genlik, faz</h1>
+  <p>Her dalgayı dört kelime tarif eder. Üçü kolaydır, dördüncüsü işin kalbidir.
+     Aşağıda gri bir referans dalga duruyor. Yeşil dalgayı sen ayarlıyorsun.
+     Turuncu çizgi ise ikisinin toplamıdır.</p>
+</header>
+
+<main class="wrap">
+
+  <div class="scene">
+    <canvas id="cv"></canvas>
+    <div class="knoblar">
+      <div class="knob" style="--kc:var(--acc)">
+        <label for="g"><i></i>Genlik</label>
+        <input type="range" id="g" min="0" max="150" step="1" value="100">
+        <span class="lvl" id="gl">1.00</span>
+      </div>
+      <div class="knob" style="--kc:var(--l2)">
+        <label for="f"><i></i>Frekans</label>
+        <input type="range" id="f" min="0" max="100" step="1" value="50">
+        <span class="lvl" id="fl">440 Hz</span>
+      </div>
+      <div class="knob" style="--kc:var(--mor)">
+        <label for="p"><i></i>Faz</label>
+        <input type="range" id="p" min="0" max="360" step="1" value="0">
+        <span class="lvl" id="pl">0°</span>
+      </div>
+      <div class="hiz" id="hazir"></div>
+    </div>
+  </div>
+
+  <div class="skor">
+    <div class="kart" style="--kc:var(--acc)">
+      <div class="b">Genlik</div>
+      <div class="d" id="dG">1.00</div>
+      <div class="a" id="aG">referans dalgayla aynı yükseklik</div>
+      <div class="o" id="oG">Genlik iki katına çıkarsa güç dört katına çıkar.</div>
+    </div>
+    <div class="kart" style="--kc:var(--l2)">
+      <div class="b">Frekans ve dalga boyu</div>
+      <div class="d" id="dF">440 Hz</div>
+      <div class="a" id="aF">periyot 2.27 ms · dalga boyu 78.0 cm</div>
+      <div class="o" id="oF">Frekans ve dalga boyu aynı şeyin iki ölçüsüdür.</div>
+    </div>
+    <div class="kart" style="--kc:var(--mor)">
+      <div class="b">Faz</div>
+      <div class="d" id="dP">0°</div>
+      <div class="a" id="aP">iki dalga tam üst üste</div>
+      <div class="o" id="oP">Faz, dalganın turunun neresinde olduğudur.</div>
+    </div>
+    <div class="kart" style="--kc:var(--top)">
+      <div class="b">Toplam</div>
+      <div class="d" id="dT" style="color:#ffc061">2.00</div>
+      <div class="a" id="aT">ikisi üst üste binince çıkan yükseklik</div>
+      <div class="o" id="oT">Aynı fazdaki iki dalga birbirini güçlendirir.</div>
+    </div>
+  </div>
+
+  <h2>Dört kelime</h2>
+  <p class="lead">Her biri dalganın ayrı bir özelliğini söyler.</p>
+  <div class="parts">
+    <div class="part" style="--pc:#7cf5c4">
+      <h3>Genlik — ne kadar yüksek</h3>
+      <p>Dalganın denge çizgisinden ne kadar uzağa çıktığıdır. Seste yükseklik, ışıkta
+        parlaklık, radyoda sinyal gücü demektir.</p>
+      <p>Güç genliğin karesiyle artar. Genlik iki katına çıktığında güç <b>dört katına</b> çıkar.</p>
+    </div>
+    <div class="part" style="--pc:#86b6ef">
+      <h3>Frekans — saniyede kaç tur</h3>
+      <p>Dalganın saniyede kaç kez inip çıktığıdır. Birimi hertzdir. Dört yüz kırk hertz,
+        saniyede dört yüz kırk tur demektir.</p>
+      <p>Periyot bunun tersidir: <b>bir turun süresi</b>. Dört yüz kırk hertzde bir tur
+        2.27 milisaniye sürer.</p>
+    </div>
+    <div class="part" style="--pc:#cde2fb">
+      <h3>Dalga boyu — iki tepe arası</h3>
+      <p>Aynı anda uzaya bakarsan iki tepe arasındaki mesafeyi görürsün. Bu mesafe hızın
+        frekansa bölümüdür.</p>
+      <p>Frekans ile dalga boyu bağımsız iki sayı değildir. Biri artarsa <b>diğeri azalır</b>.</p>
+    </div>
+    <div class="part" style="--pc:#b79cf0">
+      <h3>Faz — turun neresinde</h3>
+      <p>Dalganın tam turunun neresinde olduğudur. Tek başına bir anlamı yoktur; her zaman
+        <b>başka bir dalgaya göre</b> ölçülür.</p>
+      <p>Aynı faz derece, milisaniye ve santimetre cinsinden yazılabilir. Üçü de aynı şeyi söyler.</p>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="t1 on" data-l="1">L1 · Herkes</button>
+    <button class="t2" data-l="2">L2 · Meraklı</button>
+    <button class="t3" data-l="3">L3 · Mühendis</button>
+  </div>
+  <div id="metin"></div>
+
+  <footer>
+    Yatay eksen zamandır ve ekran, referans dalganın dört turunu gösterir: 9.09 milisaniye.
+    Tarayıcı bu süreyi izlenebilsin diye yaklaşık 385 kat yavaşlatarak tarar. Referans dalga
+    440 hertzdir ve genliği 1.00 kabul edilmiştir; genlik değerleri birimsizdir, referansa
+    oranıdır. Dalga boyu değerleri 20 °C kuru havada ses hızı 343 m/s alınarak λ = v ⁄ f
+    bağıntısından hesaplanır. Toplam eğri, iki dalganın her andaki değerlerinin toplanmasıyla
+    çizilir; bu, ortamın doğrusal olduğu varsayımına dayanır. Güç ile genlik arasındaki
+    P ∝ A² bağıntısı da aynı varsayımın sonucudur.
+  </footer>
+</main>
+
+<script>
+"use strict";
+/* ===========================================================================
+   KONU 07 — FREKANS, DALGA BOYU, GENLİK, FAZ
+   Referans: 440 Hz, genlik 1.00.  Ekran = referansın 4 turu = 9.0909 ms.
+   Doğrulandı (dogrula-07.py):
+     λ(440 Hz, hava) = 343/440 = 0.7795 m = 78.0 cm
+     güç ∝ genlik²  →  genlik ×2 = +6.02 dB
+     aynı frekansta toplam genlik = √(A1²+A2²+2A1A2·cos φ)
+       φ=0 → 2.000 · φ=120° → 1.000 · φ=180° → 0.000   (benzetimle 2e-5 içinde)
+     vuru frekansı = |f₁ − f₂|
+   =========================================================================== */
+const $ = id => document.getElementById(id);
+const cv = $('cv'), ctx = cv.getContext('2d');
+
+const VHAVA = 343;            // m/s, 20 °C kuru hava
+const FREF  = 440;            // Hz, referans dalga
+const AREF  = 1.0;            // referans genlik
+const TPEN  = 4 / FREF;       // ekranın kapsadığı süre, saniye (9.0909 ms)
+const TARA  = 3.6;            // tarama çizgisi ekranı kaç saniyede geçsin
+
+const HAZIR = [
+  { ad:'Aynı dalga',   g:100, f:50, p:0   },
+  { ad:'Çeyrek tur',   g:100, f:50, p:90  },
+  { ad:'Ters faz',     g:100, f:50, p:180 },
+  { ad:'Yarı genlik',  g:50,  f:50, p:0   },
+  { ad:'Farklı frekans', g:100, f:65, p:0 },
+];
+
+let sg = 100, sf = 50, sp = 0;
+let W=0, H=0, dpr=1, t0=0;
+
+const gen  = () => sg/100;                        // 0 .. 1.50
+const frek = () => 110 * Math.pow(16, sf/100);    // 110 .. 1760 Hz, sf=50 → 440
+const faz  = () => sp;                            // derece
+const lam  = () => VHAVA / frek();
+
+function olcu(){
+  dpr = Math.min(2, devicePixelRatio||1);
+  W = cv.clientWidth; H = cv.clientHeight;
+  if(W<10||H<10) return;
+  cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+
+/* ---- biçimlendirme ---- */
+function mYaz(m){
+  if(m>=1)    return m.toFixed(2)+' m';
+  if(m>=0.01) return (m*100).toFixed(1)+' cm';
+  return (m*1000).toFixed(1)+' mm';
+}
+function fYaz(f){ return (f>=1000 ? f.toFixed(0) : f.toFixed(0))+' Hz'; }
+function sYaz(sn){
+  const ms = sn*1e3;
+  if(ms>=1)    return ms.toFixed(2)+' ms';
+  if(ms>=0.1)  return ms.toFixed(3)+' ms';
+  if(sn>=1e-7) return (sn*1e6).toFixed(1)+' µs';
+  return '0 ms';
+}
+function yz(m,x,y,renk,boy,hiza,kalin,aralik,tek){
+  ctx.font=`${kalin||700} ${boy}px ${tek?'ui-monospace,Menlo,monospace':'system-ui,-apple-system,sans-serif'}`;
+  ctx.textAlign=hiza||'left'; ctx.textBaseline='alphabetic'; ctx.fillStyle=renk;
+  ctx.letterSpacing=(aralik||0)+'px'; ctx.fillText(m,x,y); ctx.letterSpacing='0px';
+}
+const gw = (m,boy,kalin,aralik)=>{
+  ctx.font=`${kalin||700} ${boy}px system-ui,-apple-system,sans-serif`;
+  ctx.letterSpacing=(aralik||0)+'px'; const w=ctx.measureText(m).width; ctx.letterSpacing='0px'; return w;
+};
+function yk(x,y,w,h,r,dolgu,cizgi,kal){
+  ctx.beginPath(); ctx.roundRect(x,y,w,h,r);
+  if(dolgu){ctx.fillStyle=dolgu;ctx.fill()}
+  if(cizgi){ctx.strokeStyle=cizgi;ctx.lineWidth=kal||1.3;ctx.stroke()}
+}
+
+/* ---- dalga değerleri: x ekrandaki yatay konum (0..1) → zaman ---- */
+const PADL = 22, PADR = 22, USTP = 30, ALTP = 28;
+const zamanOf = u => u * TPEN;
+const yRef = u => AREF * Math.sin(2*Math.PI*FREF*zamanOf(u));
+const ySen = u => gen() * Math.sin(2*Math.PI*frek()*zamanOf(u) + faz()*Math.PI/180);
+
+/* ekranda görünen toplamın en yüksek değeri */
+function tepeToplam(){
+  let m = 0;
+  for(let i=0;i<=2000;i++){ const u=i/2000; m = Math.max(m, Math.abs(yRef(u)+ySen(u))); }
+  return m;
+}
+
+function ciz(z){
+  if(W<10||H<10) return;
+  if(!t0) t0 = z;
+  ctx.fillStyle='#080c14'; ctx.fillRect(0,0,W,H);
+
+  const A = PADL, B = W-PADR, gp = B-A;
+  const u  = (H - USTP - ALTP - 22) / 8;        // bir birim genlik, piksel
+  const y1 = USTP + 1.5*u;                       // üst şerit merkezi
+  const yd = y1 + 1.5*u + 11;                    // ayırıcı çizgi
+  const y2 = yd + 11 + 2.5*u;                    // alt şerit merkezi
+
+  const px = i => A + gp*i;                      // 0..1  →  piksel
+  const Y1 = v => y1 - v*u;
+  const Y2 = v => y2 - v*u;
+
+  /* denge çizgileri */
+  ctx.strokeStyle='rgba(120,145,180,.16)'; ctx.lineWidth=1;
+  for(const [yy,xx] of [[y1,A],[y2,A]]){ ctx.beginPath(); ctx.moveTo(xx,yy); ctx.lineTo(B,yy); ctx.stroke(); }
+
+  /* ayırıcı */
+  ctx.strokeStyle='rgba(120,145,180,.13)'; ctx.setLineDash([2,6]); ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(A,yd); ctx.lineTo(B,yd); ctx.stroke(); ctx.setLineDash([]);
+
+  /* eğri çizici */
+  const egri = (fn, Y, renk, kal) => {
+    ctx.strokeStyle=renk; ctx.lineWidth=kal; ctx.lineJoin='round'; ctx.lineCap='round';
+    ctx.beginPath();
+    for(let i=0;i<=gp;i+=1){ const uu=i/gp, y=Y(fn(uu));
+      i===0?ctx.moveTo(A+i,y):ctx.lineTo(A+i,y); }
+    ctx.stroke();
+  };
+  egri(yRef, Y1, 'rgba(139,160,186,.62)', 4.6);
+  egri(ySen, Y1, '#7cf5c4', 2.3);
+  egri(u2 => yRef(u2)+ySen(u2), Y2, '#ffc061', 2.3);
+
+  /* tarama çizgisi */
+  const uu = (((z - t0)/1000) % TARA) / TARA;
+  const xs = px(uu);
+  ctx.strokeStyle='rgba(232,238,247,.20)'; ctx.lineWidth=1.2;
+  ctx.beginPath(); ctx.moveTo(xs, USTP-8); ctx.lineTo(xs, y2+2.5*u+6); ctx.stroke();
+
+  const vr = yRef(uu), vs = ySen(uu), vt = vr+vs;
+
+  /* alt şeritte toplama gösterimi: önce gri parça, üstüne yeşil parça */
+  ctx.lineWidth=5; ctx.lineCap='butt';
+  ctx.strokeStyle='rgba(139,160,186,.75)';
+  ctx.beginPath(); ctx.moveTo(xs, Y2(0));  ctx.lineTo(xs, Y2(vr)); ctx.stroke();
+  ctx.strokeStyle='rgba(124,245,196,.80)';
+  ctx.beginPath(); ctx.moveTo(xs, Y2(vr)); ctx.lineTo(xs, Y2(vt)); ctx.stroke();
+
+  /* noktalar */
+  const nokta = (x,y,renk) => {
+    ctx.fillStyle=renk; ctx.beginPath(); ctx.arc(x,y,6,0,6.2832); ctx.fill();
+    ctx.strokeStyle='rgba(8,12,20,.85)'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.arc(x,y,6,0,6.2832); ctx.stroke();
+  };
+  nokta(xs, Y1(vr), '#8ba0ba');
+  nokta(xs, Y1(vs), '#7cf5c4');
+  nokta(xs, Y2(vt), '#ffc061');
+
+  /* faz farkını gösteren ok — aynı frekanstayken anlamlı */
+  if(Math.abs(frek()-FREF) < 0.6 && sp > 0){
+    const T  = 1/FREF, dt = (sp/360)*T;
+    const dx = (dt/TPEN)*gp;
+    const oy = USTP - 13;
+    const x0 = A + gp*0.44, x1 = x0 + dx;
+    ctx.strokeStyle='rgba(183,156,240,.85)'; ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.moveTo(x0,oy); ctx.lineTo(x1,oy); ctx.stroke();
+    for(const [xx,yn] of [[x0,1],[x1,-1]]){
+      ctx.beginPath(); ctx.moveTo(xx,oy-5); ctx.lineTo(xx,oy+5); ctx.stroke();
+    }
+    const et = sp+'°  gecikme', ew = gw(et,10.5,700,1.2)+14;
+    const ex = Math.min(B-ew, Math.max(A, (x0+x1)/2 - ew/2));
+    yk(ex, oy-20, ew, 17, 6, '#080c14', null);
+    yz(et, ex+ew/2, oy-7, 'rgba(183,156,240,.95)', 10.5, 'center', 700, 1.2);
+  }
+
+  /* künye: hangi renk ne */
+  const kunye = (x, y, renk, m) => {
+    ctx.fillStyle=renk; ctx.beginPath(); ctx.arc(x+4, y-3.5, 4, 0, 6.2832); ctx.fill();
+    yz(m, x+14, y, 'rgba(174,190,212,.80)', 10.5, 'left', 600, .5);
+    return x + 14 + gw(m,10.5,600,.5) + 16;
+  };
+  let kx = A;
+  kx = kunye(kx, USTP-13, '#8ba0ba', 'referans · '+FREF+' Hz');
+  kunye(kx, USTP-13, '#7cf5c4', 'senin dalgan');
+  kunye(A, yd+17, '#ffc061', 'ikisinin toplamı');
+
+  /* zaman ekseni */
+  const ay = H-12;
+  ctx.strokeStyle='rgba(120,145,180,.28)'; ctx.lineWidth=1.2;
+  ctx.beginPath(); ctx.moveTo(A,ay); ctx.lineTo(B,ay); ctx.stroke();
+  for(let ms=0; ms<=9; ms+=2){
+    const x = A + gp*(ms/1000)/TPEN;
+    if(x>B) break;
+    ctx.beginPath(); ctx.moveTo(x,ay-4); ctx.lineTo(x,ay+4); ctx.stroke();
+    yz(ms+(ms===0?' ms':''), x, ay-9, 'rgba(150,172,200,.55)', 9.5, ms===0?'left':'center', 600);
+  }
+}
+
+function kare(z){ ciz(z); requestAnimationFrame(kare); }
+
+/* ---- pano ---- */
+function panoYaz(){
+  const A2 = gen(), f = frek(), T = 1/f, L = lam(), d = faz();
+
+  $('gl').textContent = A2.toFixed(2);
+  $('fl').textContent = fYaz(f);
+  $('pl').textContent = d+'°';
+
+  /* genlik kartı */
+  $('dG').textContent = A2.toFixed(2);
+  const guc = A2*A2;
+  $('aG').textContent = A2===1 ? 'referans dalgayla aynı yükseklik'
+    : (A2>1 ? 'referanstan '+A2.toFixed(2)+' kat yüksek' : 'referansın '+A2.toFixed(2)+' katı');
+  $('oG').textContent =
+      A2===0 ? 'Genlik sıfır olduğunda ortada dalga kalmaz.'
+    : A2===1 ? 'Güç referansla aynı. Genlik iki katına çıksaydı güç dört katına çıkardı.'
+    : 'Güç '+guc.toFixed(2)+' kat, yani '+(A2>1?'+':'')+(20*Math.log10(A2)).toFixed(2)+' dB.';
+
+  /* frekans kartı */
+  $('dF').textContent = fYaz(f);
+  $('aF').textContent = 'periyot '+sYaz(T)+' · dalga boyu '+mYaz(L);
+  $('oF').textContent = 'Havada bu sesin bir turu '+mYaz(L)+' yer kaplar.';
+
+  /* faz kartı */
+  $('dP').textContent = d+'°';
+  $('aP').textContent = d===0 ? 'iki dalga tam üst üste'
+                      : '= '+sYaz((d/360)*T)+' = '+mYaz((d/360)*L);
+  $('oP').textContent = d===0   ? 'İki dalga tam üst üste; tepeleri aynı anda geliyor.'
+                      : d===180 ? 'Biri tepedeyken diğeri tam çukurda.'
+                      : 'Yeşil dalga, gri dalgadan '+sYaz((d/360)*T)+' geride.';
+
+  /* toplam kartı */
+  const ayniF = Math.abs(f-FREF) < 0.6;
+  const kural = Math.sqrt(AREF*AREF + A2*A2 + 2*AREF*A2*Math.cos(d*Math.PI/180));
+  const tepe  = ayniF ? kural : tepeToplam();
+  $('dT').textContent = tepe.toFixed(2);
+  $('aT').textContent = ayniF ? 'ikisi üst üste binince çıkan yükseklik'
+                              : 'ekranda görünen en yüksek değer';
+  let s;
+  const df = Math.abs(f-FREF);
+  if(!ayniF && df < 25){
+    s = 'Frekanslar birbirine çok yakın. Bu iki ses birlikte çalınsa saniyede '
+        + df.toFixed(0) + ' kez yükselip alçalan bir vuru duyulur.';
+  } else if(!ayniF){
+    s = 'Frekanslar farklı olduğu için toplam artık düzgün bir sinüs değil. '
+        + 'Yüksekliği saniyede ' + Math.round(df) + ' kez sıfıra iniyor.';
+  } else if(tepe < 0.02){
+    s = 'Tam sönüm. İki dalga birbirini tamamen siliyor.';
+  } else if(d===0 && Math.abs(A2-1)<1e-9){
+    s = 'Tam iki katı. Genlik iki kat olunca güç dört kat, yani +6.02 dB.';
+  } else if(Math.abs(tepe-1)<0.02 && Math.abs(A2-1)<1e-9){
+    s = 'Toplam, tek bir dalgayla aynı yükseklikte. İkinci dalga hiçbir şey eklemedi.';
+  } else if(tepe > Math.max(AREF,A2)){
+    s = 'İki dalga birbirini güçlendiriyor.';
+  } else {
+    s = 'İki dalga birbirini kısmen siliyor.';
+  }
+  $('oT').textContent = s;
+
+  HAZIR.forEach((x,i)=>$('h'+i).className =
+    (sg===x.g && sf===x.f && sp===x.p) ? 'on' : '');
+}
+
+/* ---- katman metinleri ---- */
+const METIN = {
+1:{b:'Dört kelime, tek dalga',
+   p:[`Bir salıncak düşün. Salıncağı anlatmak için kaç şey söylemen gerekir?`,
+      `Önce <b>ne kadar yükseğe çıktığını</b> söylersin. Buna genlik denir. Sonra
+       <b>saniyede kaç kez gidip geldiğini</b> söylersin. Buna frekans denir. Dalgalar için
+       bir üçüncüsü daha vardır: iki tepe arasındaki mesafe. Buna da dalga boyu denir.`,
+      `Dördüncü kelime ancak <b>iki salıncak</b> olunca ortaya çıkar. Yan yana iki salıncak
+       düşün. İkisi de saniyede aynı sayıda gidip geliyor, ama biri öndeyken diğeri arkada.
+       İşte bu geri kalma miktarına faz denir.`,
+      `Yukarıdaki ekranda gri dalga referanstır, yeşil dalga senindir. Fazı büyüttüğünde
+       yeşil dalga sağa doğru kayar. Turuncu çizgi ise ikisinin toplamıdır.`,
+      `Şuna dikkat et: faz 180 dereceye geldiğinde turuncu çizgi <b>düz bir çizgiye</b> döner.
+       İki dalga birbirini tamamen siler. Biri tepedeyken diğeri tam çukurdadır, toplamları
+       her an sıfır olur.`],
+   n:'Gürültü önleyici kulaklıklar tam olarak bunu yapar. Dışarıdaki sesi mikrofonla dinler, aynı sesin 180 derece kaydırılmış hâlini kulağına verir ve iki ses birbirini siler.'},
+
+2:{b:'Dördü arasındaki bağıntılar',
+   p:[`Bu dört kelime birbirinden bağımsız değildir. Aralarında sayılarla yazılabilen
+       ilişkiler vardır.`,
+      `<div class="form">dalga boyu = hız ÷ frekans      λ = v / f</div>`,
+      `Bu yüzden frekans ve dalga boyu tek bir bilgidir, iki ayrı bilgi değil. Havada
+       440 hertzlik bir ses 78 santimetre uzunluğundadır. Frekansı iki katına çıkarırsan
+       dalga boyu 39 santimetreye iner.`,
+      `Genlik ile güç arasındaki ilişki ise karesel bir ilişkidir:`,
+      `<div class="form">güç ∝ genlik²</div>`,
+      `Genliği iki katına çıkarmak gücü dört katına çıkarır. Bu, desibel cinsinden
+       <b>6.02 dB</b> eder. Radyoda menzili belirleyen şey genlik değil, güçtür; bu yüzden
+       mühendis genlikten çok bu kareyi düşünür.`,
+      `Faz ise aynı şeyin üç ayrı birimle yazılmış hâlidir. Bir tam tur 360 derecedir,
+       bir periyottur, bir dalga boyudur. 440 hertzde 90 derece şu üç şeyin hepsidir:
+       <b>0.568 milisaniye</b>, <b>19.5 santimetre</b>, çeyrek tur.`,
+      `İki dalga üst üste bindiğinde toplam genlik şu bağıntıdan çıkar:`,
+      `<div class="form">A = √(A₁² + A₂² + 2·A₁·A₂·cos φ)</div>`,
+      `Eşit genlikli iki dalga için bu <b>2A·cos(φ/2)</b> olur. Sonuç bazen şaşırtıcıdır:
+       faz farkı 120 derece olduğunda toplam genlik, tek bir dalganınkiyle aynı çıkar.
+       İkinci dalga hiçbir şey eklememiş olur.`],
+   n:'Wi-Fi\'ın 2.4 GHz dalgası 12.5 santimetredir. Duvardan yansıyıp 6.25 santimetre uzun yoldan gelen bir kopya, doğrudan gelen sinyalle 180 derece faz farkına düşer ve onu siler. Telefonu birkaç santim oynatınca bağlantının düzelmesinin sebebi budur.'},
+
+3:{b:'Fazör, güç ve fazın taşıdığı bilgi',
+   p:[`Sinüs biçimli bir işaret üç sayıyla tam olarak belirlidir:`,
+      `<div class="form">u(t) = A · sin(ωt + φ)      ω = 2πf</div>`,
+      `Bu üçlüyü karmaşık düzlemde tek bir sayıya indirebiliriz. <b>Fazör</b> gösterimi
+       budur: <b>U = A·e<sup>jφ</sup></b>. Aynı frekanstaki işaretlerin toplanması, bu
+       vektörlerin toplanmasına indirgenir. Kosinüs teoremi doğrudan yukarıdaki genlik
+       bağıntısını verir; trigonometriye hiç girmeden.`,
+      `Güç ilişkisi de buradan çıkar. Sinüs için etkin değer <b>A/√2</b>, ortalama güç ise
+       <b>A²/2</b> orantısındadır. Bir dirençte P = V²<sub>rms</sub>/R yazıldığında karesel
+       bağıntı kendiliğinden görünür. Desibel bu yüzden iki türlü yazılır:
+       genlik oranı için 20·log₁₀, güç oranı için 10·log₁₀. İkisi aynı sayıyı verir.`,
+      `Frekansları farklı iki işaretin toplamı ise sabit genlikli değildir. Çarpım
+       formülünden toplam, <b>2A·cos(2π·Δf·t/2)·sin(2π·f̄·t)</b> biçimine girer: ortalama
+       frekansta bir taşıyıcı, <b>Δf = |f₁ − f₂|</b> hızında bir zarf. Duyulan vuru sayısı
+       saniyede Δf'tir. Sayfada frekansı değiştirdiğinde alt şeritte beliren desen budur.`,
+      `Fazın en kritik özelliği şudur: <b>mutlak faz diye bir şey yoktur.</b> Faz her zaman
+       bir referansa göre tanımlıdır. Alıcının işi, gelen işaretin fazını kendi yerel
+       osilatörüne göre ölçmektir; bu yüzden her sayısal alıcının içinde bir faz kilitleme
+       çevrimi bulunur.`,
+      `Modern haberleşmenin bilgiyi asıl fazda taşımasının sebebi de budur. QPSK dört ayrı
+       faz kullanır ve sembol başına 2 bit taşır; 16-QAM genlik ile fazı birlikte kullanıp
+       4 bit taşır. Anten dizilerinde ışının yönü, elemanlara verilen faz farkıyla
+       elektronik olarak çevrilir. Faz, dördü içinde <b>üzerine en çok bilgi yazdığımız</b>
+       büyüklüktür.`],
+   n:'Buradaki toplama işlemi ortamın doğrusal olmasına dayanır. Doğrusal olmayan bir ortamda iki frekans girip dört frekans çıkar: toplam, fark ve harmonikler. Karıştırıcılar bu bozulmayı bilerek kullanır, yükselteçlerde ise aynı olay istenmeyen bir kusurdur.'},
+};
+let katman=1;
+function metinYaz(){
+  const m=METIN[katman];
+  $('metin').innerHTML=`<h4>${m.b}</h4>`+
+    m.p.map(x=> x.startsWith('<div') ? x : `<p>${x}</p>`).join('')+
+    `<div class="not">${m.n}</div>`;
+}
+document.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('[data-l]').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); katman=+b.dataset.l; metinYaz();
+});
+
+/* ---- hazır düzenler ---- */
+$('hazir').innerHTML = HAZIR.map((x,i)=>`<button id="h${i}" data-h="${i}">${x.ad}</button>`).join('');
+document.querySelectorAll('[data-h]').forEach(b=>b.onclick=()=>{
+  const x = HAZIR[+b.dataset.h];
+  sg=x.g; sf=x.f; sp=x.p;
+  $('g').value=sg; $('f').value=sf; $('p').value=sp;
+  panoYaz();
+});
+$('g').oninput = e => { sg=+e.target.value; panoYaz(); };
+$('f').oninput = e => { sf=+e.target.value; panoYaz(); };
+$('p').oninput = e => { sp=+e.target.value; panoYaz(); };
+
+if(!CanvasRenderingContext2D.prototype.roundRect){
+  CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,h,r){
+    this.moveTo(x+r,y); this.arcTo(x+w,y,x+w,y+h,r); this.arcTo(x+w,y+h,x,y+h,r);
+    this.arcTo(x,y+h,x,y,r); this.arcTo(x,y,x+w,y,r); this.closePath(); return this;};
+}
+addEventListener('resize', olcu);
+olcu(); metinYaz(); panoYaz();
+requestAnimationFrame(kare);
+</script>
+</body>
+</html>
