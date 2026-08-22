@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Işık hızı ve gecikme</title>
+<meta name="description" content="Ay'a "nasılsın" desen, cevap 2.5 saniye sonra gelir. Sebebi teknoloji değil, mesafe.">
+<meta property="og:site_name" content="101 Konuda Haberleşme">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Işık hızı ve gecikme · 101 Konuda Haberleşme">
+<meta property="og:description" content="Ay'a "nasılsın" desen, cevap 2.5 saniye sonra gelir. Sebebi teknoloji değil, mesafe.">
+<meta property="og:url" content="https://qualimodo.github.io/haberlesme/09-isik-hizi-ve-gecikme.html">
+<meta property="og:image" content="https://qualimodo.github.io/haberlesme/og-09.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Işık hızı ve gecikme · 101 Konuda Haberleşme">
+<meta name="twitter:description" content="Ay'a "nasılsın" desen, cevap 2.5 saniye sonra gelir. Sebebi teknoloji değil, mesafe.">
+<meta name="twitter:image" content="https://qualimodo.github.io/haberlesme/og-09.png">
+<style>
+  :root{
+    --bg:#070a10; --panel:#0e131d; --panel2:#131b28; --line:#1e2736;
+    --ink:#e8eef7; --dim:#9aabc2; --dim2:#5d6d85; --acc:#7cf5c4;
+    --fib:#ffc061; --uyd:#b79cf0; --kir:#ef6a6a;
+    --l1:#cde2fb; --l2:#86b6ef; --l3:#3987e5;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);line-height:1.6;padding-bottom:60px;
+    font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:960px;margin:0 auto;padding:0 22px}
+
+  header{background:radial-gradient(900px 300px at 16% -12%,rgba(42,120,214,.16),transparent 62%)}
+  header.wrap{padding-top:84px;padding-bottom:22px}
+  .kick{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);font-weight:700}
+  h1{font-size:38px;font-weight:700;letter-spacing:-.03em;margin:18px 0 13px;line-height:1.1}
+  header p{color:var(--dim);font-size:16px;max-width:660px}
+
+  .scene{background:var(--panel);border:1px solid var(--line);border-radius:16px;
+    margin-top:26px;padding:6px 6px 0}
+  canvas{display:block;width:100%;height:400px;border-radius:12px}
+
+  .knob{display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    padding:14px 16px 16px;border-top:1px solid var(--line);margin-top:6px}
+  .knob .et{font-size:13px;color:var(--dim);font-weight:600;white-space:nowrap;margin-right:2px}
+  .hiz{display:flex;gap:6px;flex-wrap:wrap}
+  .hiz button{font:inherit;font-size:12px;font-weight:600;color:var(--dim);background:var(--panel2);
+    border:1px solid var(--line);padding:7px 11px;border-radius:8px;cursor:pointer;transition:.15s;
+    white-space:nowrap}
+  .hiz button:hover{color:var(--ink);border-color:#33445f}
+  .hiz button.on{background:rgba(124,245,196,.12);border-color:rgba(124,245,196,.5);color:var(--acc)}
+  .hiz button.on.u{background:rgba(183,156,240,.13);border-color:rgba(183,156,240,.5);color:var(--uyd)}
+  .tekrar{margin-left:auto;font:inherit;font-size:12px;font-weight:600;color:var(--dim);
+    background:var(--panel2);border:1px solid var(--line);padding:7px 13px;border-radius:8px;
+    cursor:pointer;transition:.15s}
+  .tekrar:hover{color:var(--acc);border-color:rgba(124,245,196,.45)}
+
+  .skor{display:grid;grid-template-columns:repeat(auto-fit,minmax(206px,1fr));gap:12px;margin-top:14px}
+  .kart{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--kc);
+    border-radius:13px;padding:15px 17px}
+  .kart .b{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--kc);font-weight:700}
+  .kart .d{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:25px;font-weight:680;
+    margin:7px 0 2px;letter-spacing:-.02em}
+  .kart .a{font-size:12.5px;color:var(--dim2)}
+  .kart .o{font-size:13px;color:#c2cfe1;margin-top:9px;padding-top:9px;border-top:1px solid #1a2333}
+
+  h2{font-size:22px;font-weight:660;letter-spacing:-.02em;margin:46px 0 6px}
+  .lead{color:var(--dim);font-size:15px;margin-bottom:18px}
+  .parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(216px,1fr));gap:12px}
+  .part{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:17px;
+    border-top:3px solid var(--pc)}
+  .part h3{font-size:16px;font-weight:660;margin-bottom:8px;color:var(--pc)}
+  .part p{font-size:13.5px;color:#c0cddf;line-height:1.65;margin-bottom:8px}
+  .part p:last-child{margin-bottom:0}
+  .part b{color:#fff;font-weight:640}
+
+  /* üç yol karşılaştırması */
+  .ucyol{margin-top:34px;background:linear-gradient(150deg,#0f1724,#0b111b);
+    border:1px solid #223047;border-radius:16px;padding:26px 28px}
+  .ucyol h3{font-size:19px;font-weight:660;letter-spacing:-.015em;margin-bottom:6px}
+  .ucyol h3 span{color:var(--acc)}
+  .ucyol > p{font-size:14.5px;color:#a9bbd2;margin-bottom:20px;max-width:640px}
+  .yol{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+  .yol .ad{font-size:13.5px;color:#c3d0e2;font-weight:600;width:152px;flex:none}
+  .yol .cub{flex:1;height:22px;background:#0b1018;border-radius:6px;overflow:hidden;min-width:60px}
+  .yol .cub i{display:block;height:100%;border-radius:6px;background:var(--yc)}
+  .yol .sy{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:14px;color:var(--yc);
+    font-weight:650;width:96px;text-align:right;flex:none}
+  .yakin{background:#0b1018;border:1px solid #1e2736;border-radius:11px;
+    padding:13px 16px 11px;margin:6px 0 14px}
+  .yakin .bas{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--dim2);
+    font-weight:700;margin-bottom:10px}
+  .yakin .yol{margin-bottom:8px}
+  .yakin .yol:last-child{margin-bottom:0}
+  .yakin .cub{height:16px}
+  .ucyol .son{font-size:13.5px;color:#8fa0b8;margin-top:16px;padding-top:14px;
+    border-top:1px solid #1a2333;line-height:1.7}
+  .ucyol .son b{color:var(--acc);font-weight:640}
+
+  .tabs{display:flex;gap:6px;margin:46px 0 16px}
+  .tabs button{flex:1;font:inherit;font-size:13px;font-weight:600;color:var(--dim);
+    background:var(--panel2);border:1px solid var(--line);padding:11px;border-radius:10px;
+    cursor:pointer;transition:.15s}
+  .tabs button:hover{color:var(--ink);border-color:#33445f}
+  .tabs button.on.t1{background:rgba(205,226,251,.13);border-color:rgba(205,226,251,.5);color:var(--l1)}
+  .tabs button.on.t2{background:rgba(134,182,239,.13);border-color:rgba(134,182,239,.5);color:var(--l2)}
+  .tabs button.on.t3{background:rgba(57,135,229,.17);border-color:rgba(57,135,229,.55);color:var(--l3)}
+  #metin{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
+  #metin h4{font-size:19px;font-weight:660;letter-spacing:-.015em;margin-bottom:12px}
+  #metin p{font-size:15.5px;color:#c8d5e6;line-height:1.75;margin-bottom:13px}
+  #metin p:last-child{margin-bottom:0}
+  #metin b{color:#fff;font-weight:640}
+  #metin .not{font-size:14px;color:var(--acc);border-left:2px solid var(--acc);
+    padding-left:14px;margin-top:16px;line-height:1.7}
+  #metin .form{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;color:#dbe6f5;
+    background:var(--panel2);border:1px solid var(--line);border-radius:10px;
+    padding:12px 15px;margin:4px 0 14px;overflow-x:auto;white-space:nowrap}
+
+  footer{margin-top:38px;padding-top:20px;border-top:1px solid var(--line);
+    font-size:13px;color:var(--dim2);line-height:1.75}
+
+  @media (max-width:640px){
+    h1{font-size:27px} .wrap{padding:0 15px} header.wrap{padding-top:58px;padding-bottom:18px}
+    canvas{height:330px} .skor{grid-template-columns:1fr}
+    .ucyol{padding:20px 18px} .yol .ad{width:100%} .yol{flex-wrap:wrap}
+    .yol .cub{order:3;width:100%;flex-basis:100%} .yol .sy{margin-left:auto}
+    .tekrar{margin-left:0}
+  }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="kick">101 Konuda Haberleşme · Konu 09</div>
+  <h1>Işık hızı ve gecikme</h1>
+  <p>Evrenin en hızlı şeyi bile bir yerden bir yere gitmek için zaman harcar. Aşağıda
+     bir darbe gidip geliyor ve kronometre gerçek süreyi sayıyor. Hiçbir teknoloji bu
+     sürenin altına inemez; yalnızca yol kısaltılabilir.</p>
+</header>
+
+<main class="wrap">
+
+  <div class="scene">
+    <canvas id="cv"></canvas>
+    <div class="knob">
+      <span class="et">Nereye?</span>
+      <div class="hiz" id="hed"></div>
+      <button class="tekrar" id="tk">Tekrar gönder</button>
+    </div>
+  </div>
+
+  <div class="skor">
+    <div class="kart" style="--kc:var(--l2)">
+      <div class="b">Yol</div>
+      <div class="d" id="dY">349 km</div>
+      <div class="a" id="aY">tek yön, yeryüzü boyunca</div>
+      <div class="o" id="oY">Fiber içinde ışık, boşluktakinin yüzde 68'i hızında gider.</div>
+    </div>
+    <div class="kart" style="--kc:var(--acc)">
+      <div class="b">Tek yön</div>
+      <div class="d" id="dT">1.71 ms</div>
+      <div class="a" id="aT">fiberde</div>
+      <div class="o" id="oT">Boşlukta olsaydı 1,17 milisaniye sürerdi.</div>
+    </div>
+    <div class="kart" style="--kc:var(--fib)">
+      <div class="b">Gidiş-dönüş</div>
+      <div class="d" id="dG" style="color:#ffc061">3.42 ms</div>
+      <div class="a">soruyu sorup cevabı almak</div>
+      <div class="o">Ping ölçümünde gördüğün sayının fiziksel alt sınırı budur.</div>
+    </div>
+    <div class="kart" style="--kc:var(--uyd)">
+      <div class="b">İnsan hisseder mi?</div>
+      <div class="d" id="dH" style="color:#b79cf0">Hayır</div>
+      <div class="a" id="aH">tek yön 150 ms'nin altında</div>
+      <div class="o">Eşikler ITU-T G.114 tavsiyesinden alınmıştır.</div>
+    </div>
+  </div>
+
+  <h2>Ekranda ne var?</h2>
+  <p class="lead">Yeşil darbe boşlukta, turuncu darbe fiber içinde gidiyor.</p>
+  <div class="parts">
+    <div class="part" style="--pc:#7cf5c4">
+      <h3>Yeşil darbe boşluktaki ışıktır</h3>
+      <p>Saniyede 299.792.458 metre gider. Işık hızı evrenin üst sınırıdır ve <b>aşılamaz</b>.</p>
+      <p>Uydu bağlantılarında sinyal boşlukta ilerlediği için yalnızca bu darbe görünür.</p>
+    </div>
+    <div class="part" style="--pc:#ffc061">
+      <h3>Turuncu darbe fiberdeki ışıktır</h3>
+      <p>Cam içinde ışık yavaşlar. Tek modlu fiberde hız saniyede yaklaşık
+        <b>204.190 kilometredir</b>.</p>
+      <p>Bu yüzden aynı yolu gitmek fiberde 1,47 kat daha uzun sürer.</p>
+    </div>
+    <div class="part" style="--pc:#cde2fb">
+      <h3>Kronometre gerçek süreyi sayar</h3>
+      <p>Ekrandaki hareket izlenebilsin diye yavaşlatılmıştır. Yavaşlatma oranı sağ üstte
+        yazıyor.</p>
+      <p>Kronometrenin gösterdiği sayı ise <b>gerçek süredir</b>; mesafenin hıza
+        bölümünden çıkar.</p>
+    </div>
+    <div class="part" style="--pc:#b79cf0">
+      <h3>Hedef düğmeleri</h3>
+      <p>İlk beşi yeryüzündedir ve fiber üzerinden gider. Sonraki ikisi aynı iki şehri
+        uydudan bağlar, sonuncusu ise Ay'a uzanır.</p>
+      <p>Uydu seçeneklerinde yol <b>yukarı çıkıp aşağı iner</b>; bu yüzden çizim üçgen
+        biçimindedir.</p>
+    </div>
+  </div>
+
+  <div class="ucyol">
+    <h3>Aynı iki şehir, <span>üç ayrı yol</span></h3>
+    <p>İstanbul ile Londra arası 2.501 kilometredir. Aynı mesajı üç ayrı yoldan gönderirsek
+      gidiş-dönüş süreleri şöyle oluyor. Sonuç, çoğu kişinin beklediğinin tersidir.</p>
+    <div class="yol" style="--yc:#ffc061">
+      <span class="ad">Fiber, yer altından</span>
+      <span class="cub"><i style="width:5.1%"></i></span>
+      <span class="sy">24,50 ms</span>
+    </div>
+    <div class="yol" style="--yc:#7cf5c4">
+      <span class="ad">Alçak yörünge uydusu</span>
+      <span class="cub"><i style="width:3.9%"></i></span>
+      <span class="sy">18,85 ms</span>
+    </div>
+    <div class="yol" style="--yc:#b79cf0">
+      <span class="ad">Yer sabit uydu</span>
+      <span class="cub"><i style="width:100%"></i></span>
+      <span class="sy">479,40 ms</span>
+    </div>
+    <div class="yakin">
+      <div class="bas">İlk iki satır, kendi ölçeğinde</div>
+      <div class="yol" style="--yc:#ffc061">
+        <span class="ad">Fiber, yer altından</span>
+        <span class="cub"><i style="width:100%"></i></span>
+        <span class="sy">24,50 ms</span>
+      </div>
+      <div class="yol" style="--yc:#7cf5c4">
+        <span class="ad">Alçak yörünge uydusu</span>
+        <span class="cub"><i style="width:76.9%"></i></span>
+        <span class="sy">18,85 ms</span>
+      </div>
+    </div>
+    <div class="son">
+      Alçak yörünge uydusu, fiberden <b>daha hızlı</b>. Uydu yolu 324 kilometre daha uzun
+      olduğu hâlde kazanıyor, çünkü o yolun tamamı boşlukta geçiyor. Fiberde ışık yüzde
+      32 yavaşlıyor ve 2.501 kilometre boyunca bu kayıp birikiyor. Yer sabit uydu ise
+      36 bin kilometre yükseklikte olduğu için aynı yarışta yirmi kat geride kalıyor.
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="t1 on" data-l="1">L1 · Herkes</button>
+    <button class="t2" data-l="2">L2 · Meraklı</button>
+    <button class="t3" data-l="3">L3 · Mühendis</button>
+  </div>
+  <div id="metin"></div>
+
+  <footer>
+    Ekrandaki hareket izlenebilsin diye yavaşlatılmıştır; kronometrenin gösterdiği süre
+    gerçektir. Yeryüzü mesafeleri İstanbul merkezli büyük daire uzaklıklarıdır. Ankara için 349,
+    Londra için 2.501, New York için 8.070 ve Sydney için 14.946 kilometre alınmıştır. Gerçek fiber güzergâhı
+    düz gitmez; tipik olarak büyük dairenin 1,3 ilâ 1,5 katı uzunluğundadır, dolayısıyla
+    buradaki değerler fiziksel alt sınırdır. Fiberde hız c ⁄ n bağıntısından hesaplanır;
+    tek modlu silika fiber için 1550 nanometrede n = 1,4682 alınmıştır. Uydu eğik
+    menzilleri, iki yer istasyonunun ortasında duran bir uydu için üçgen geometriden
+    hesaplanır. Ay uzaklığı ortalama değerdir ve 356.500 ile 406.700 kilometre arasında
+    değişir. Buradaki süreler yalnızca yayılma gecikmesidir; gerçek gecikmeye
+    yönlendirici, kuyruk ve kodlama gecikmeleri de eklenir. İnsan algısı eşikleri
+    ITU-T G.114 tavsiyesinden alınmıştır.
+  </footer>
+</main>
+
+<script>
+"use strict";
+/* ===========================================================================
+   KONU 09 — IŞIK HIZI VE GECİKME
+   Doğrulandı (dogrula-09.py):
+     c = 299 792 458 m/s · fiber n=1.4682 → 204 190 km/s (c'nin %68.1'i)
+     Ankara 349 km → 1.71 ms · Londra 2 501 km → 12.25 ms
+     New York 8.070 km → 39.52 ms · Sydney 14.946 km → 73.20 ms
+     İST–LON: fiber 24.50 ms · LEO 18.85 ms · yer sabit 479.40 ms (gidiş-dönüş)
+     Ay 384 400 km → tek yön 1.282 s, gidiş-dönüş 2.564 s
+     1 ns = 29.98 cm
+   =========================================================================== */
+const $ = id => document.getElementById(id);
+const cv = $('cv'), ctx = cv.getContext('2d');
+
+const C   = 299792458;
+const NF  = 1.4682;
+const VF  = C/NF;                 // 204 190 km/s
+const RE  = 6371;                 // km
+
+/* tur: 'yuzey' (fiber, yay boyunca) · 'uydu' (üçgen, boşluk) · 'uzay' (düz, boşluk) */
+const HEDEF = [
+  { ad:'Aynı şehir', tam:'On kilometre ötedeki sunucu', tur:'yuzey', d:10 },
+  { ad:'Ankara',     tam:'İstanbul → Ankara',           tur:'yuzey', d:349.356 },
+  { ad:'Londra',     tam:'İstanbul → Londra',           tur:'yuzey', d:2500.784 },
+  { ad:'New York',   tam:'İstanbul → New York',         tur:'yuzey', d:8069.829 },
+  { ad:'Sydney',     tam:'İstanbul → Sydney',           tur:'yuzey', d:14946.238 },
+  { ad:'LEO uydu',   tam:'İstanbul → Londra · alçak yörünge uydusu', tur:'uydu',
+    yuk:550,   yer:2500.784 },
+  { ad:'Yer sabit uydu', tam:'İstanbul → Londra · yer sabit uydu',   tur:'uydu',
+    yuk:35786, yer:2500.784 },
+  { ad:'Ay',         tam:'Dünya → Ay',                  tur:'uzay',  d:384400 },
+];
+
+/* uydu eğik menzili: iki yer istasyonunun ortasında duran uydu */
+function egik(h, yerKm){
+  const phi = (yerKm/RE)/2, r = RE+h;
+  return Math.sqrt(RE*RE + r*r - 2*RE*r*Math.cos(phi));
+}
+/* seçili hedef için: tek yönlük yol (km) ve hız (m/s) */
+function yol(){
+  const k = HEDEF[h];
+  if(k.tur==='uydu') return { km: 2*egik(k.yuk,k.yer), v:C, bosluk:true };
+  if(k.tur==='uzay') return { km: k.d, v:C, bosluk:true };
+  return { km: k.d, v:VF, bosluk:false };
+}
+const tekYon = () => { const y=yol(); return y.km*1000/y.v; };
+const bosYon = () => yol().km*1000/C;
+
+let h = 1;
+let W=0, H=0, dpr=1, t0=0, sonZ=0, gecen=0, bitti=false;
+
+function olcu(){
+  dpr = Math.min(2, devicePixelRatio||1);
+  W = cv.clientWidth; H = cv.clientHeight;
+  if(W<10||H<10) return;
+  cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+
+/* ---- biçimlendirme ---- */
+const bosluk = n => n.toLocaleString('tr-TR');          // binlik ayırıcı nokta
+const nk = x => String(x).replace('.', ',');            // ondalık ayırıcı virgül
+function kmYaz(km){
+  if(km>=1000) return bosluk(Math.round(km))+' km';
+  if(km>=10)   return km.toFixed(0)+' km';
+  return nk(km.toFixed(1))+' km';
+}
+function sYaz(sn){
+  if(sn>=60)   return nk((sn/60).toFixed(2))+' dk';
+  if(sn>=1)    return nk(sn.toFixed(3))+' s';
+  if(sn>=1e-3) return nk((sn*1e3).toFixed(2))+' ms';
+  if(sn>=1e-6) return nk((sn*1e6).toFixed(2))+' µs';
+  return nk((sn*1e9).toFixed(1))+' ns';
+}
+function katYaz(k){
+  if(k>=1e6) return bosluk(Math.round(k/1e5)/10)+' milyon kat';
+  if(k>=1e3) return bosluk(Math.round(k))+' kat';
+  return nk(k.toFixed(1))+' kat';
+}
+function yz(m,x,y,renk,boy,hiza,kalin,aralik,tek){
+  ctx.font=`${kalin||700} ${boy}px ${tek?'ui-monospace,Menlo,monospace':'system-ui,-apple-system,sans-serif'}`;
+  ctx.textAlign=hiza||'left'; ctx.textBaseline='alphabetic'; ctx.fillStyle=renk;
+  ctx.letterSpacing=(aralik||0)+'px'; ctx.fillText(m,x,y); ctx.letterSpacing='0px';
+}
+const gw=(m,boy,kalin,aralik)=>{
+  ctx.font=`${kalin||700} ${boy}px system-ui,-apple-system,sans-serif`;
+  ctx.letterSpacing=(aralik||0)+'px'; const w=ctx.measureText(m).width; ctx.letterSpacing='0px'; return w;
+};
+function yk(x,y,w,hh,r,dolgu,cizgi,kal){
+  ctx.beginPath(); ctx.roundRect(x,y,w,hh,r);
+  if(dolgu){ctx.fillStyle=dolgu;ctx.fill()}
+  if(cizgi){ctx.strokeStyle=cizgi;ctx.lineWidth=kal||1.3;ctx.stroke()}
+}
+
+/* ---- animasyon süresi: mesafeye göre 1.6 s ile 7 s arası ---- */
+function perde(){
+  const top = 2*yol().km;
+  const u = (Math.log10(Math.max(20,top)) - 1.3) / (Math.log10(768800) - 1.3);
+  return 1.6 + 5.4*Math.max(0,Math.min(1,u));
+}
+
+/* ---- yol geometrisi: t ∈ [0,1] → ekran noktası ---- */
+function geo(){
+  const k = HEDEF[h];
+  const solx = W*0.13, sagx = W*0.87, gen = sagx-solx;
+  if(k.tur==='yuzey'){
+    const th = k.d/RE;                          // merkez açı
+    const kiris = 2*RE*Math.sin(th/2);          // km
+    const olcek = gen/kiris;                    // px/km
+    const R = RE*olcek;
+    const tepe = H*0.34;
+    const cy = tepe + R;
+    const P = a => [W/2 + R*Math.sin(a), cy - R*Math.cos(a)];
+    return { tip:'yay', R, cy, th, P, olcek,
+             nok: t => P(-th/2 + th*t) };
+  }
+  if(k.tur==='uzay'){
+    const olcek = gen/k.d;
+    const R = RE*olcek;
+    const y = H*0.50;
+    const cx = solx - R;
+    return { tip:'duz', R, cx, cy:y, olcek,
+             nok: t => [solx + gen*t, y] };
+  }
+  /* uydu: yer A → uydu → yer B */
+  const phi = (k.yer/RE)/2, r = RE+k.yuk;
+  const s   = egik(k.yuk, k.yer);
+  const yatay = 2*RE*Math.sin(phi);                    // iki istasyon arası kiriş, km
+  const yuks  = r - RE*Math.cos(phi);                  // uydunun kirişten yüksekliği, km
+  const olcek = Math.min(gen/Math.max(yatay,1), (H*0.40)/Math.max(yuks,1));
+  const R = RE*olcek;
+  const taban = H*0.78;
+  const A = [W/2 - yatay*olcek/2, taban];
+  const B = [W/2 + yatay*olcek/2, taban];
+  const S = [W/2, taban - yuks*olcek];
+  const cy = taban + Math.sqrt(Math.max(0, R*R - (yatay*olcek/2)**2)) - 0;
+  return { tip:'uydu', R, cy, A, B, S, olcek, s,
+    nok: t => t<0.5 ? [A[0]+(S[0]-A[0])*t*2, A[1]+(S[1]-A[1])*t*2]
+                    : [S[0]+(B[0]-S[0])*(t-0.5)*2, S[1]+(B[1]-S[1])*(t-0.5)*2] };
+}
+
+/* ---- dünya yüzeyi çizimi ---- */
+function dunya(g){
+  ctx.save();
+  ctx.beginPath();
+  if((g.tip==='yay' || g.tip==='uydu') && g.R < W*0.30){
+    /* Dünya ekrana sığıyorsa tam daire çiz; ufuk çizgisi yerine küre görünsün */
+    ctx.arc(W/2, g.cy, g.R, 0, 6.2832);
+  } else if(g.tip==='yay' || g.tip==='uydu'){
+    const cy = g.cy, R = g.R, cx = W/2;
+    const sin = Math.min(1, (W/2 + 40)/R);
+    const aM = Math.asin(sin);
+    const N = 220;
+    for(let i=0;i<=N;i++){
+      const a = -aM + 2*aM*i/N;
+      const x = cx + R*Math.sin(a), y = cy - R*Math.cos(a);
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.lineTo(W+40,H+40); ctx.lineTo(-40,H+40); ctx.closePath();
+  } else {
+    ctx.arc(g.cx, g.cy, g.R, 0, 6.2832);
+  }
+  ctx.fillStyle='rgba(30,52,84,.38)'; ctx.fill();
+  ctx.strokeStyle='rgba(112,158,214,.55)'; ctx.lineWidth=1.8; ctx.stroke();
+  ctx.restore();
+}
+
+function ciz(z){
+  if(W<10||H<10) return;
+  if(!t0) t0 = z;
+  const dt = sonZ ? (z-sonZ)/1000 : 0; sonZ = z;
+  ctx.fillStyle='#080c14'; ctx.fillRect(0,0,W,H);
+
+  const k = HEDEF[h], g = geo(), P = perde();
+  const y = yol();
+
+  /* yıldızlar (uzay ve uydu görünümünde) */
+  if(k.tur!=='yuzey'){
+    for(let i=0;i<46;i++){
+      const x = ((i*97)%1000)/1000*W, yy = ((i*233)%1000)/1000*H*0.62;
+      ctx.fillStyle='rgba(205,226,251,'+(0.06+0.10*((i*37)%10)/10)+')';
+      ctx.beginPath(); ctx.arc(x,yy,1.1,0,6.2832); ctx.fill();
+    }
+  }
+
+  dunya(g);
+
+  /* yol çizgisi */
+  ctx.strokeStyle='rgba(120,145,180,.30)'; ctx.lineWidth=1.6; ctx.setLineDash([3,6]);
+  ctx.beginPath();
+  for(let i=0;i<=120;i++){ const p=g.nok(i/120); i===0?ctx.moveTo(p[0],p[1]):ctx.lineTo(p[0],p[1]); }
+  ctx.stroke(); ctx.setLineDash([]);
+
+  /* uçlar */
+  const A = g.nok(0), B = g.nok(1);
+  const yakin = Math.abs(B[0]-A[0]) < 150;      // uçlar üst üste binerse yazıları ayır
+  const uc = (p,renk,ad,taraf) => {
+    ctx.fillStyle=renk; ctx.beginPath(); ctx.arc(p[0],p[1],6,0,6.2832); ctx.fill();
+    ctx.strokeStyle='rgba(8,12,20,.9)'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.arc(p[0],p[1],6,0,6.2832); ctx.stroke();
+    const alt = (k.tur==='uydu');
+    let x = p[0], hiza = 'center', dy = alt ? 26 : -16;
+    if(yakin){ x = p[0] + (taraf<0 ? -14 : 14); hiza = taraf<0 ? 'right' : 'left';
+               dy = alt ? (taraf<0 ? 20 : 38) : (taraf<0 ? -16 : 22); }
+    yz(ad, x, p[1]+dy, renk, 11.5, hiza, 700);
+  };
+
+  /* uydu düğümü */
+  if(g.tip==='uydu'){
+    ctx.fillStyle='#b79cf0';
+    ctx.beginPath(); ctx.arc(g.S[0],g.S[1],7,0,6.2832); ctx.fill();
+    ctx.strokeStyle='rgba(183,156,240,.35)'; ctx.lineWidth=1.4;
+    ctx.beginPath(); ctx.arc(g.S[0],g.S[1],13,0,6.2832); ctx.stroke();
+    yz(kmYaz(k.yuk)+' yükseklik', g.S[0], g.S[1]-22, 'rgba(183,156,240,.9)', 11, 'center', 700);
+  }
+
+  /* animasyon: 0→1 gidiş, 1→2 dönüş */
+  gecen += dt;
+  const dev = (gecen % (P*1.35)) / P;            // 1.35: dönüş sonrası kısa bekleme
+  const ilerle = Math.min(2, dev*2);
+  const konum = u => g.nok(u<=1 ? u : 2-u);
+
+  /* boşluk darbesi (yeşil) */
+  const darbe = (u, renk, boy) => {
+    if(u>2) return;
+    const p = konum(u);
+    const gr = ctx.createRadialGradient(p[0],p[1],0,p[0],p[1],boy*3.2);
+    gr.addColorStop(0, renk); gr.addColorStop(1, renk.replace(/[\d.]+\)$/,'0)'));
+    ctx.fillStyle=gr; ctx.beginPath(); ctx.arc(p[0],p[1],boy*3.2,0,6.2832); ctx.fill();
+    ctx.fillStyle=renk; ctx.beginPath(); ctx.arc(p[0],p[1],boy,0,6.2832); ctx.fill();
+  };
+  darbe(ilerle, 'rgba(124,245,196,1)', 5.5);
+  /* fiber darbesi (turuncu) — yalnız yeryüzü bağlantılarında */
+  if(!y.bosluk) darbe(ilerle/NF, 'rgba(255,192,97,1)', 5.5);
+
+  uc(A, '#cde2fb', k.tur==='uzay' ? 'DÜNYA' : 'SEN', -1);
+  uc(B, '#7cf5c4', k.ad.toLocaleUpperCase('tr-TR'), 1);
+
+  /* kronometre — gerçek süre */
+  const oran = Math.min(1, ilerle/2);
+  const gercek = oran * 2 * tekYon();
+  const kw = 190, kx = W-kw-14, ky = 14;
+  yk(kx, ky, kw, 58, 11, 'rgba(10,16,26,.92)', 'rgba(60,80,110,.55)');
+  yz('GEÇEN SÜRE', kx+14, ky+20, 'rgba(154,171,194,.7)', 10, 'left', 700, 1.6);
+  yz(sYaz(gercek), kx+14, ky+45, '#e8eef7', 21, 'left', 700, 0, true);
+  const dur = ilerle>=2 ? 'geri döndü' : (ilerle>=1 ? 'dönüyor' : 'gidiyor');
+  yz(dur, kx+kw-14, ky+45, 'rgba(124,245,196,.85)', 11.5, 'right', 700);
+
+  /* sol üst künye */
+  yz(k.tam.toLocaleUpperCase('tr-TR'), 16, 26, 'rgba(154,171,194,.62)', 10.5, 'left', 700, 1.6);
+  yz(katYaz(P/(2*tekYon()))+' yavaşlatıldı', 16, 44, 'rgba(154,171,194,.42)', 10.5, 'left', 600, .6);
+
+  /* alt ölçek */
+  const sy = H-14;
+  yz(kmYaz(y.km)+(k.tur==='uydu' ? '  ·  yer → uydu → yer' : '  ·  tek yön'),
+     W/2, sy, 'rgba(150,172,200,.55)', 11, 'center', 600, .5);
+}
+
+function kare(z){ ciz(z); requestAnimationFrame(kare); }
+
+/* ---- pano ---- */
+function panoYaz(){
+  const k = HEDEF[h], y = yol(), t = tekYon(), tb = bosYon();
+  $('dY').textContent = kmYaz(y.km);
+  $('aY').textContent = k.tur==='uydu' ? 'yer → uydu → yer' :
+                        k.tur==='uzay' ? 'tek yön, boşlukta' : 'tek yön, yeryüzü boyunca';
+  $('oY').textContent = y.bosluk
+    ? 'Yol boşlukta geçtiği için ışık tam hızıyla gider.'
+    : 'Fiber içinde ışık, boşluktakinin yüzde 68\'i hızında gider.';
+
+  $('dT').textContent = sYaz(t);
+  $('aT').textContent = y.bosluk ? 'boşlukta' : 'fiberde';
+  $('oT').textContent = y.bosluk
+    ? 'Bu süre aşılamaz; evrenin hız sınırı budur.'
+    : 'Boşlukta olsaydı '+sYaz(tb)+' sürerdi. Fark '+sYaz(t-tb)+'.';
+
+  $('dG').textContent = sYaz(2*t);
+
+  const ms = t*1000;
+  const hs = ms<150 ? ['Hayır','tek yön 150 ms\'nin altında']
+           : ms<400 ? ['Evet','tek yön 150 ile 400 ms arasında']
+                    : ['Konuşulamaz','tek yön 400 ms\'nin üstünde'];
+  $('dH').textContent = hs[0];
+  $('dH').style.color = ms<150 ? '#b79cf0' : (ms<400 ? '#ffc061' : '#ef6a6a');
+  $('aH').textContent = hs[1];
+
+  HEDEF.forEach((x,i)=>$('h'+i).className = i===h ? (x.tur==='yuzey'?'on':'on u') : '');
+}
+
+/* ---- katman metinleri ---- */
+const METIN = {
+1:{b:'Hiçbir şey anında gitmez',
+   p:[`Telefonunda bir mesaj gönderdiğinde iş bitmiş gibi görünür. Oysa o mesaj yola
+       çıkar ve yolu bitirmesi zaman alır.`,
+      `Işık, evrendeki en hızlı şeydir. Boşlukta saniyede 299.792.458 metre yol alır.
+       Ancak bu hız sonsuz değildir; yalnızca çok yüksektir. <b>Sonsuz hız ile çok
+       yüksek hız arasındaki fark, haberleşmenin bütün kurallarını belirler.</b>`,
+      `Ankara'ya bir soru sorup cevabını almak 3,42 milisaniye sürer. New York'a sorarsan
+       79 milisaniye. Ay'a sorarsan <b>2,56 saniye</b>.`,
+      `Ay'daki bir astronota "nasılsın" desen, o daha soruyu duymadan 1,28 saniye geçer.
+       Cevabını duymak için 2,56 saniye beklersin. Aradaki sessizlik kimsenin suçu
+       değildir; fiziktir.`,
+      `Bir şey daha var. Kablodaki ışık, boşluktaki ışıktan yavaştır. Cam fiberin içinde
+       hız saniyede 204.190 kilometreye iner. Yani bir mesaj kabloyla gittiğinde
+       <b>1,47 kat</b> daha uzun sürer.`,
+      `Bu yüzden internet hızını artırmak gecikmeyi azaltmaz. Hızlı internet daha çok
+       veriyi aynı anda taşır; ama tek bir mesajın yolu bitirme süresi değişmez.`],
+   n:'Oyun oynarken "ping" diye gördüğün sayı, bir mesajın gidip geri dönme süresidir. Sunucu ne kadar uzaksa o sayı o kadar büyür ve hiçbir paket bu sınırın altına inemez.'},
+
+2:{b:'Gecikme nereden gelir, nasıl hesaplanır',
+   p:[`Yayılma gecikmesi tek satırlık bir hesaptır:`,
+      `<div class="form">gecikme = mesafe ÷ hız</div>`,
+      `Hız kısmı, düşündüğünden daha ilginçtir. Boşlukta ışık saniyede 299.792 kilometre
+       gider. Cam fiberin kırılma indisi 1,4682 olduğu için fiberde hız
+       <b>204.190 kilometreye</b> iner. Yani ışığın boşluktaki hızının yüzde 68'i.`,
+      `Pratik kural şudur: fiberde her kilometre yaklaşık <b>4,9 mikrosaniye</b> ekler.
+       İki yüz kilometre bir milisaniye demektir.`,
+      `Mesafe kısmında da bir tuzak var. Fiber güzergâhı iki nokta arasında düz gitmez;
+       şehirleri, denizleri ve mevcut altyapıyı takip eder. Gerçek yol tipik olarak
+       kuş uçuşu mesafenin <b>1,3 ilâ 1,5 katıdır</b>. Bu sayfadaki değerler kuş uçuşu
+       hesaplandığı için fiziksel alt sınırdır; gerçek ölçüm hep biraz üstünde çıkar.`,
+      `İnsanın bunu ne zaman hissettiği ölçülmüştür. ITU-T G.114 tavsiyesine göre tek yön
+       gecikme 150 milisaniyenin altındaysa konuşma doğal akar. 150 ile 400 milisaniye
+       arasında konuşanlar gecikmenin farkına varır. 400 milisaniyenin üstünde karşılıklı
+       konuşma bozulur.`,
+      `Yer sabit uydu tam olarak bu yüzden sorunludur. 36 bin kilometre yükseklikteki bir
+       uyduya çıkıp inmek tek yönde 240 milisaniye alır. Sinyal gücüyle veya modemle
+       ilgisi yoktur; sorun mesafedir.`],
+   n:'Bant genişliği ile gecikme ayrı şeylerdir. Bant genişliği yolun kaç şeritli olduğunu, gecikme ise yolun ne kadar uzun olduğunu söyler. Şerit eklemek yolu kısaltmaz.'},
+
+3:{b:'Alt sınır, bütçe ve mühendislik kararları',
+   p:[`Uçtan uca gecikme dört bileşenin toplamıdır:`,
+      `<div class="form">T = T_yayılma + T_iletim + T_kuyruk + T_işleme</div>`,
+      `Yayılma bileşeni <b>d/v</b> ile verilir ve donanımla değiştirilemez. İletim bileşeni
+       <b>L/R</b>'dir; paket boyu bölü hat hızı. Kuyruk ve işleme bileşenleri yük altında
+       artar ve gecikme değişkenliğinin (jitter) asıl kaynağıdır.`,
+      `Kritik ayrım şudur: hat hızını artırmak yalnızca <b>L/R</b> terimini küçültür.
+       1500 baytlık bir paket 1 Gbit/s'te 12 mikrosaniyede, 10 Gbit/s'te 1,2
+       mikrosaniyede çıkar. Aynı paketin İstanbul'dan New York'a yayılması ise her iki
+       durumda da 39,5 milisaniyedir. On kat hızlı hat, gecikmeyi binde bir oranında bile
+       iyileştirmez.`,
+      `Bu sayfadaki en öğretici sonuç, üç yol karşılaştırmasıdır. İstanbul–Londra
+       arasında alçak yörünge uydusu, fiberden <b>daha hızlıdır</b>. Uydu yolu 2.825
+       kilometre, fiber yolu 2.501 kilometre; uydu 324 kilometre fazla gider ama yolun
+       tamamı boşlukta geçtiği için 18,85 milisaniyede döner. Fiber 24,50 milisaniyede
+       döner. Kazanç, <b>n = 1,4682</b> çarpanından gelir.`,
+      `Aynı mantık boş çekirdekli fiberin (hollow-core) neden geliştirildiğini de açıklar.
+       Işığı camdan değil havadan geçirerek indisi 1'e yaklaştırırsınız ve aynı güzergâhta
+       yaklaşık üçte bir gecikme kazanırsınız. Finansal işlem ağlarının Chicago–New York
+       hattında mikrodalga röleye para dökmesinin sebebi de aynıdır: hava, camdan hızlıdır.`,
+      `Ölçek küçüldüğünde de aynı fizik çalışır. Boşlukta bir nanosaniye
+       <b>29,98 santimetredir</b>. 3 GHz'lik bir işlemcide bir saat vuruşu 333
+       pikosaniye sürer ve o sürede baskı devre izinde sinyal ancak 5,5 santimetre gider.
+       Yonga boyutlarının ve bellek yerleşiminin neden bu kadar kritik olduğunun cevabı
+       budur.`],
+   n:'Grace Hopper konferanslarda 29,98 santimetrelik teller dağıtırdı ve "bu bir nanosaniyedir" derdi. Uydu bağlantısındaki gecikmeyi soranlara da bir mikrosaniyelik 300 metrelik makarayı gösterirdi. Gecikme soyut bir sayı değil, elle tutulur bir uzunluktur.'},
+};
+let katman=1;
+function metinYaz(){
+  const m=METIN[katman];
+  $('metin').innerHTML=`<h4>${m.b}</h4>`+
+    m.p.map(x=> x.startsWith('<div') ? x : `<p>${x}</p>`).join('')+
+    `<div class="not">${m.n}</div>`;
+}
+document.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('[data-l]').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on'); katman=+b.dataset.l; metinYaz();
+});
+
+$('hed').innerHTML = HEDEF.map((x,i)=>`<button id="h${i}" data-h="${i}">${x.ad}</button>`).join('');
+document.querySelectorAll('[data-h]').forEach(b=>b.onclick=()=>{
+  h=+b.dataset.h; gecen=0; panoYaz();
+});
+$('tk').onclick = () => { gecen = 0; };
+
+if(!CanvasRenderingContext2D.prototype.roundRect){
+  CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,hh,r){
+    this.moveTo(x+r,y); this.arcTo(x+w,y,x+w,y+hh,r); this.arcTo(x+w,y+hh,x,y+hh,r);
+    this.arcTo(x,y+hh,x,y,r); this.arcTo(x,y,x+w,y,r); this.closePath(); return this;};
+}
+addEventListener('resize', olcu);
+olcu(); metinYaz(); panoYaz();
+requestAnimationFrame(kare);
+</script>
+</body>
+</html>
