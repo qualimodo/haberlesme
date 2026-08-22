@@ -26,7 +26,7 @@
     --l1:#cde2fb; --l2:#86b6ef; --l3:#3987e5;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--bg);color:var(--ink);line-height:1.6;padding-bottom:60px;
+  body{background:var(--bg);color:var(--ink);line-height:1,6;padding-bottom:60px;
     font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
     -webkit-font-smoothing:antialiased}
   .wrap{max-width:960px;margin:0 auto;padding:0 22px}
@@ -34,7 +34,7 @@
   header{background:radial-gradient(900px 300px at 16% -12%,rgba(42,120,214,.16),transparent 62%)}
   header.wrap{padding-top:84px;padding-bottom:22px}
   .kick{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);font-weight:700}
-  h1{font-size:38px;font-weight:700;letter-spacing:-.03em;margin:18px 0 13px;line-height:1.1}
+  h1{font-size:38px;font-weight:700;letter-spacing:-.03em;margin:18px 0 13px;line-height:1,1}
   header p{color:var(--dim);font-size:16px;max-width:640px}
 
   .scene{background:var(--panel);border:1px solid var(--line);border-radius:16px;
@@ -75,7 +75,7 @@
   .part{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:17px;
     border-top:3px solid var(--pc)}
   .part h3{font-size:16px;font-weight:660;margin-bottom:8px;color:var(--pc)}
-  .part p{font-size:13.5px;color:#c0cddf;line-height:1.65;margin-bottom:8px}
+  .part p{font-size:13.5px;color:#c0cddf;line-height:1,65;margin-bottom:8px}
   .part p:last-child{margin-bottom:0}
   .part b{color:#fff;font-weight:640}
 
@@ -89,17 +89,17 @@
   .tabs button.on.t3{background:rgba(57,135,229,.17);border-color:rgba(57,135,229,.55);color:var(--l3)}
   #metin{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
   #metin h4{font-size:19px;font-weight:660;letter-spacing:-.015em;margin-bottom:12px}
-  #metin p{font-size:15.5px;color:#c8d5e6;line-height:1.75;margin-bottom:13px}
+  #metin p{font-size:15.5px;color:#c8d5e6;line-height:1,75;margin-bottom:13px}
   #metin p:last-child{margin-bottom:0}
   #metin b{color:#fff;font-weight:640}
   #metin .not{font-size:14px;color:var(--acc);border-left:2px solid var(--acc);
-    padding-left:14px;margin-top:16px;line-height:1.7}
+    padding-left:14px;margin-top:16px;line-height:1,7}
   #metin .form{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;color:#dbe6f5;
     background:var(--panel2);border:1px solid var(--line);border-radius:10px;
     padding:12px 15px;margin:4px 0 14px;overflow-x:auto;white-space:nowrap}
 
   footer{margin-top:38px;padding-top:20px;border-top:1px solid var(--line);
-    font-size:13px;color:var(--dim2);line-height:1.75}
+    font-size:13px;color:var(--dim2);line-height:1,75}
 
   @media (max-width:640px){
     h1{font-size:27px} .wrap{padding:0 15px} header.wrap{padding-top:58px;padding-bottom:18px}
@@ -134,7 +134,7 @@
   <div class="skor">
     <div class="kart" style="--kc:var(--acc)">
       <div class="b">Dalga boyu</div>
-      <div class="d" id="dL">3.43 m</div>
+      <div class="d" id="dL">3,43 m</div>
       <div class="a" id="aL">iki tepe arasındaki mesafe</div>
       <div class="o" id="oL">Frekansı iki katına çıkarırsan dalga boyu yarıya iner.</div>
     </div>
@@ -169,7 +169,7 @@
       <h3>Ortam düğmeleri</h3>
       <p>Aynı frekans, farklı ortamda farklı bir dalga boyu verir. Sebebi şudur: her ortamda
         dalganın hızı farklıdır.</p>
-      <p>Yüz hertzlik bir ses havada 3.43 metre, suda ise <b>14.8 metre</b> uzunluğundadır.</p>
+      <p>Yüz hertzlik bir ses havada 3,43 metre, suda ise <b>14,8 metre</b> uzunluğundadır.</p>
     </div>
   </div>
 
@@ -183,7 +183,7 @@
     Ekrandaki hareket, izlenebilsin diye çok yavaşlatılmıştır; oranlar korunur. Dalga boyu
     ve periyot değerleri gerçektir ve λ = v ⁄ f bağıntısından hesaplanır. Kullanılan hızlar:
     havada ses 343 m/s (20 °C), suda ses 1480 m/s (20 °C), boşlukta elektromanyetik dalga
-    299 792 458 m/s (tanım gereği tam sayı). Sudaki ve havadaki ses hızı sıcaklıkla değişir.
+    299 792 458 m/s alınmıştır; sonuncusu tanım gereği tam sayıdır. Sudaki ve havadaki ses hızı sıcaklıkla değişir.
     Deniz dalgaları bunlardan farklıdır: hızları dalga boyuna bağlıdır, dolayısıyla buradaki
     sabit hız varsayımı onlar için geçerli değildir. Şamandıra benzetmesi yalnızca hareketi
     anlatmak içindir.
@@ -400,9 +400,9 @@ const METIN = {
        1480 metre. Radyo dalgası boşlukta saniyede yaklaşık <b>300 000 kilometre</b> gider.`,
       `Bu yüzden frekans iki katına çıktığında dalga boyu yarıya iner. Hız sabit kaldığına
        göre başka türlüsü mümkün değildir.`,
-      `Çıkan sayılar bazen şaşırtıcıdır. Wi-Fi'ın 2.4 GHz'lik dalgası <b>12.5 santimetre</b>
+      `Çıkan sayılar bazen şaşırtıcıdır. Wi-Fi'ın 2,4 GHz'lik dalgası <b>12,5 santimetre</b>
        uzunluğundadır. La notası havada 78 santimetre olur. İnsanın duyabildiği en tiz ses
-       ise sadece 1.7 santimetre uzunluğundadır.`],
+       ise sadece 1,7 santimetre uzunluğundadır.`],
    n:'Anten boyunun neden dalga boyuyla ölçüldüğünü serinin 29. konusunda kuracağız. Cebindeki telefonun anteni birkaç santimetredir, çünkü taşıdığı dalga da birkaç santimetre uzunluğundadır.'},
 
 3:{b:'Dalga denklemi ve iki ayrı hız',
@@ -416,7 +416,7 @@ const METIN = {
        v = √(γRT/M), boşlukta elektromanyetik dalga için <b>c = 1/√(μ₀ε₀)</b>.`,
       `Bu sayfadaki üç ortam da <b>dağılımsızdır</b>: hız frekanstan bağımsızdır, dolayısıyla
        λ = v/f her frekansta geçerlidir. Dağılımlı ortamlarda durum değişir ve faz hızı ile
-       <b>grup hızı</b> ayrışır: v<sub>g</sub> = dω/dk. Bilgi grup hızıyla taşınır, faz hızıyla değil.`,
+       <b>grup hızı</b> ayrışır; grup hızı v<sub>g</sub> = dω/dk ile verilir. Bilgiyi grup hızı taşır, faz hızı taşımaz.`,
       `Deniz dalgaları bu ayrımın en tanıdık örneğidir. Derin suda v = √(gλ/2π) olduğu için
        uzun dalgalar daha hızlı gider ve grup hızı, faz hızının yarısına düşer. Bir dalga
        öbeğini izlerken tepelerin öbek içinde öne doğru kayıp kaybolmasının sebebi budur.`,

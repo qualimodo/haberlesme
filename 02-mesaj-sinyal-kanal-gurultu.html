@@ -25,7 +25,7 @@
     --l1:#cde2fb; --l2:#86b6ef; --l3:#3987e5;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--bg);color:var(--ink);line-height:1.6;padding-bottom:60px;
+  body{background:var(--bg);color:var(--ink);line-height:1,6;padding-bottom:60px;
     font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
     -webkit-font-smoothing:antialiased}
   .wrap{max-width:960px;margin:0 auto;padding:0 22px}
@@ -33,7 +33,7 @@
   header{background:radial-gradient(900px 300px at 16% -12%,rgba(42,120,214,.16),transparent 62%)}
   header.wrap{padding-top:84px;padding-bottom:22px}
   .kick{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);font-weight:700}
-  h1{font-size:38px;font-weight:700;letter-spacing:-.03em;margin:18px 0 13px;line-height:1.1}
+  h1{font-size:38px;font-weight:700;letter-spacing:-.03em;margin:18px 0 13px;line-height:1,1}
   header p{color:var(--dim);font-size:16px;max-width:620px}
 
   /* ---------- taşıyıcı seçimi ---------- */
@@ -43,7 +43,7 @@
   .tas:hover{background:var(--panel2);border-color:#33455f}
   .tas.on{background:var(--panel2);border-color:var(--tc);box-shadow:inset 0 0 0 1px var(--tc)}
   .tas .ad{font-size:15px;font-weight:660;color:var(--tc);margin-bottom:2px}
-  .tas .as{font-size:11.5px;color:var(--dim2);line-height:1.45}
+  .tas .as{font-size:11.5px;color:var(--dim2);line-height:1,45}
 
   /* ---------- sahne ---------- */
   .scene{background:var(--panel);border:1px solid var(--line);border-radius:16px;
@@ -85,7 +85,7 @@
     border-top:3px solid var(--pc)}
   .part .n{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--dim2);font-weight:600}
   .part h3{font-size:16px;font-weight:660;margin:6px 0 8px;color:var(--pc)}
-  .part p{font-size:13.5px;color:#c0cddf;line-height:1.65;margin-bottom:8px}
+  .part p{font-size:13.5px;color:#c0cddf;line-height:1,65;margin-bottom:8px}
   .part p:last-child{margin-bottom:0}
   .part b{color:#fff;font-weight:640}
 
@@ -100,14 +100,14 @@
   .tabs button.on.t3{background:rgba(57,135,229,.17);border-color:rgba(57,135,229,.55);color:var(--l3)}
   #metin{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
   #metin h4{font-size:19px;font-weight:660;letter-spacing:-.015em;margin-bottom:12px}
-  #metin p{font-size:15.5px;color:#c8d5e6;line-height:1.75;margin-bottom:13px}
+  #metin p{font-size:15.5px;color:#c8d5e6;line-height:1,75;margin-bottom:13px}
   #metin p:last-child{margin-bottom:0}
   #metin b{color:#fff;font-weight:640}
   #metin .not{font-size:14px;color:var(--acc);border-left:2px solid var(--acc);
-    padding-left:14px;margin-top:16px;line-height:1.7}
+    padding-left:14px;margin-top:16px;line-height:1,7}
 
   footer{margin-top:38px;padding-top:20px;border-top:1px solid var(--line);
-    font-size:13px;color:var(--dim2);line-height:1.75}
+    font-size:13px;color:var(--dim2);line-height:1,75}
 
   @media (max-width:720px){ .tasiyici{grid-template-columns:repeat(2,1fr)} }
   @media (max-width:640px){
@@ -122,8 +122,7 @@
 <header class="wrap">
   <div class="kick">101 Konuda Haberleşme · Konu 02</div>
   <h1>Mesaj, sinyal, kanal, gürültü</h1>
-  <p>Aynı kelimeyi dört ayrı yoldan gönderelim. Mesaj hiç değişmiyor; değişen sadece onu
-     taşıyan şey ve gittiği yol. Her yolun da kendi bedeli var.</p>
+  <p>Aynı kelimeyi dört ayrı yoldan gönderelim. Mesaj hiç değişmiyor; değişen şey yalnızca onu taşıyan sinyal ile gittiği yoldur. Her yolun da kendi bedeli var.</p>
 </header>
 
 <main class="wrap">
@@ -153,7 +152,7 @@
       <p>Mesaj, taşımak istediğin bilginin kendisidir. Yukarıdaki dört düğmeye sırayla bas:
         soldaki kelime hiç değişmiyor.</p>
       <p>Mesajın <b>fiziksel bir karşılığı yoktur</b>. Ses de değildir, ışık da değildir.
-        Haberleşme mühendisliğinin en güçlü fikri budur: bilgiyi, onu taşıyan şeyden ayırmak.</p>
+        Haberleşme mühendisliğinin en güçlü fikri budur: bilgi, onu taşıyan şeyden ayrılabilir.</p>
     </div>
     <div class="part" style="--pc:#7cf5c4">
       <div class="n">02</div><h3>Sinyal</h3>
@@ -460,12 +459,12 @@ function tasiyiciKur(){
 /* ---------------- katman metinleri ---------------- */
 const METIN = {
 1:{ b:'Aynı mesaj, dört ayrı yol',
-    p:[`Yukarıdaki dört düğmeye sırayla bas. Soldaki kelime hep aynı kalıyor, değil mi?
-        Değişen şey onu taşıyan araç ve gittiği yol.`,
+    p:[`Yukarıdaki dört düğmeye sırayla basmayı dene. Soldaki kelime hep aynı kalıyor, değil mi?
+        Değişen şey, onu taşıyan araç ile gittiği yoldur.`,
        `Bir arkadaşına bir şey söylemek istediğinde seçeneklerin vardır. Bağırabilirsin,
         el feneriyle işaret verebilirsin, telsizle konuşabilirsin ya da telefon kablosunu
         kullanabilirsin. Söylediğin şey hepsinde aynıdır.`,
-       `Ama her yolun bir bedeli var. Ses bedava ama çok uzağa gitmez. Işık çok hızlı ama
+       `Ancak her yolun bir bedeli vardır. Ses bedava ama çok uzağa gitmez. Işık çok hızlı ama
         önce cam bir boru döşemen gerekir. Radyo dalgası her yere gider ama hava kalabalıktır.`],
     n:'Gürültü sürgüsünü sabit tutup taşıyıcıyı değiştir. Aynı gürültüde bile bozulan harf sayısı değişiyor.'},
 
@@ -489,8 +488,7 @@ const METIN = {
        `Bu ayrım sayesinde katmanlı sistemler kurabiliyoruz. WhatsApp mesajın Wi-Fi'dan 4G'ye
         geçtiğinde hiçbir şey fark etmez, çünkü üst katman alt katmanın fiziğini bilmek
         zorunda değildir. Aynı fikir OSI ve TCP/IP katman modellerinin çıkış noktasıdır.`,
-       `Kanalların karşılaştırması da mühendislikte biçimseldir. Bir kanalı üç büyüklük
-        tarif eder: bant genişliği, sinyal-gürültü oranı ve gecikme. Shannon 1948'de bu
+       `Kanalların karşılaştırması da mühendislikte biçimseldir. Bir kanalı üç büyüklük tarif eder; bunlar bant genişliği, sinyal-gürültü oranı ve gecikmedir. Shannon 1948'de bu
         üçünden ilk ikisinin kanal kapasitesini kesin olarak belirlediğini gösterdi.
         Sayfadaki gürültü katsayıları bu farkın basitleştirilmiş bir temsilidir.`],
     n:'Kanal kapasitesinin kesin ifadesini ve Shannon sınırını 50. konuda kuracağız.'},

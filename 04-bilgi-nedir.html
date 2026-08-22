@@ -26,7 +26,7 @@
     --l1:#cde2fb; --l2:#86b6ef; --l3:#3987e5;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--bg);color:var(--ink);line-height:1.6;padding-bottom:60px;
+  body{background:var(--bg);color:var(--ink);line-height:1,6;padding-bottom:60px;
     font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
     -webkit-font-smoothing:antialiased}
   .wrap{max-width:960px;margin:0 auto;padding:0 22px}
@@ -34,7 +34,7 @@
   header{background:radial-gradient(900px 300px at 16% -12%,rgba(42,120,214,.16),transparent 62%)}
   header.wrap{padding-top:84px;padding-bottom:22px}
   .kick{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);font-weight:700}
-  h1{font-size:38px;font-weight:700;letter-spacing:-.03em;margin:18px 0 13px;line-height:1.1}
+  h1{font-size:38px;font-weight:700;letter-spacing:-.03em;margin:18px 0 13px;line-height:1,1}
   header p{color:var(--dim);font-size:16px;max-width:640px}
 
   .scene{background:var(--panel);border:1px solid var(--line);border-radius:16px;
@@ -74,7 +74,7 @@
   .part{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:17px;
     border-top:3px solid var(--pc)}
   .part h3{font-size:16px;font-weight:660;margin-bottom:8px;color:var(--pc)}
-  .part p{font-size:13.5px;color:#c0cddf;line-height:1.65;margin-bottom:8px}
+  .part p{font-size:13.5px;color:#c0cddf;line-height:1,65;margin-bottom:8px}
   .part p:last-child{margin-bottom:0}
   .part b{color:#fff;font-weight:640}
 
@@ -88,17 +88,17 @@
   .tabs button.on.t3{background:rgba(57,135,229,.17);border-color:rgba(57,135,229,.55);color:var(--l3)}
   #metin{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
   #metin h4{font-size:19px;font-weight:660;letter-spacing:-.015em;margin-bottom:12px}
-  #metin p{font-size:15.5px;color:#c8d5e6;line-height:1.75;margin-bottom:13px}
+  #metin p{font-size:15.5px;color:#c8d5e6;line-height:1,75;margin-bottom:13px}
   #metin p:last-child{margin-bottom:0}
   #metin b{color:#fff;font-weight:640}
   #metin .not{font-size:14px;color:var(--acc);border-left:2px solid var(--acc);
-    padding-left:14px;margin-top:16px;line-height:1.7}
+    padding-left:14px;margin-top:16px;line-height:1,7}
   #metin .form{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;color:#dbe6f5;
     background:var(--panel2);border:1px solid var(--line);border-radius:10px;
     padding:12px 15px;margin:4px 0 14px;overflow-x:auto;white-space:nowrap}
 
   footer{margin-top:38px;padding-top:20px;border-top:1px solid var(--line);
-    font-size:13px;color:var(--dim2);line-height:1.75}
+    font-size:13px;color:var(--dim2);line-height:1,75}
 
   @media (max-width:640px){
     h1{font-size:27px} .wrap{padding:0 15px} header.wrap{padding-top:58px;padding-bottom:18px}
@@ -137,9 +137,9 @@
   <div class="skor">
     <div class="kart" style="--kc:var(--gunes)">
       <div class="b">Günlük bilgi</div>
-      <div class="d" id="dH">1.00 bit</div>
+      <div class="d" id="dH">1,00 bit</div>
       <div class="a">bir günün ortalama sürprizi</div>
-      <div class="o" id="oH">Şehir tam ortada. Her haber sana tam bir soruluk cevap kazandırıyor.</div>
+      <div class="o" id="oH">Şehir tam ortadadır. Her haber sana tam bir soruluk cevap kazandırıyor.</div>
     </div>
     <div class="kart" style="--kc:var(--acc)">
       <div class="b">30 günlük kayıt</div>
@@ -364,10 +364,10 @@ function panoYaz(){
 
   $('oH').textContent =
     y>=100 ? 'Şehir hiç şaşırtmıyor. Haber gelmeden de cevabı bildiğin için haberin değeri sıfır.' :
-    y>=95  ? 'Neredeyse her gün güneşli. Haberi dinlemesen de çoğu zaman doğru tahmin edersin.' :
-    y>=75  ? 'Şehir çoğunlukla güneşli. Yağmur haberi ise nadir olduğu için çok şey söylüyor.' :
-    y>=60  ? 'Şehir biraz güneşliye yatkın. Tahmin biraz kolaylaşıyor, sürpriz biraz azalıyor.' :
-             'Şehir tam ortada. Her haber sana tam bir soruluk cevap kazandırıyor.';
+    y>=95  ? 'Neredeyse her gün güneşlidir. Haberi dinlemesen de çoğu zaman doğru tahmin edersin.' :
+    y>=75  ? 'Şehir çoğunlukla güneşlidir. Yağmur haberi ise nadir olduğu için çok şey söylüyor.' :
+    y>=60  ? 'Şehir biraz güneşliye yatkındır. Tahmin biraz kolaylaşıyor, sürpriz biraz azalıyor.' :
+             'Şehir tam ortadadır. Her haber sana tam bir soruluk cevap kazandırıyor.';
 
   $('oT').textContent =
     y>=100 ? 'Otuz günü yazmaya hiç gerek yok. "Hepsi güneşli" cümlesi zaten yeter.' :
@@ -387,7 +387,7 @@ const METIN = {
        <b>yeni bir şey söylemiyor</b>.`,
       `Arada bir yağmur yağdığında ise çubuk tavana vuruyor. Beklemediğin şey olduğunda
        aynı uzunluktaki haber çok daha fazla şey söylüyor.`,
-      `Bilgi işte budur: <b>bilmediğin şeyin azalması.</b> Bir cümlenin uzunluğu değil,
+      `Bilgi işte budur; <b>bilmediğin şeyin azalmasıdır.</b> Bir cümlenin uzunluğu değil,
        ne kadar şaşırttığı önemlidir.`],
    n:'Çölde "yarın güneşli" cümlesi neredeyse hiçbir şey söylemez. Londra\'da aynı cümle çok şey söyler. Cümle aynıdır, taşıdığı bilgi değildir.'},
 
@@ -395,14 +395,14 @@ const METIN = {
    p:[`Bir haberin sürprizini ölçmek için tek bir soru sorulur: <b>bu ne kadar
        beklenmiyordu?</b> Olasılığı p olan bir olayın sürprizi şudur:`,
       `<div class="form">sürpriz = log₂(1 / p)   [bit]</div>`,
-      `Yarı yarıya bir olay (p = 0.5) tam <b>1 bit</b> eder. Yüzde üç olasılıklı bir
-       yağmur günü ise 5.06 bit eder, yani yaklaşık beş katı. Kesin olan bir olay
+      `Yarı yarıya bir olay (p = 0,5) tam <b>1 bit</b> eder. Yüzde üç olasılıklı bir
+       yağmur günü ise 5,06 bit eder, yani yaklaşık beş katı. Kesin olan bir olay
        (p = 1) tam <b>0 bit</b> eder, çünkü sıfır sürpriz taşır.`,
       `Kaynağın günlük bilgisi tek bir günün sürprizi değil, tüm günlerin
        <b>ortalamasıdır</b>. Ekrandaki kesikli çizgi budur ve adı <b>entropi</b>dir.
-       %50 güneşli şehirde 1.00 bit, %85'te 0.61 bit, %97'de 0.19 bit çıkar.`,
+       %50 güneşli şehirde 1,00 bit, %85'te 0,61 bit, %97'de 0,19 bit çıkar.`,
       `Otuz günü ham hâlde yazmak 30 bit tutar; her güne bir "evet/hayır" düşer.
-       Entropi 0.19 bit ise aynı otuz gün ortalama <b>6 bit</b> ile yazılabilir.`],
+       Entropi 0,19 bit ise aynı otuz gün ortalama <b>6 bit</b> ile yazılabilir.`],
    n:'Bu son cümle sıkıştırmanın tanımıdır. Serinin 17. konusunda bu işi yapan gerçek yöntemleri (Huffman, aritmetik kodlama) tek tek kuracağız.'},
 
 3:{b:'Shannon entropisi',
@@ -416,7 +416,7 @@ const METIN = {
       `Entropinin mühendislikteki karşılığı <b>kaynak kodlama teoremidir</b>: kayıpsız bir
        kodun sembol başına ortalama uzunluğu H'nin altına <b>inemez</b>. Alt sınır fizikseldir,
        daha iyi bir algoritma bulmakla aşılmaz.`,
-      `Sınıra yaklaşmak ise blok uzunluğu ile olur. p = 0.97 için H = 0.194 bit'tir. Tek tek
+      `Sınıra yaklaşmak ise blok uzunluğu ile olur. p = 0,97 için H = 0.194 bit'tir. Tek tek
        kodlarsan 1.000 bit harcarsın; dörtlü bloklarda 0.319, sekizli bloklarda 0.227 bit'e
        inersin. Sınır asla aşılmaz, yalnızca yaklaşılır.`],
    n:'Buradaki H kaynağın ürettiği bilgidir. Kanalın taşıyabildiği bilginin üst sınırı ise ayrı bir büyüklüktür; SNR ve Shannon kapasitesini serinin 49 ve 50. konularında kuracağız.'},

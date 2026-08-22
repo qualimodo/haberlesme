@@ -26,7 +26,7 @@
     --l1:#cde2fb; --l2:#86b6ef; --l3:#3987e5;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--bg);color:var(--ink);line-height:1.6;padding-bottom:60px;
+  body{background:var(--bg);color:var(--ink);line-height:1,6;padding-bottom:60px;
     font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
     -webkit-font-smoothing:antialiased}
   .wrap{max-width:960px;margin:0 auto;padding:0 22px}
@@ -34,7 +34,7 @@
   header{background:radial-gradient(900px 300px at 16% -12%,rgba(42,120,214,.16),transparent 62%)}
   header.wrap{padding-top:84px;padding-bottom:22px}
   .kick{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);font-weight:700}
-  h1{font-size:38px;font-weight:700;letter-spacing:-.03em;margin:18px 0 13px;line-height:1.1}
+  h1{font-size:38px;font-weight:700;letter-spacing:-.03em;margin:18px 0 13px;line-height:1,1}
   header p{color:var(--dim);font-size:16px;max-width:620px}
 
   .scene{background:var(--panel);border:1px solid var(--line);border-radius:16px;
@@ -73,7 +73,7 @@
   .part{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:17px;
     border-top:3px solid var(--pc)}
   .part h3{font-size:16px;font-weight:660;margin-bottom:8px;color:var(--pc)}
-  .part p{font-size:13.5px;color:#c0cddf;line-height:1.65;margin-bottom:8px}
+  .part p{font-size:13.5px;color:#c0cddf;line-height:1,65;margin-bottom:8px}
   .part p:last-child{margin-bottom:0}
   .part b{color:#fff;font-weight:640}
 
@@ -87,14 +87,14 @@
   .tabs button.on.t3{background:rgba(57,135,229,.17);border-color:rgba(57,135,229,.55);color:var(--l3)}
   #metin{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
   #metin h4{font-size:19px;font-weight:660;letter-spacing:-.015em;margin-bottom:12px}
-  #metin p{font-size:15.5px;color:#c8d5e6;line-height:1.75;margin-bottom:13px}
+  #metin p{font-size:15.5px;color:#c8d5e6;line-height:1,75;margin-bottom:13px}
   #metin p:last-child{margin-bottom:0}
   #metin b{color:#fff;font-weight:640}
   #metin .not{font-size:14px;color:var(--acc);border-left:2px solid var(--acc);
-    padding-left:14px;margin-top:16px;line-height:1.7}
+    padding-left:14px;margin-top:16px;line-height:1,7}
 
   footer{margin-top:38px;padding-top:20px;border-top:1px solid var(--line);
-    font-size:13px;color:var(--dim2);line-height:1.75}
+    font-size:13px;color:var(--dim2);line-height:1,75}
 
   @media (max-width:640px){
     h1{font-size:27px} .wrap{padding:0 15px} header.wrap{padding-top:58px;padding-bottom:18px}
@@ -132,14 +132,14 @@
       <div class="b">Kablolu</div>
       <div class="d" id="dK">0 hata</div>
       <div class="a" id="aK">hız payın %100</div>
-      <div class="o">Kablon senin. Kaç kişi eklenirse eklensin, senin hattından
+      <div class="o">Kablo yalnızca senindir. Kaç kişi eklenirse eklensin, senin hattından
         başkası geçmiyor.</div>
     </div>
     <div class="kart" style="--kc:var(--hava)">
       <div class="b">Kablosuz</div>
       <div class="d" id="dW">0 hata</div>
       <div class="a" id="aW">hız payın %100</div>
-      <div class="o" id="oW">Şu an ortamda başka kimse yok, o yüzden hava tamamen senin.</div>
+      <div class="o" id="oW">Şu an ortamda başka kimse yok, o yüzden hava tamamen senindir.</div>
     </div>
   </div>
 
@@ -333,20 +333,20 @@ function panoYaz(){
   $('dW').style.color = y===0?'#cde2fb' : (y<=2?'#eda100':'#ff9d4d');
   $('aW').textContent='hız payın %'+Math.round(100/N);
   $('oW').textContent = N===1
-    ? 'Şu an ortamda başka kimse yok, o yüzden hava tamamen senin.'
+    ? 'Şu an ortamda başka kimse yok, o yüzden hava tamamen senindir.'
     : `Ortamda ${N} kişi var. Çarpışma olasılığı %${Math.round(carpisma()*100)}, kapasite ${N} kişiye bölünüyor.`;
 }
 setInterval(panoYaz, 260);
 
 const METIN = {
 1:{b:'İki yol, tek fark',
-   p:[`Yukarıda aynı mesaj iki ayrı yoldan gidiyor. Üstteki kablodan, alttaki havadan.
+   p:[`Yukarıda aynı mesaj iki ayrı yoldan gidiyor. Üstteki kablodan gider, alttaki havadan gider.
        Sürgü <b>1 kişi</b>deyken ikisi de kusursuz çalışıyor.`,
       `Şimdi sürgüyü sağa çek. Ortama başka kullanıcılar giriyor. Üstteki şeritte hiçbir şey
        değişmiyor, çünkü <b>herkesin kendi kablosu var</b>. Alttaki şeritte ise harfler
        birbirine giriyor ve bozulmaya başlıyor.`,
-      `Sebep basit: <b>hava tek ve ortak.</b> Aynı anda iki kişi konuşursa ikisi de anlaşılmaz.
-       Kalabalık bir odada herkesin aynı anda konuşması gibi.`],
+      `Sebebi basittir: <b>hava tektir ve ortaktır.</b> Aynı anda iki kişi konuşursa ikisi de anlaşılmaz.
+       Durum, kalabalık bir odada herkesin aynı anda konuşmasına benzer.`],
    n:'Kafede Wi-Fi\'ın akşam saatlerinde yavaşlamasının sebebi tam olarak budur. Sinyalin zayıflamaz, sadece havayı paylaşman gereken kişi sayısı artar.'},
 
 2:{b:'İki ayrı şey aynı anda bozuluyor',
@@ -364,14 +364,14 @@ const METIN = {
        Bu, haberleşme tarihinin gerçek bir uğrağıdır. 1971'de Hawaii Üniversitesi'nde kurulan
        <b>ALOHAnet</b> tam olarak böyle çalışıyordu.`,
       `Sonuç matematiksel olarak bellidir. Saf ALOHA'da kanalın kullanılabilir verimi en fazla
-       <b>1/2e ≈ %18.4</b>'e çıkar. Zamanı dilimlere bölüp herkesi dilim başında konuşmaya
-       zorlarsan (dilimli ALOHA) bu değer <b>1/e ≈ %36.8</b> olur. Yani kanalın üçte ikisi
+       <b>1/2e ≈ %18,4</b>'e çıkar. Zamanı dilimlere bölüp herkesi dilim başında konuşmaya
+       zorlarsan (dilimli ALOHA) bu değer <b>1/e ≈ %36,8</b> olur. Yani kanalın üçte ikisi
        yine boşa gider.`,
       `Modern sistemler bu yüzden dinleyip konuşur. Wi-Fi, yayın yapmadan önce havayı dinler
        ve boşsa gönderir; doluysa rastgele bir süre bekler. Hücresel şebekelerde ise baz
        istasyonu kimin ne zaman konuşacağını merkezi olarak dağıtır.`,
       `Sayfadaki çarpışma olasılığı <b>p = 1 − (1−a)<sup>N−1</sup></b> bağıntısından geliyor;
-       burada a, kullanıcı başına yayın oranıdır ve 0.10 alındı.`],
+       burada a, kullanıcı başına yayın oranıdır ve 0,10 alındı.`],
    n:'Çoklu erişim yöntemlerini (FDMA, TDMA, CDMA, OFDMA) serinin 67 ve 68. konularında ayrıntısıyla kuracağız.'},
 };
 function metinYaz(){
