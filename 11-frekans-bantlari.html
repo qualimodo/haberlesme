@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frekans bantları</title>
+<meta name="description" content="Gökkuşağının mahalleleri. Denizaltı bir mahallede oturur, Wi-Fi bambaşka birinde.">
+<meta property="og:site_name" content="101 Konuda Haberleşme">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Frekans bantları · 101 Konuda Haberleşme">
+<meta property="og:description" content="Gökkuşağının mahalleleri. Denizaltı bir mahallede oturur, Wi-Fi bambaşka birinde.">
+<meta property="og:url" content="https://qualimodo.github.io/haberlesme/11-frekans-bantlari.html">
+<meta property="og:image" content="https://qualimodo.github.io/haberlesme/og-11.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Frekans bantları · 101 Konuda Haberleşme">
+<meta name="twitter:description" content="Gökkuşağının mahalleleri. Denizaltı bir mahallede oturur, Wi-Fi bambaşka birinde.">
+<meta name="twitter:image" content="https://qualimodo.github.io/haberlesme/og-11.png">
+<style>
+  :root{
+    --bg:#070a10; --panel:#0e131d; --panel2:#131b28; --line:#1e2736;
+    --ink:#e8eef7; --dim:#9aabc2; --dim2:#5d6d85; --acc:#7cf5c4;
+    --sar:#ffc061; --mor:#b79cf0; --mav:#5598e7;
+    --l1:#cde2fb; --l2:#86b6ef; --l3:#3987e5;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);line-height:1.6;padding-bottom:60px;
+    font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:960px;margin:0 auto;padding:0 22px}
+  header{background:radial-gradient(900px 300px at 16% -12%,rgba(42,120,214,.16),transparent 62%)}
+  header.wrap{padding-top:84px;padding-bottom:22px}
+  .kick{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);font-weight:700}
+  h1{font-size:38px;font-weight:700;letter-spacing:-.03em;margin:18px 0 13px;line-height:1.1}
+  header p{color:var(--dim);font-size:16px;max-width:660px}
+
+  .scene{background:var(--panel);border:1px solid var(--line);border-radius:16px;
+    margin-top:26px;padding:6px 6px 0}
+  canvas{display:block;width:100%;height:420px;border-radius:12px}
+  .knob{display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    padding:14px 16px 16px;border-top:1px solid var(--line);margin-top:6px}
+  .knob .et{font-size:13px;color:var(--dim);font-weight:600;white-space:nowrap}
+  .hiz{display:flex;gap:6px;flex-wrap:wrap}
+  .hiz button{font:inherit;font-size:12px;font-weight:600;color:var(--dim);background:var(--panel2);
+    border:1px solid var(--line);padding:7px 11px;border-radius:8px;cursor:pointer;transition:.15s;
+    white-space:nowrap}
+  .hiz button:hover{color:var(--ink);border-color:#33445f}
+  .hiz button.on{background:rgba(124,245,196,.12);border-color:rgba(124,245,196,.5);color:var(--acc)}
+
+  .skor{display:grid;grid-template-columns:repeat(auto-fit,minmax(206px,1fr));gap:12px;margin-top:14px}
+  .kart{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--kc);
+    border-radius:13px;padding:15px 17px}
+  .kart .b{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--kc);font-weight:700}
+  .kart .d{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:24px;font-weight:680;
+    margin:7px 0 2px;letter-spacing:-.02em}
+  .kart .a{font-size:12.5px;color:var(--dim2)}
+  .kart .o{font-size:13px;color:#c2cfe1;margin-top:9px;padding-top:9px;border-top:1px solid #1a2333}
+
+  h2{font-size:22px;font-weight:660;letter-spacing:-.02em;margin:46px 0 6px}
+  .lead{color:var(--dim);font-size:15px;margin-bottom:18px}
+  .parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(216px,1fr));gap:12px}
+  .part{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:17px;
+    border-top:3px solid var(--pc)}
+  .part h3{font-size:16px;font-weight:660;margin-bottom:8px;color:var(--pc)}
+  .part p{font-size:13.5px;color:#c0cddf;line-height:1.65;margin-bottom:8px}
+  .part p:last-child{margin-bottom:0}
+  .part b{color:#fff;font-weight:640}
+
+  .anten{margin-top:34px;background:linear-gradient(150deg,#0f1724,#0b111b);
+    border:1px solid #223047;border-radius:16px;padding:26px 28px}
+  .anten h3{font-size:19px;font-weight:660;letter-spacing:-.015em;margin-bottom:6px}
+  .anten h3 span{color:var(--acc)}
+  .anten > p{font-size:14.5px;color:#a9bbd2;margin-bottom:20px;max-width:640px}
+  .sat{display:flex;align-items:center;gap:14px;padding:11px 0;border-top:1px solid #172032}
+  .sat:first-of-type{border-top:none}
+  .sat .ad{font-size:14px;color:#c3d0e2;font-weight:600;width:150px;flex:none}
+  .sat .bo{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:16px;color:var(--acc);
+    font-weight:650;width:92px;text-align:right;flex:none}
+  .sat .ne{font-size:13.5px;color:#8fa0b8;flex:1;min-width:0}
+
+  .tabs{display:flex;gap:6px;margin:46px 0 16px}
+  .tabs button{flex:1;font:inherit;font-size:13px;font-weight:600;color:var(--dim);
+    background:var(--panel2);border:1px solid var(--line);padding:11px;border-radius:10px;
+    cursor:pointer;transition:.15s}
+  .tabs button:hover{color:var(--ink);border-color:#33445f}
+  .tabs button.on.t1{background:rgba(205,226,251,.13);border-color:rgba(205,226,251,.5);color:var(--l1)}
+  .tabs button.on.t2{background:rgba(134,182,239,.13);border-color:rgba(134,182,239,.5);color:var(--l2)}
+  .tabs button.on.t3{background:rgba(57,135,229,.17);border-color:rgba(57,135,229,.55);color:var(--l3)}
+  #metin{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
+  #metin h4{font-size:19px;font-weight:660;letter-spacing:-.015em;margin-bottom:12px}
+  #metin p{font-size:15.5px;color:#c8d5e6;line-height:1.75;margin-bottom:13px}
+  #metin p:last-child{margin-bottom:0}
+  #metin b{color:#fff;font-weight:640}
+  #metin .not{font-size:14px;color:var(--acc);border-left:2px solid var(--acc);
+    padding-left:14px;margin-top:16px;line-height:1.7}
+  #metin .form{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;color:#dbe6f5;
+    background:var(--panel2);border:1px solid var(--line);border-radius:10px;
+    padding:12px 15px;margin:4px 0 14px;overflow-x:auto;white-space:nowrap}
+  footer{margin-top:38px;padding-top:20px;border-top:1px solid var(--line);
+    font-size:13px;color:var(--dim2);line-height:1.75}
+  @media (max-width:640px){
+    h1{font-size:27px} .wrap{padding:0 15px} header.wrap{padding-top:58px;padding-bottom:18px}
+    canvas{height:330px} .skor{grid-template-columns:1fr}
+    .anten{padding:20px 18px} .sat{flex-wrap:wrap} .sat .ad{width:100%}
+    .sat .ne{flex-basis:100%;order:3} .sat .bo{margin-left:auto}
+  }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="kick">101 Konuda Haberleşme · Konu 11</div>
+  <h1>Frekans bantları</h1>
+  <p>Tayfın her mahallesinin kendi kuralları vardır. Aynı mesajı başka bir bantta
+     gönderdiğinde ne kadar uzağa gittiği, neyin arkasından geçebildiği ve anteninin ne
+     kadar büyük olacağı baştan sona değişir. Aşağıda bir verici var; bandı sen seçiyorsun.</p>
+</header>
+
+<main class="wrap">
+
+  <div class="scene">
+    <canvas id="cv"></canvas>
+    <div class="knob">
+      <span class="et">Bant</span>
+      <div class="hiz" id="bant"></div>
+    </div>
+  </div>
+
+  <div class="skor">
+    <div class="kart" style="--kc:var(--acc)">
+      <div class="b">Dalga boyu</div>
+      <div class="d" id="dL">3,00 m</div>
+      <div class="a" id="aL">100 MHz</div>
+      <div class="o" id="oL">Frekans yükseldikçe dalga boyu kısalır.</div>
+    </div>
+    <div class="kart" style="--kc:var(--l2)">
+      <div class="b">Anten boyu</div>
+      <div class="d" id="dA">74,9 cm</div>
+      <div class="a">çeyrek dalga anten</div>
+      <div class="o" id="oA">Bir anten, taşıdığı dalganın dörtte biri kadar olur.</div>
+    </div>
+    <div class="kart" style="--kc:var(--mav)">
+      <div class="b">Deniz suyuna iner</div>
+      <div class="d" id="dS" style="color:#5598e7">2,5 cm</div>
+      <div class="a">yüzeyden aşağı</div>
+      <div class="o" id="oS">Frekans düştükçe dalga suyun içine daha derin girer.</div>
+    </div>
+    <div class="kart" style="--kc:var(--mor)">
+      <div class="b">Kim kullanıyor?</div>
+      <div class="d" id="dK" style="color:#b79cf0;font-size:19px">FM radyo</div>
+      <div class="a" id="aK">30 – 300 MHz</div>
+      <div class="o" id="oK">Her bandın kendi sakinleri vardır.</div>
+    </div>
+  </div>
+
+  <h2>Ekranda ne var?</h2>
+  <p class="lead">Verici solda duruyor. Dalganın izlediği yol bantla birlikte değişiyor.</p>
+  <div class="parts">
+    <div class="part" style="--pc:#7cf5c4">
+      <h3>Alçak bantlar yeri takip eder</h3>
+      <p>Çok uzun dalgalar yeryüzünün eğrisine yapışarak ilerler ve ufkun arkasına geçer.</p>
+      <p>Suya da girebilirler. Denizaltılarla haberleşmenin tek yolu <b>budur</b>.</p>
+    </div>
+    <div class="part" style="--pc:#ffc061">
+      <h3>Kısa dalga gökten seker</h3>
+      <p>On megahertz civarındaki dalgalar yukarı çıkar, iyonküreden yansır ve binlerce
+        kilometre ötede yere iner.</p>
+      <p>Dünyanın öbür ucundaki yayınların duyulmasının sebebi <b>bu sekmedir</b>.</p>
+    </div>
+    <div class="part" style="--pc:#86b6ef">
+      <h3>Yüksek bantlar düz gider</h3>
+      <p>Frekans yükseldikçe dalga ışığa benzer: düz gider, ufku aşamaz ve engellere takılır.</p>
+      <p>Menzil artık <b>görüş hattıyla</b> sınırlıdır.</p>
+    </div>
+    <div class="part" style="--pc:#b79cf0">
+      <h3>Anten boyu bandı ele verir</h3>
+      <p>Anten, taşıdığı dalganın dörtte biri kadardır. Bu yüzden bant değişince anten de
+        değişir.</p>
+      <p>Yirmi kilohertzte anten <b>kilometrelerce</b>, yirmi sekiz gigahertzte
+        <b>bir pirinç tanesi</b> kadardır.</p>
+    </div>
+  </div>
+
+  <div class="anten">
+    <h3>Aynı iş, <span>yedi ayrı anten boyu</span></h3>
+    <p>Aşağıdaki uzunluklar çeyrek dalga anten hesabından çıkar. Bir bandın hangi cihaza
+      sığabileceğini doğrudan bu sayı belirler.</p>
+    <div class="sat"><span class="ad">VLF · 20 kHz</span><span class="bo">3,75 km</span>
+      <span class="ne">Boğaz Köprüsü'nün iki katından uzun</span></div>
+    <div class="sat"><span class="ad">MF · 1 MHz</span><span class="bo">74,9 m</span>
+      <span class="ne">yirmi beş katlı bir bina</span></div>
+    <div class="sat"><span class="ad">HF · 10 MHz</span><span class="bo">7,49 m</span>
+      <span class="ne">iki katlı bir ev</span></div>
+    <div class="sat"><span class="ad">VHF · 100 MHz</span><span class="bo">74,9 cm</span>
+      <span class="ne">bir kol boyu</span></div>
+    <div class="sat"><span class="ad">UHF · 900 MHz</span><span class="bo">8,33 cm</span>
+      <span class="ne">bir baş parmak</span></div>
+    <div class="sat"><span class="ad">SHF · 2,4 GHz</span><span class="bo">3,12 cm</span>
+      <span class="ne">bir kibrit çöpü</span></div>
+    <div class="sat"><span class="ad">EHF · 28 GHz</span><span class="bo">2,68 mm</span>
+      <span class="ne">bir pirinç tanesi</span></div>
+  </div>
+
+  <div class="tabs">
+    <button class="t1 on" data-l="1">L1 · Herkes</button>
+    <button class="t2" data-l="2">L2 · Meraklı</button>
+    <button class="t3" data-l="3">L3 · Mühendis</button>
+  </div>
+  <div id="metin"></div>
+
+  <footer>
+    Yandan görünüm şematiktir; mesafeler ölçekli değildir, davranış farkını göstermek
+    içindir. Dalga boyu ve çeyrek dalga anten değerleri λ = c ⁄ f bağıntısından hesaplanır.
+    Deniz suyuna girme derinliği δ = 1 ⁄ √(π f μ₀ σ) bağıntısından, deniz suyu iletkenliği
+    4 S/m alınarak bulunur; bu derinlikte alan genliği başlangıç değerinin yaklaşık üçte
+    birine iner. Ufuk mesafesi d = 4,12 · (√h₁ + √h₂) yaklaşımıyla verilir. Bina ve yağmur
+    kayıpları ölçüm aralıklarıdır ve yapıya, malzemeye ve yağış şiddetine göre değişir.
+    İyonküre yansıması gündüz ve gece, mevsime ve güneş etkinliğine göre değişir; kısa
+    dalga menzili bu yüzden sabit değildir.
+  </footer>
+</main>
+
+<script>
+"use strict";
+/* ===========================================================================
+   KONU 11 — FREKANS BANTLARI
+   Doğrulandı (dogrula-11.py):
+     λ/4: 20 kHz → 3,75 km · 100 MHz → 74,9 cm · 2,4 GHz → 3,12 cm · 28 GHz → 2,68 mm
+     deniz suyu δ: 20 kHz → 1,78 m · 2,4 GHz → 5,14 mm  (oran 346 kat)
+     1 km yol kaybı: 100 MHz 72,45 dB · 28 GHz 121,39 dB → fark 48,94 dB ≈ 78 400 kat
+     ufuk: 30 m kule ile elde telefon arası 27,6 km
+   =========================================================================== */
+const $ = id => document.getElementById(id);
+const cv = $('cv'), ctx = cv.getContext('2d');
+const C = 299792458, MU0 = 4*Math.PI*1e-7, SIGMA = 4;
+
+/* yol: 'yer' yeryüzünü takip eder · 'gok' iyonküreden seker · 'duz' görüş hattı */
+const BANT = [
+  { k:'VLF',  ad:'VLF',  f:20e3,  yol:'yer', ad2:'Denizaltı haberleşmesi', ar:'3 – 30 kHz',
+    su:true,  n:'Yeryüzüne yapışarak ilerler ve suyun içine girebilir.' },
+  { k:'MF',   ad:'AM radyo', f:1e6, yol:'yer', ad2:'AM radyo', ar:'300 kHz – 3 MHz',
+    su:false, n:'Gündüz yer dalgasıyla, gece iyonküreden sekerek çok uzağa gider.' },
+  { k:'HF',   ad:'Kısa dalga', f:10e6, yol:'gok', ad2:'Kısa dalga yayını', ar:'3 – 30 MHz',
+    su:false, n:'İyonküreden sekerek kıtalar arası mesafe kat eder.' },
+  { k:'VHF',  ad:'FM radyo', f:100e6, yol:'duz', ad2:'FM radyo ve telsiz', ar:'30 – 300 MHz',
+    su:false, n:'Görüş hattında gider, tepeyi kısmen aşar, duvarı zorlanarak geçer.' },
+  { k:'UHF',  ad:'Cep telefonu', f:900e6, yol:'duz', ad2:'Cep telefonu ve televizyon', ar:'300 MHz – 3 GHz',
+    su:false, n:'Binaya girebilir ama her duvarda gücünün bir kısmını bırakır.' },
+  { k:'SHF',  ad:'Wi-Fi', f:2.4e9, yol:'duz', ad2:'Wi-Fi ve uydu', ar:'3 – 30 GHz',
+    su:false, n:'Duvarlarda ciddi biçimde zayıflar, açık görüş ister.' },
+  { k:'EHF',  ad:'Milimetre dalga', f:28e9, yol:'duz', ad2:'5G milimetre dalga', ar:'30 – 300 GHz',
+    su:false, yagmur:true, n:'Duvarı geçemez, yağmurda bile belirgin biçimde zayıflar.' },
+];
+
+let b = 3, W=0, H=0, dpr=1, faz=0, sonZ=0;
+const bant = () => BANT[b];
+const lam  = () => C / bant().f;
+const anten= () => lam()/4;
+const deri = () => 1/Math.sqrt(Math.PI*bant().f*MU0*SIGMA);
+
+function olcu(){
+  dpr = Math.min(2, devicePixelRatio||1);
+  W = cv.clientWidth; H = cv.clientHeight;
+  if(W<10||H<10) return;
+  cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+
+const nk = x => String(x).replace('.', ',');
+function uzunluk(m){
+  if(m>=1000) return nk((m/1000).toFixed(2))+' km';
+  if(m>=1)    return nk(m.toFixed(2))+' m';
+  if(m>=1e-2) return nk((m*100).toFixed(1))+' cm';
+  if(m>=1e-3) return nk((m*1000).toFixed(2))+' mm';
+  return nk((m*1e6).toFixed(0))+' µm';
+}
+function fYaz(f){
+  if(f>=1e9) return nk((f/1e9).toFixed(1))+' GHz';
+  if(f>=1e6) return Math.round(f/1e6)+' MHz';
+  return Math.round(f/1e3)+' kHz';
+}
+function yz(m,x,y,renk,boy,hiza,kalin,aralik){
+  ctx.font=`${kalin||700} ${boy}px system-ui,-apple-system,sans-serif`;
+  ctx.textAlign=hiza||'left'; ctx.textBaseline='alphabetic'; ctx.fillStyle=renk;
+  ctx.letterSpacing=(aralik||0)+'px'; ctx.fillText(m,x,y); ctx.letterSpacing='0px';
+}
+const gw=(m,boy,kalin,aralik)=>{
+  ctx.font=`${kalin||700} ${boy}px system-ui,-apple-system,sans-serif`;
+  ctx.letterSpacing=(aralik||0)+'px'; const w=ctx.measureText(m).width; ctx.letterSpacing='0px'; return w;
+};
+function yk(x,y,w,h,r,dolgu,cizgi,kal){
+  ctx.beginPath(); ctx.roundRect(x,y,w,h,r);
+  if(dolgu){ctx.fillStyle=dolgu;ctx.fill()}
+  if(cizgi){ctx.strokeStyle=cizgi;ctx.lineWidth=kal||1.3;ctx.stroke()}
+}
+
+/* ---- sahne ölçüleri ---- */
+const S = () => ({
+  yer : H*0.72,              // zemin
+  iyon: H*0.12,              // iyonküre
+  kule: W*0.09,              // verici
+  kuleY: H*0.30,             // kule yüksekliği
+  tepeA: W*0.28, tepeB: W*0.44, tepeY: H*0.14,
+  bina: W*0.56, binaG: W*0.055, binaY: H*0.17,
+  deniz: W*0.72,
+});
+/* arazi yüksekliği: tepe dahil */
+function zeminY(x){
+  const s = S();
+  if(x <= s.tepeA || x >= s.tepeB) return s.yer;
+  const t = (x - s.tepeA)/(s.tepeB - s.tepeA);
+  return s.yer - s.tepeY*Math.sin(Math.PI*t);
+}
+
+/* dalganın izlediği yol — normalize noktalar */
+function yolNoktalari(){
+  const s = S(), N = [];
+  const y0 = s.yer - s.kuleY;                      // anten ucu
+  if(bant().yol === 'yer'){
+    /* yer dalgası araziyi takip eder: tepenin üstünden aşar */
+    for(let i=0;i<=80;i++){
+      const t=i/80, x=s.kule + (W-s.kule-10)*t;
+      const inis = y0 + (s.yer-y0)*Math.pow(t,0.5);
+      N.push([x, Math.min(inis, zeminY(x)-6)]);
+    }
+  } else if(bant().yol === 'gok'){
+    const xu = W*0.42;
+    for(let i=0;i<=30;i++){ const t=i/30; N.push([s.kule+(xu-s.kule)*t, y0+(s.iyon-y0)*t]); }
+    for(let i=1;i<=30;i++){ const t=i/30; N.push([xu+(W-14-xu)*t, s.iyon+(s.yer-6-s.iyon)*t]); }
+  } else {
+    const bit = bant().f >= 2.4e9 ? s.bina - s.binaG/2 - 4
+              : bant().f >= 900e6 ? W*0.72 : W*0.80;
+    for(let i=0;i<=60;i++){
+      const t=i/60, x=s.kule + (bit-s.kule)*t;
+      N.push([x, y0 + (s.yer-34-y0)*t]);
+    }
+  }
+  return N;
+}
+
+function ciz(z){
+  if(W<10||H<10) return;
+  const dt = sonZ ? Math.min(0.05,(z-sonZ)/1000) : 0; sonZ = z;
+  faz = (faz + dt*0.22) % 1;
+  const s = S();
+  const g = ctx.createLinearGradient(0,0,0,s.yer);
+  g.addColorStop(0,'#0a1526'); g.addColorStop(1,'#080d16');
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,s.yer);
+  ctx.fillStyle='#080c14'; ctx.fillRect(0,s.yer,W,H-s.yer);
+
+  /* iyonküre */
+  const ak = bant().yol==='gok';
+  ctx.strokeStyle = ak ? 'rgba(255,192,97,.55)' : 'rgba(120,145,180,.16)';
+  ctx.lineWidth = ak ? 2 : 1; ctx.setLineDash([6,7]);
+  ctx.beginPath(); ctx.moveTo(0,s.iyon); ctx.lineTo(W,s.iyon); ctx.stroke(); ctx.setLineDash([]);
+  yz('İYONKÜRE', 14, s.iyon-9, ak?'rgba(255,192,97,.85)':'rgba(120,145,180,.35)', 10, 'left', 700, 1.5);
+
+  /* deniz */
+  ctx.fillStyle='rgba(40,90,150,.30)'; ctx.fillRect(s.deniz, s.yer, W-s.deniz, H-s.yer);
+  ctx.strokeStyle='rgba(120,170,230,.4)'; ctx.lineWidth=1.4;
+  ctx.beginPath(); ctx.moveTo(s.deniz,s.yer); ctx.lineTo(W,s.yer); ctx.stroke();
+  yz('DENİZ', W-14, s.yer+20, 'rgba(150,190,235,.55)', 10, 'right', 700, 1.5);
+
+  /* zemin */
+  ctx.strokeStyle='rgba(150,175,205,.45)'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(0,s.yer); ctx.lineTo(s.deniz,s.yer); ctx.stroke();
+
+  /* tepe */
+  ctx.fillStyle='rgba(90,110,140,.30)'; ctx.strokeStyle='rgba(150,175,205,.45)';
+  ctx.beginPath(); ctx.moveTo(s.tepeA,s.yer);
+  for(let x=s.tepeA; x<=s.tepeB; x+=3) ctx.lineTo(x, zeminY(x));
+  ctx.lineTo(s.tepeB,s.yer); ctx.closePath(); ctx.fill(); ctx.stroke();
+
+  /* bina */
+  yk(s.bina-s.binaG/2, s.yer-s.binaY, s.binaG, s.binaY, 3, 'rgba(90,110,140,.35)','rgba(150,175,205,.5)');
+  for(let i=0;i<4;i++) for(let j=0;j<2;j++){
+    ctx.fillStyle='rgba(180,205,235,.18)';
+    ctx.fillRect(s.bina-s.binaG/2+6+j*(s.binaG/2-4), s.yer-s.binaY+10+i*(s.binaY/4.6), 7, 9);
+  }
+
+  /* verici kulesi */
+  const ky = s.yer - s.kuleY;
+  ctx.strokeStyle='rgba(200,220,245,.7)'; ctx.lineWidth=2.4;
+  ctx.beginPath(); ctx.moveTo(s.kule, s.yer); ctx.lineTo(s.kule, ky); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(s.kule-13, s.yer); ctx.lineTo(s.kule, s.yer-H*0.075);
+  ctx.lineTo(s.kule+13, s.yer); ctx.stroke();
+  ctx.beginPath(); ctx.arc(s.kule, ky, 4, 0, 6.2832); ctx.fillStyle='rgba(200,220,245,.85)'; ctx.fill();
+
+  /* yağmur */
+  if(bant().yagmur){
+    ctx.strokeStyle='rgba(120,170,230,.35)'; ctx.lineWidth=1.2;
+    for(let i=0;i<44;i++){
+      const x=((i*137)%1000)/1000*W, y0=((i*311+faz*400)%1000)/1000*s.yer;
+      ctx.beginPath(); ctx.moveTo(x,y0); ctx.lineTo(x-3,y0+11); ctx.stroke();
+    }
+  }
+
+  /* dalga yolu */
+  const N = yolNoktalari();
+  ctx.strokeStyle='rgba(124,245,196,.28)'; ctx.lineWidth=2.4; ctx.lineJoin='round';
+  ctx.beginPath(); N.forEach((p,i)=> i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1])); ctx.stroke();
+
+  /* ilerleyen darbeler */
+  for(let d=0; d<3; d++){
+    const t = (faz + d/3) % 1;
+    const i = Math.min(N.length-1, Math.floor(t*(N.length-1)));
+    const p = N[i];
+    const gr = ctx.createRadialGradient(p[0],p[1],0,p[0],p[1],16);
+    gr.addColorStop(0,'rgba(124,245,196,.95)'); gr.addColorStop(1,'rgba(124,245,196,0)');
+    ctx.fillStyle=gr; ctx.beginPath(); ctx.arc(p[0],p[1],16,0,6.2832); ctx.fill();
+    ctx.fillStyle='#7cf5c4'; ctx.beginPath(); ctx.arc(p[0],p[1],4.5,0,6.2832); ctx.fill();
+  }
+
+  /* engel işareti */
+  if(bant().f >= 2.4e9){
+    const x = s.bina - s.binaG/2 - 4;
+    ctx.strokeStyle='#ef6a6a'; ctx.lineWidth=3; ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(x-9, s.yer-s.binaY*0.62-9); ctx.lineTo(x+9, s.yer-s.binaY*0.62+9);
+    ctx.moveTo(x+9, s.yer-s.binaY*0.62-9); ctx.lineTo(x-9, s.yer-s.binaY*0.62+9); ctx.stroke();
+    ctx.lineCap='butt';
+    yz('binayı geçemiyor', x, s.yer-s.binaY-14, '#ef6a6a', 11, 'center', 700);
+  }
+
+  /* suya iniş */
+  if(bant().su){
+    const x = W*0.86, dp = Math.min(H-s.yer-30, 42);
+    ctx.strokeStyle='rgba(124,245,196,.8)'; ctx.lineWidth=2.6;
+    ctx.setLineDash([5,5]);
+    ctx.beginPath(); ctx.moveTo(x,s.yer); ctx.lineTo(x,s.yer+dp); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle='#7cf5c4';
+    ctx.beginPath(); ctx.moveTo(x,s.yer+dp+7); ctx.lineTo(x-6,s.yer+dp-4);
+    ctx.lineTo(x+6,s.yer+dp-4); ctx.closePath(); ctx.fill();
+    const et = uzunluk(deri())+' derine iner', ew=gw(et,11,700,0)+16;
+    yk(Math.min(W-ew-8, x-ew/2), s.yer+dp+13, ew, 20, 6, 'rgba(10,20,34,.95)', 'rgba(124,245,196,.4)');
+    yz(et, Math.min(W-ew-8, x-ew/2)+ew/2, s.yer+dp+27, '#7cf5c4', 11, 'center', 700);
+  }
+
+  /* künye */
+  yz(bant().ad2.toLocaleUpperCase('tr-TR')+'  ·  '+fYaz(bant().f),
+     14, 26, 'rgba(154,171,194,.62)', 10.5, 'left', 700, 1.6);
+  const yolAd = bant().yol==='yer' ? 'yeryüzünü takip ediyor'
+              : bant().yol==='gok' ? 'iyonküreden sekiyor' : 'görüş hattında gidiyor';
+  yz(yolAd, W-14, 26, 'rgba(124,245,196,.7)', 10.5, 'right', 700, 1.2);
+}
+function kare(z){ ciz(z); requestAnimationFrame(kare); }
+
+function panoYaz(){
+  $('dL').textContent = uzunluk(lam());
+  $('aL').textContent = fYaz(bant().f);
+  $('dA').textContent = uzunluk(anten());
+  $('dS').textContent = uzunluk(deri());
+  $('dK').textContent = bant().ad2;
+  $('aK').textContent = bant().ar;
+  $('oK').textContent = bant().n;
+  $('oL').textContent = bant().yol==='yer'
+    ? 'Bu kadar uzun dalgalar yeryüzünün eğrisini takip edebilir.'
+    : (bant().yol==='gok' ? 'Bu boydaki dalgalar iyonküreden geri yansır.'
+                          : 'Bu kadar kısa dalgalar artık ışık gibi düz gider.');
+  $('oS').textContent = bant().su
+    ? 'Denizaltılarla haberleşmenin tek yolu bu banttır.'
+    : 'Bu derinlik bir denizaltıya ulaşmak için çok sığdır.';
+  BANT.forEach((x,i)=>$('b'+i).className = i===b ? 'on' : '');
+}
+
+const METIN = {
+1:{b:'Tayfın mahalleleri',
+   p:[`Bir şehirde her mahallenin kendi hâli vardır. Tayf da böyledir. Aynı mesajı başka
+       bir banttan gönderdiğinde her şey değişir.`,
+      `Yukarıdaki verici hep aynı yerde duruyor. Sadece bandı değiştiriyorsun ve dalganın
+       izlediği yol tamamen başkalaşıyor.`,
+      `En alçak bantta dalga <b>yeryüzüne yapışıp</b> ilerliyor, ufkun arkasına geçiyor ve
+       suyun içine giriyor. Denizaltılarla haberleşmenin tek yolu budur.`,
+      `Kısa dalgada ise yukarı çıkıp <b>gökten sekiyor</b> ve binlerce kilometre ötede yere
+       iniyor. Dünyanın öbür ucundaki radyo yayınlarının duyulmasının sebebi budur.`,
+      `Yukarı çıktıkça dalga ışığa benziyor. Düz gidiyor, ufku aşamıyor, tepeye ve binaya
+       takılıyor. Wi-Fi'nin duvarın arkasında zayıflamasının sebebi budur.`,
+      `Bir şey daha değişiyor: anten boyu. Anten, taşıdığı dalganın <b>dörtte biri</b>
+       kadardır. Yirmi kilohertzte anten kilometrelerce uzunlukta olmak zorundadır; yirmi
+       sekiz gigahertzte bir pirinç tanesi kadardır.`],
+   n:'Cep telefonunun içine anten sığmasının sebebi budur. Kullandığı dalga bir karıştan kısa olduğu için anteni de birkaç santimetreye iner.'},
+
+2:{b:'Üç yayılma biçimi ve bir anten kuralı',
+   p:[`Radyo dalgası üç ayrı yoldan yol alır ve hangisinin baskın olduğunu frekans belirler.`,
+      `<b>Yer dalgası</b> yüzeye tutunarak ilerler. Yalnızca çok uzun dalgalarda işe yarar;
+       frekans yükseldikçe yer tarafından hızla yutulur. AM radyonun gündüz menzili budur.`,
+      `<b>Gök dalgası</b> iyonküreden yansır. Üç ile otuz megahertz arasında çalışır. Tek
+       sekmede 3.000 ilâ 4.000 kilometre alınır, birkaç sekmede kıtalar aşılır. Otuz
+       megahertzin üstünde iyonküre artık yansıtmaz, dalga uzaya kaçar.`,
+      `<b>Görüş hattı</b> otuz megahertzin üstünde geçerlidir. Menzil ufka takılır ve
+       yükseklikle belirlenir:`,
+      `<div class="form">ufuk (km) ≈ 4,12 · (√h₁ + √h₂)   [yükseklikler metre]</div>`,
+      `Otuz metrelik bir kule ile elde tutulan bir telefon arasındaki ufuk mesafesi
+       <b>27,6 kilometredir</b>. Kuleleri yükseltmenin sebebi budur.`,
+      `Anten tarafında tek bir kural işi bitirir: anten, dalga boyunun dörtte biri kadar
+       olur. Yüz megahertzte anten 74,9 santimetre, 2,4 gigahertzte 3,12 santimetre,
+       28 gigahertzte 2,68 milimetre olur.`],
+   n:'Deniz suyuna girme derinliği frekansın kareköküyle ters orantılıdır. 20 kilohertzte 1,78 metre, 2,4 gigahertzte 5,14 milimetredir. Aradaki oran 346 kattır ve denizaltı vericilerinin neden dev antenlerle çalıştığını tek başına açıklar.'},
+
+3:{b:'Kayıp, derinlik ve bant seçimi',
+   p:[`Serbest uzay yol kaybı frekansın karesiyle büyür:`,
+      `<div class="form">FSPL (dB) = 32,45 + 20·log₁₀(f_MHz) + 20·log₁₀(d_km)</div>`,
+      `Bir kilometre mesafede yüz megahertzte kayıp 72,45 dB, yirmi sekiz gigahertzte
+       121,39 dB olur. Aradaki <b>48,94 dB</b> fark, aynı mesafeye ulaşmak için yaklaşık
+       <b>78 bin kat</b> daha fazla güç demektir. Milimetre dalganın hücre yarıçapının
+       yüzlerce metreye inmesinin sebebi budur.`,
+      `Buradaki incelik şudur: kayıp aslında antenden değil, <b>etkin açıklıktan</b> gelir.
+       Kazancı sabit bir antenin etkin alanı A<sub>e</sub> = Gλ²/4π ile küçülür. Aynı fiziksel
+       boyutta anten dizisi kullanılırsa kayıp geri kazanılabilir; milimetre dalgada devasa
+       anten dizilerinin kullanılmasının sebebi tam olarak budur.`,
+      `İletken ortamda derinlik ise frekansla ters kök ilişkisi kurar:`,
+      `<div class="form">δ = 1 ⁄ √(π f μ σ)</div>`,
+      `Deniz suyu için σ ≈ 4 S/m alındığında 20 kilohertzte δ = 1,78 metre, 2,4 gigahertzte
+       δ = 5,14 milimetre çıkar. Denizaltı haberleşmesinin çok alçak frekansa mahkûm olması
+       ve buna karşılık saniyede yalnızca birkaç bit taşıyabilmesi bu iki sonucun
+       birleşimidir: derinlik için düşük frekans gerekir, düşük frekansta ise bant
+       genişliği yoktur.`,
+      `Bant seçimi bu yüzden hep aynı üçgende kurulur: <b>menzil, kapasite ve anten
+       boyutu</b>. Üçünü birden en iyi yapan bir bant yoktur; sistem hangisini feda
+       edeceğine karar verir.`],
+   n:'İyonküre yansıması sabit değildir. Gündüz D katmanı alçak frekansları yutar, gece kaybolur ve AM radyo aniden yüzlerce kilometre öteden dinlenir hâle gelir. Kısa dalga operatörlerinin saate göre bant değiştirmesinin sebebi budur.'},
+};
+let katman=1;
+function metinYaz(){
+  const m=METIN[katman];
+  $('metin').innerHTML=`<h4>${m.b}</h4>`+
+    m.p.map(x=> x.startsWith('<div') ? x : `<p>${x}</p>`).join('')+
+    `<div class="not">${m.n}</div>`;
+}
+document.querySelectorAll('[data-l]').forEach(x=>x.onclick=()=>{
+  document.querySelectorAll('[data-l]').forEach(y=>y.classList.remove('on'));
+  x.classList.add('on'); katman=+x.dataset.l; metinYaz();
+});
+$('bant').innerHTML = BANT.map((x,i)=>`<button id="b${i}" data-b="${i}">${x.ad}</button>`).join('');
+document.querySelectorAll('[data-b]').forEach(x=>x.onclick=()=>{ b=+x.dataset.b; faz=0; panoYaz(); });
+
+if(!CanvasRenderingContext2D.prototype.roundRect){
+  CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,h,r){
+    this.moveTo(x+r,y); this.arcTo(x+w,y,x+w,y+h,r); this.arcTo(x+w,y+h,x,y+h,r);
+    this.arcTo(x,y+h,x,y,r); this.arcTo(x,y,x+w,y,r); this.closePath(); return this;};
+}
+addEventListener('resize', olcu);
+olcu(); metinYaz(); panoYaz();
+requestAnimationFrame(kare);
+</script>
+</body>
+</html>
