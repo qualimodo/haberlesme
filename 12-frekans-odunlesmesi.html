@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neden farklı frekans farklı iş yapar?</title>
+<meta name="description" content="Alçak frekans duvarı deler ama yavaştır; yüksek frekans hızlıdır ama duvara çarpar.">
+<meta property="og:site_name" content="101 Konuda Haberleşme">
+<meta property="og:locale" content="tr_TR">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Neden farklı frekans farklı iş yapar? · 101 Konuda Haberleşme">
+<meta property="og:description" content="Alçak frekans duvarı deler ama yavaştır; yüksek frekans hızlıdır ama duvara çarpar.">
+<meta property="og:url" content="https://qualimodo.github.io/haberlesme/12-frekans-odunlesmesi.html">
+<meta property="og:image" content="https://qualimodo.github.io/haberlesme/og-12.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Neden farklı frekans farklı iş yapar? · 101 Konuda Haberleşme">
+<meta name="twitter:description" content="Alçak frekans duvarı deler ama yavaştır; yüksek frekans hızlıdır ama duvara çarpar.">
+<meta name="twitter:image" content="https://qualimodo.github.io/haberlesme/og-12.png">
+<style>
+  :root{
+    --bg:#070a10; --panel:#0e131d; --panel2:#131b28; --line:#1e2736;
+    --ink:#e8eef7; --dim:#9aabc2; --dim2:#5d6d85; --acc:#7cf5c4;
+    --sar:#ffc061; --mor:#b79cf0; --mav:#5598e7; --kir:#ff8a8a;
+    --l1:#cde2fb; --l2:#86b6ef; --l3:#3987e5;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);line-height:1.6;padding-bottom:60px;
+    font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:960px;margin:0 auto;padding:0 22px}
+  header{background:radial-gradient(900px 300px at 16% -12%,rgba(42,120,214,.16),transparent 62%)}
+  header.wrap{padding-top:84px;padding-bottom:22px}
+  .kick{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);font-weight:700}
+  h1{font-size:38px;font-weight:700;letter-spacing:-.03em;margin:18px 0 13px;line-height:1.1}
+  header p{color:var(--dim);font-size:16px;max-width:680px}
+
+  .scene{background:var(--panel);border:1px solid var(--line);border-radius:16px;
+    margin-top:26px;padding:6px 6px 0}
+  canvas{display:block;width:100%;height:480px;border-radius:12px}
+  .knob{display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    padding:14px 16px 16px;border-top:1px solid var(--line);margin-top:6px}
+  .knob .et{font-size:13px;color:var(--dim);font-weight:600;white-space:nowrap}
+  .hiz{display:flex;gap:6px;flex-wrap:wrap}
+  .hiz button{font:inherit;font-size:12px;font-weight:600;color:var(--dim);background:var(--panel2);
+    border:1px solid var(--line);padding:7px 11px;border-radius:8px;cursor:pointer;transition:.15s;
+    white-space:nowrap}
+  .hiz button:hover{color:var(--ink);border-color:#33445f}
+  .hiz button.on{background:rgba(124,245,196,.12);border-color:rgba(124,245,196,.5);color:var(--acc)}
+
+  .skor{display:grid;grid-template-columns:repeat(auto-fit,minmax(206px,1fr));gap:12px;margin-top:14px}
+  .kart{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--kc);
+    border-radius:13px;padding:15px 17px}
+  .kart .b{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--kc);font-weight:700}
+  .kart .d{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:24px;font-weight:680;
+    margin:7px 0 2px;letter-spacing:-.02em}
+  .kart .a{font-size:12.5px;color:var(--dim2)}
+  .kart .o{font-size:13px;color:#c2cfe1;margin-top:9px;padding-top:9px;border-top:1px solid #1a2333}
+
+  h2{font-size:22px;font-weight:660;letter-spacing:-.02em;margin:46px 0 6px}
+  .lead{color:var(--dim);font-size:15px;margin-bottom:18px}
+  .parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(216px,1fr));gap:12px}
+  .part{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:17px;
+    border-top:3px solid var(--pc)}
+  .part h3{font-size:16px;font-weight:660;margin-bottom:8px;color:var(--pc)}
+  .part p{font-size:13.5px;color:#c0cddf;line-height:1.65;margin-bottom:8px}
+  .part p:last-child{margin-bottom:0}
+  .part b{color:#fff;font-weight:640}
+
+  .duvar{margin-top:34px;background:linear-gradient(150deg,#0f1724,#0b111b);
+    border:1px solid #223047;border-radius:16px;padding:26px 28px}
+  .duvar h3{font-size:19px;font-weight:660;letter-spacing:-.015em;margin-bottom:6px}
+  .duvar h3 span{color:var(--acc)}
+  .duvar > p{font-size:14.5px;color:#a9bbd2;margin-bottom:20px;max-width:660px}
+  .sat{display:flex;align-items:center;gap:14px;padding:11px 0;border-top:1px solid #172032}
+  .sat:first-of-type{border-top:none}
+  .sat .ad{font-size:14px;color:#c3d0e2;font-weight:600;width:158px;flex:none}
+  .sat .cub{flex:1;min-width:70px;height:9px;background:#141d2c;border-radius:5px;overflow:hidden}
+  .sat .cub i{display:block;height:100%;border-radius:5px;background:var(--sc)}
+  .sat .bo{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;color:var(--sc);
+    font-weight:650;width:78px;text-align:right;flex:none}
+  .sat .ne{font-size:13px;color:#8fa0b8;width:172px;flex:none}
+
+  .ikili{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+  .yol{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:18px 20px;
+    border-top:3px solid var(--yc)}
+  .yol .b{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--yc);font-weight:700}
+  .yol .d{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:30px;font-weight:680;
+    margin:9px 0 3px;letter-spacing:-.02em;color:var(--yc)}
+  .yol .a{font-size:13px;color:#a9bbd2;line-height:1.6}
+  .altnot{font-size:13px;color:var(--dim2);margin-top:14px;text-align:center;line-height:1.7}
+
+  .tabs{display:flex;gap:6px;margin:46px 0 16px}
+  .tabs button{flex:1;font:inherit;font-size:13px;font-weight:600;color:var(--dim);
+    background:var(--panel2);border:1px solid var(--line);padding:11px;border-radius:10px;
+    cursor:pointer;transition:.15s}
+  .tabs button:hover{color:var(--ink);border-color:#33445f}
+  .tabs button.on.t1{background:rgba(205,226,251,.13);border-color:rgba(205,226,251,.5);color:var(--l1)}
+  .tabs button.on.t2{background:rgba(134,182,239,.13);border-color:rgba(134,182,239,.5);color:var(--l2)}
+  .tabs button.on.t3{background:rgba(57,135,229,.17);border-color:rgba(57,135,229,.55);color:var(--l3)}
+  #metin{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px}
+  #metin h4{font-size:19px;font-weight:660;letter-spacing:-.015em;margin-bottom:12px}
+  #metin p{font-size:15.5px;color:#c8d5e6;line-height:1.75;margin-bottom:13px}
+  #metin p:last-child{margin-bottom:0}
+  #metin b{color:#fff;font-weight:640}
+  #metin .not{font-size:14px;color:var(--acc);border-left:2px solid var(--acc);
+    padding-left:14px;margin-top:16px;line-height:1.7}
+  #metin .form{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:15px;color:#dbe6f5;
+    background:var(--panel2);border:1px solid var(--line);border-radius:10px;
+    padding:12px 15px;margin:4px 0 14px;overflow-x:auto;white-space:nowrap}
+  footer{margin-top:38px;padding-top:20px;border-top:1px solid var(--line);
+    font-size:13px;color:var(--dim2);line-height:1.75}
+  @media (max-width:640px){
+    h1{font-size:27px} .wrap{padding:0 15px} header.wrap{padding-top:58px;padding-bottom:18px}
+    canvas{height:330px} .skor{grid-template-columns:1fr} .ikili{grid-template-columns:1fr}
+    .duvar{padding:20px 18px} .sat{flex-wrap:wrap} .sat .ad{width:100%}
+    .sat .ne{flex-basis:100%;order:4;width:auto} .sat .bo{margin-left:auto}
+  }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="kick">101 Konuda Haberleşme · Konu 12</div>
+  <h1>Neden farklı frekans farklı iş yapar?</h1>
+  <p>Alçak frekans duvarı deler ama yavaştır. Yüksek frekans hızlıdır ama duvara çarpar.
+     Mühendislik burada bir seçim yapmak zorunda kalır. Aşağıda on kilometreye on kilometrelik
+     bir şehir var; bandı sen seçiyorsun, kaç kule gerektiğini şehir sana gösteriyor.</p>
+</header>
+
+<main class="wrap">
+
+  <div class="scene">
+    <canvas id="cv"></canvas>
+    <div class="knob">
+      <span class="et">Bant</span>
+      <div class="hiz" id="bant"></div>
+    </div>
+  </div>
+
+  <div class="skor">
+    <div class="kart" style="--kc:var(--acc)">
+      <div class="b">Hücre yarıçapı</div>
+      <div class="d" id="dR">2,07 km</div>
+      <div class="a" id="aR">700 MHz</div>
+      <div class="o" id="oR">Frekans yükseldikçe bir kulenin ulaştığı mesafe kısalır.</div>
+    </div>
+    <div class="kart" style="--kc:var(--sar)">
+      <div class="b">Gereken kule</div>
+      <div class="d" id="dK">10</div>
+      <div class="a">100 kilometrekare için</div>
+      <div class="o" id="oK">Menzil yarıya inince aynı alan için dört kat kule gerekir.</div>
+    </div>
+    <div class="kart" style="--kc:var(--mav)">
+      <div class="b">Bir hücrenin hızı</div>
+      <div class="d" id="dH">50 Mb/s</div>
+      <div class="a" id="aH">10 MHz bant genişliği</div>
+      <div class="o" id="oH">Hız, kulenin gücünden değil, elindeki bant genişliğinden gelir.</div>
+    </div>
+    <div class="kart" style="--kc:var(--mor)">
+      <div class="b">Şehrin toplamı</div>
+      <div class="d" id="dT">500 Mb/s</div>
+      <div class="a" id="aT">bütün kuleler birlikte</div>
+      <div class="o" id="oT">Şehrin toplam kapasitesi kule sayısı ile bant genişliğinin çarpımıdır.</div>
+    </div>
+  </div>
+
+  <h2>Üç ayrı bedel</h2>
+  <p class="lead">Yukarı çıkmanın kazancı da bedeli de aynı anda büyür.</p>
+  <div class="parts">
+    <div class="part" style="--pc:var(--acc)">
+      <h3>Menzil kısalır</h3>
+      <p>Aynı güçle gönderilen dalga, frekans yükseldikçe daha yakında tükenir. Yedi yüz
+         megahertzte bir kule iki kilometreye ulaşır; yirmi sekiz gigahertzte üç yüz metrede
+         biter.</p>
+      <p><b>Alan yarıçapın karesiyle küçülür.</b> Yarıçap altıda bire inince aynı şehir için
+         kırk kat kule gerekir.</p>
+    </div>
+    <div class="part" style="--pc:var(--sar)">
+      <h3>Duvar geçilmez olur</h3>
+      <p>Bir beton duvar yedi yüz megahertzte gücün yaklaşık altıda beşini yutar. Aynı duvar
+         yirmi sekiz gigahertzte neredeyse hiçbir şey geçirmez.</p>
+      <p><b>Isı yalıtımlı camlar</b> alçak bantta bile ciddi engel çıkarır. Yeni binalarda
+         içeride çekimin düşük olmasının sebebi budur.</p>
+    </div>
+    <div class="part" style="--pc:var(--mav)">
+      <h3>Buna karşılık yer açılır</h3>
+      <p>Yukarıda boş bant genişliği vardır. Yedi yüz megahertzte bir operatöre on megahertz
+         düşer; yirmi sekiz gigahertzte dört yüz megahertzlik kanallar açılabilir.</p>
+      <p><b>Hız doğrudan bant genişliğinden gelir.</b> Kırk kat bant, kırk kat hız demektir.</p>
+    </div>
+  </div>
+
+  <div class="duvar">
+    <h3>Bir beton duvarın <span>bandına göre bedeli</span></h3>
+    <p>Duvar da kalınlık da malzeme de aynıdır. Değişen tek şey frekanstır. Çubuklar duvarın
+       yuttuğu gücü gösterir; uzun çubuk kötü haberdir.</p>
+    <div id="duvarlar"></div>
+    <p class="altnot">3GPP TR 38.901 bina içine girme kaybı formülleriyle hesaplanmıştır.</p>
+  </div>
+
+  <h2>Hızı iki katına çıkarmanın iki yolu</h2>
+  <p class="lead">Biri neredeyse bedavadır, diğeri imkânsıza yakındır.</p>
+  <div class="ikili">
+    <div class="yol" style="--yc:var(--acc)">
+      <div class="b">Bandı iki katına çıkar</div>
+      <div class="d">2,00 kat</div>
+      <div class="a">Bant genişliği iki katına çıkınca hız da tam iki katına çıkar. İlişki
+        doğrusaldır.</div>
+    </div>
+    <div class="yol" style="--yc:var(--kir)">
+      <div class="b">Gücü iki katına çıkar</div>
+      <div class="d">1,27 kat</div>
+      <div class="a">Gücü iki katına çıkarınca hız yalnızca yüzde yirmi yedi artar. İlişki
+        logaritmiktir.</div>
+    </div>
+  </div>
+  <p class="altnot">Shannon bağıntısıyla, sinyal gürültü oranı 10 dB alınarak hesaplanmıştır.
+    Hızı on katına çıkarmak için bandı on katına çıkarman yeter; aynı sonucu güçle almak
+    isteseydin gücü <b style="color:#ff8a8a">2,6 milyar katına</b> çıkarman gerekirdi.</p>
+
+  <div class="tabs">
+    <button class="t1 on" data-l="1">L1 · Herkes</button>
+    <button class="t2" data-l="2">L2 · Meraklı</button>
+    <button class="t3" data-l="3">L3 · Mühendis</button>
+  </div>
+  <div id="metin"></div>
+
+  <footer>
+    Hücre yarıçapları 3GPP TR 38.901 kentsel makro modeliyle, bütün bantlar için aynı güç ve
+    aynı eşik varsayılarak hesaplanmıştır. Duvar kayıpları aynı standardın malzeme
+    formüllerinden, kırınım kayıpları ITU-R P.526 yaklaşımından gelir. Spektral verim
+    hücre başına 5 bit/s/Hz alınmıştır. Bütün hesaplar <b>dogrula-12.py</b> içindedir.
+  </footer>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const K = 3 * Math.sqrt(3) / 2;          // altıgen alan katsayısı
+const SEHIR = 100;                        // km²
+const PLMAX = 140;                        // dB
+const SE = 5;                             // bit/s/Hz
+
+const BANT = [
+  { ad:'700 MHz',  f:0.7,  bw:10,  kim:'Kapsama bandı · 5G ve LTE' },
+  { ad:'1800 MHz', f:1.8,  bw:20,  kim:'Klasik LTE bandı' },
+  { ad:'3,5 GHz',  f:3.5,  bw:100, kim:'5G orta bant' },
+  { ad:'28 GHz',   f:28,   bw:400, kim:'Milimetre dalga' },
+];
+
+let i = 0;
+const b = () => BANT[i];
+
+// 3GPP TR 38.901 UMa NLOS: PL = 13,54 + 39,08·log10(d_m) + 20·log10(f_GHz)
+const yaricap = f => Math.pow(10, (PLMAX - 13.54 - 20 * Math.log10(f)) / 39.08);  // metre
+const hucreAlan = f => K * Math.pow(yaricap(f) / 1000, 2);                        // km²
+const kule = f => Math.ceil(SEHIR / hucreAlan(f));
+
+// 3GPP TR 38.901 bina içine girme kayıpları
+const MALZEME = [
+  { ad:'Beton duvar',        L:f => 5 + 4.0 * f,    ne:'iç duvar, kolon, döşeme' },
+  { ad:'Isı yalıtımlı cam',  L:f => 23 + 0.3 * f,   ne:'yeni binaların penceresi' },
+  { ad:'Ahşap kapı',         L:f => 4.85 + 0.12 * f, ne:'oda kapısı, hafif bölme' },
+  { ad:'Sıradan cam',        L:f => 2 + 0.2 * f,    ne:'eski tip tek cam' },
+];
+
+const nk = (x, d) => x.toLocaleString('tr-TR', { minimumFractionDigits:d, maximumFractionDigits:d });
+
+function mesafe(m){
+  return m >= 1000 ? nk(m / 1000, 2) + ' km' : nk(m, 0) + ' m';
+}
+function hiz(mbps){
+  if (mbps < 1000) return nk(mbps, 0) + ' Mb/s';
+  const g = mbps / 1000;
+  return nk(g, g >= 100 ? 0 : 1) + ' Gb/s';
+}
+
+/* ---------------------------------------------------------------- sahne */
+const cv = $('cv'), cx = cv.getContext('2d');
+let W = 0, H = 0;
+
+function boyut(){
+  const r = cv.getBoundingClientRect();
+  const o = window.devicePixelRatio || 1;
+  W = r.width; H = r.height;
+  cv.width = Math.round(W * o); cv.height = Math.round(H * o);
+  cx.setTransform(o, 0, 0, o, 0, 0);
+}
+
+function ciz(){
+  boyut();
+  cx.clearRect(0, 0, W, H);
+  cx.fillStyle = '#0a0f18';
+  cx.fillRect(0, 0, W, H);
+
+  const ustBar = 34, altBar = 30, pad = 16;
+  const yan = Math.min(W - 2 * pad, H - ustBar - altBar - 10);
+  const x0 = (W - yan) / 2, y0 = ustBar + (H - ustBar - altBar - yan) / 2;
+  const km = yan / 10;                       // piksel / kilometre
+  const Rkm = yaricap(b().f) / 1000;
+  const R = Rkm * km;                        // piksel
+
+  // şehir zemini
+  cx.fillStyle = '#0d1421';
+  cx.fillRect(x0, y0, yan, yan);
+
+  // sokak dokusu
+  cx.strokeStyle = 'rgba(120,150,190,.055)';
+  cx.lineWidth = 1;
+  for (let g = 1; g < 20; g++){
+    const t = x0 + yan * g / 20;
+    cx.beginPath(); cx.moveTo(t, y0); cx.lineTo(t, y0 + yan); cx.stroke();
+    const u = y0 + yan * g / 20;
+    cx.beginPath(); cx.moveTo(x0, u); cx.lineTo(x0 + yan, u); cx.stroke();
+  }
+
+  // petek
+  cx.save();
+  cx.beginPath(); cx.rect(x0, y0, yan, yan); cx.clip();
+
+  const dx = 1.5 * R, dy = Math.sqrt(3) * R;
+  const sut = Math.ceil(yan / dx) + 2, sir = Math.ceil(yan / dy) + 2;
+  const ince = R < 14;
+  cx.lineWidth = ince ? 0.6 : 1.15;
+  cx.strokeStyle = 'rgba(124,245,196,' + (ince ? .34 : .5) + ')';
+  cx.fillStyle   = 'rgba(124,245,196,.045)';
+
+  const merkez = [];
+  for (let c = -1; c <= sut; c++){
+    for (let r = -1; r <= sir; r++){
+      const mx = x0 + R + dx * c;
+      const my = y0 + dy * (r + 0.5) + (c & 1 ? dy / 2 : 0);
+      if (mx < x0 - R || mx > x0 + yan + R) continue;
+      if (my < y0 - dy || my > y0 + yan + dy) continue;
+      merkez.push([mx, my]);
+      cx.beginPath();
+      for (let k = 0; k < 6; k++){
+        const a = Math.PI / 3 * k;
+        const px = mx + R * Math.cos(a), py = my + R * Math.sin(a);
+        k ? cx.lineTo(px, py) : cx.moveTo(px, py);
+      }
+      cx.closePath(); cx.fill(); cx.stroke();
+    }
+  }
+
+  // kuleler
+  const nokta = ince ? 1.5 : 2.8;
+  for (const [mx, my] of merkez){
+    if (!ince){
+      const g = cx.createRadialGradient(mx, my, 0, mx, my, R * .55);
+      g.addColorStop(0, 'rgba(124,245,196,.30)');
+      g.addColorStop(1, 'rgba(124,245,196,0)');
+      cx.fillStyle = g;
+      cx.beginPath(); cx.arc(mx, my, R * .55, 0, 7); cx.fill();
+    }
+    cx.fillStyle = '#7cf5c4';
+    cx.beginPath(); cx.arc(mx, my, nokta, 0, 7); cx.fill();
+  }
+
+  // 700 MHz hücresinin ölçüsü, karşılaştırma için
+  if (i > 0){
+    const R0 = yaricap(BANT[0].f) / 1000 * km;
+    const mx = x0 + yan / 2, my = y0 + yan / 2;
+    cx.setLineDash([6, 5]); cx.lineWidth = 1.6;
+    cx.strokeStyle = 'rgba(255,192,97,.85)';
+    cx.beginPath();
+    for (let k = 0; k < 6; k++){
+      const a = Math.PI / 3 * k;
+      const px = mx + R0 * Math.cos(a), py = my + R0 * Math.sin(a);
+      k ? cx.lineTo(px, py) : cx.moveTo(px, py);
+    }
+    cx.closePath(); cx.stroke(); cx.setLineDash([]);
+    cx.font = '600 11px ui-monospace,Menlo,Consolas,monospace';
+    const et = '700 MHz HÜCRESİ';
+    const eg = cx.measureText(et).width, ey = my - R0 * Math.sin(Math.PI / 3) - 7;
+    cx.fillStyle = 'rgba(10,15,24,.92)';
+    cx.fillRect(mx - eg / 2 - 7, ey - 13, eg + 14, 17);
+    cx.fillStyle = '#ffc061'; cx.textAlign = 'center'; cx.textBaseline = 'bottom';
+    cx.fillText(et, mx, ey);
+  }
+  cx.restore();
+
+  // şehir çerçevesi
+  cx.strokeStyle = 'rgba(150,180,220,.28)'; cx.lineWidth = 1;
+  cx.strokeRect(x0 + .5, y0 + .5, yan - 1, yan - 1);
+
+  // üst etiketler
+  cx.font = '600 12px ui-monospace,Menlo,Consolas,monospace';
+  cx.fillStyle = '#9aabc2'; cx.textAlign = 'left'; cx.textBaseline = 'middle';
+  cx.fillText(b().ad.toUpperCase() + '  ·  ' + b().kim.toUpperCase(), pad, 18);
+  cx.textAlign = 'right'; cx.fillStyle = '#7cf5c4';
+  cx.fillText('HÜCRE YARIÇAPI ' + mesafe(yaricap(b().f)).toUpperCase(), W - pad, 18);
+
+  // yan paneller: bedel ve kazanç
+  const bosluk = (W - yan) / 2;
+  if (bosluk > 132){
+    const n = kule(b().f), toplam = b().bw * SE * n;
+    const yM = y0 + yan / 2;
+    yanPanel(x0 - 22, yM, 'right', '#ffc061', nk(n, 0),
+             'KULE', '100 km² için', 'BEDEL');
+    yanPanel(x0 + yan + 22, yM, 'left', '#b79cf0', hiz(toplam),
+             'ŞEHRİN TOPLAM HIZI', 'bütün kuleler birlikte', 'KAZANÇ');
+  }
+
+  // ölçek çubuğu
+  const oy = y0 + yan + 17;
+  cx.strokeStyle = '#5d6d85'; cx.lineWidth = 1;
+  cx.beginPath();
+  cx.moveTo(x0, oy - 4); cx.lineTo(x0, oy + 4);
+  cx.moveTo(x0, oy); cx.lineTo(x0 + 2 * km, oy);
+  cx.moveTo(x0 + 2 * km, oy - 4); cx.lineTo(x0 + 2 * km, oy + 4);
+  cx.stroke();
+  cx.font = '600 11px ui-monospace,Menlo,Consolas,monospace';
+  cx.fillStyle = '#5d6d85'; cx.textAlign = 'left'; cx.textBaseline = 'middle';
+  cx.fillText('2 km', x0 + 2 * km + 8, oy);
+  cx.textAlign = 'right';
+  cx.fillText('ŞEHİR 10 × 10 KM', x0 + yan, oy);
+}
+
+function yanPanel(x, y, hiza, renk, buyuk, etiket, alt, ust){
+  cx.textAlign = hiza; cx.textBaseline = 'alphabetic';
+  cx.font = '700 10px ui-monospace,Menlo,Consolas,monospace';
+  cx.fillStyle = '#5d6d85';
+  cx.fillText(ust, x, y - 40);
+  cx.font = '700 34px ui-monospace,Menlo,Consolas,monospace';
+  cx.fillStyle = renk;
+  cx.fillText(buyuk, x, y - 6);
+  cx.font = '700 11px ui-monospace,Menlo,Consolas,monospace';
+  cx.fillStyle = '#9aabc2';
+  cx.fillText(etiket, x, y + 15);
+  cx.font = '400 11px system-ui,-apple-system,sans-serif';
+  cx.fillStyle = '#5d6d85';
+  cx.fillText(alt, x, y + 33);
+}
+
+/* ---------------------------------------------------------------- kartlar */
+function kartlar(){
+  const f = b().f, R = yaricap(f), n = kule(f);
+  const hucreHiz = b().bw * SE;
+  const toplam = hucreHiz * n;
+
+  $('dR').textContent = mesafe(R);
+  $('aR').textContent = b().ad;
+  $('dK').textContent = nk(n, 0);
+  $('dH').textContent = hiz(hucreHiz);
+  $('aH').textContent = nk(b().bw, 0) + ' MHz bant genişliği';
+  $('dT').textContent = hiz(toplam);
+
+  const ilk = BANT[0];
+  const nk0 = kule(ilk.f), t0 = ilk.bw * SE * nk0;
+  $('oR').textContent = i === 0
+    ? 'Listedeki en uzun menzil budur. Yukarı çıktıkça kısalır.'
+    : 'Yedi yüz megahertze göre menzil ' + nk(yaricap(ilk.f) / R, 1) + ' kat kısadır.';
+  $('oK').textContent = i === 0
+    ? 'Şehri kaplamak için gereken en az kule sayısı budur.'
+    : 'Yedi yüz megahertze göre ' + nk(n / nk0, 1) + ' kat daha fazla kule gerekir.';
+  const kisi = hucreHiz / 100;
+  $('oH').textContent = 'Aynı anda yüz kişi bağlıysa kişi başına ' +
+    nk(kisi, kisi >= 10 ? 0 : 1) + ' Mb/s düşer.';
+  $('oT').textContent = i === 0
+    ? 'Bütün şehrin aynı anda paylaştığı hız budur.'
+    : 'Yedi yüz megahertze göre şehrin kapasitesi ' + nk(toplam / t0, 0) + ' kat büyüktür.';
+}
+
+/* ---------------------------------------------------------------- duvar */
+function duvarlar(){
+  const f = b().f;
+  $('duvarlar').innerHTML = MALZEME.map(m => {
+    const L = m.L(f);
+    const oran = Math.min(1, L / 120);
+    const renk = L > 60 ? '#ff8a8a' : L > 20 ? '#ffc061' : '#7cf5c4';
+    return '<div class="sat" style="--sc:' + renk + '">' +
+      '<span class="ad">' + m.ad + '</span>' +
+      '<span class="cub"><i style="width:' + (oran * 100).toFixed(1) + '%"></i></span>' +
+      '<span class="bo">' + nk(L, 1) + ' dB</span>' +
+      '<span class="ne">' + m.ne + '</span></div>';
+  }).join('');
+}
+
+/* ---------------------------------------------------------------- metin */
+const MET = {
+1:{b:'Kalın ses duvarı geçer, ince ses geçemez',
+   p:[`Üst kattaki komşu müzik açtığında sözleri duyulmaz ama basın gümbürtüsü duyulur.
+       Duvar ikisini eşit tutmaz: kalın sesi geçirir, ince sesi tutar.`,
+      `Radyo dalgasında da durum aynıdır. <b>Alçak frekans</b> duvarı deler, köşeyi döner,
+       ufkun arkasına dolanır. <b>Yüksek frekans</b> düz gider ve önüne çıkan her şeye takılır.`,
+      `Öyleyse neden herkes aşağıda oturmuyor? Çünkü aşağıda yer yoktur. Bir operatöre yedi yüz
+       megahertzte on megahertzlik ince bir dilim düşer. Yirmi sekiz gigahertzte ise dört yüz
+       megahertzlik kanallar açılabilir.`,
+      `Hız da doğrudan bu dilimin genişliğinden gelir. Bant kırk kat genişse hız da kırk kat
+       yüksek olur.`,
+      `Yukarıdaki şehre bak. Yedi yüz megahertzte on kule bütün şehri kaplar, ama herkes aynı
+       ince dilimi paylaşır. Yirmi sekiz gigahertzte petek incelir ve <b>394 kule</b> gerekir;
+       buna karşılık şehrin toplam kapasitesi 1.576 katına çıkar.`,
+      `Mühendislik burada bir seçim yapar. Aşağıda menzil vardır ama yer yoktur; yukarıda yer
+       vardır ama menzil yoktur.`],
+   n:'Cep telefonun aslında ikisini birden kullanır. Kapsamayı alçak banttan, hızı yüksek banttan alır. Şehir merkezinde hızlı çekmesinin, kırsalda ise yalnızca çekmesinin sebebi budur.'},
+
+2:{b:'Menzil, kule sayısı ve bant genişliği',
+   p:[`Frekans yükseldikçe aynı güçle gidilen mesafe kısalır. Kentsel bir ortamda bu ilişki
+       kabaca frekansın kareköküyle terstir.`,
+      `<div class="form">yarıçap ∝ f ⁻⁰˙⁵¹</div>`,
+      `Yedi yüz megahertzte bir kule <b>2,07 kilometreye</b> ulaşır. Yirmi sekiz gigahertzte
+       aynı kule <b>313 metrede</b> biter. Menzil oranı 6,6 kattır.`,
+      `Kapsanan alan yarıçapın karesiyle büyüdüğü için kule sayısı çok daha hızlı artar. Yüz
+       kilometrekarelik bir şehir için yedi yüz megahertzte <b>10 kule</b>, yirmi sekiz
+       gigahertzte <b>394 kule</b> gerekir. Fark 39,4 kattır.`,
+      `Kazanç tarafında bant genişliği vardır. Şehrin toplam kapasitesi, kule sayısı ile bant
+       genişliğinin çarpımıdır:`,
+      `<div class="form">39,4 kat kule × 40 kat bant = 1.576 kat kapasite</div>`,
+      `Kırk kat daha fazla kule dikersin, bin beş yüz kat daha fazla veri taşırsın. Beş G
+       şebekelerinin yukarı çıkmasının sebebi tam olarak budur.`],
+   n:'Duvar tarafında fark daha da serttir. Bir beton duvar 700 megahertzte gücün yüzde 83\'ünü yutar; 28 gigahertzte pratikte hiçbir şey geçirmez. Yeni binaların ısı yalıtımlı camları ise alçak bantta bile 23 desibel tutar.'},
+
+3:{b:'Model, varsayımlar ve gerçek şebeke',
+   p:[`Yarıçaplar 3GPP TR 38.901 kentsel makro NLOS yol kaybı modelinden gelir. Model 0,5 ile
+       100 gigahertz arasında geçerlidir:`,
+      `<div class="form">PL = 13,54 + 39,08·log₁₀(d) + 20·log₁₀(f) − 0,6·(h − 1,5)</div>`,
+      `Burada d metre, f gigahertz cinsindendir. Bütün bantlar için aynı bağlantı bütçesi
+       (140 dB), aynı verici gücü ve aynı alıcı eşiği varsayılmıştır. Mesafe üssü 3,908
+       olduğu için yarıçap frekansla f<sup>−0,512</sup> gibi ölçeklenir; serbest uzayda bu üs
+       −1 olurdu.`,
+      `Kapasite tarafında Shannon bağıntısı işler:`,
+      `<div class="form">C = B · log₂(1 + SNR)</div>`,
+      `Bant genişliği çarpan olarak girer, sinyal gürültü oranı ise logaritmanın içinde kalır.
+       Sonuç şudur: sinyal gürültü oranı 10 dB iken gücü iki katına çıkarmak hızı yalnızca
+       <b>1,27 kat</b> artırır, bandı iki katına çıkarmak ise <b>2,00 kat</b> artırır.`,
+      `Hızı on katına çıkarmayı yalnızca güçle denersen gereken sinyal gürültü oranı 104,14
+       dB'ye tırmanır. Böyle bir oran <b>2,6 milyar kat</b> güç demektir ve fiziksel olarak
+       anlamsızdır.`,
+      `Modelin sınırları da vardır. Gerçek şebekede yüksek bant iki yönden telafi edilir:
+       aynı fiziksel açıklığa dalga boyu küçüldükçe çok daha fazla anten öğesi sığar ve
+       hüzme oluşturma kazancı kaybın bir kısmını geri verir. Öte yandan milimetre dalga
+       bina blokajından bu modelin öngördüğünden çok daha fazla etkilenir; sahadaki hücre
+       yarıçapları çoğu zaman 100 ile 250 metre arasında kalır.`],
+   n:'Spektral verim hücre başına 5 bit/s/Hz alınmıştır. IMT-2020 yoğun kentsel hedefi 7,8 bit/s/Hz olduğu için buradaki değer temkinli tarafta durur. Bant genişlikleri Türkiye\'deki tipik tahsislere göredir; 28 gigahertz Türkiye\'de henüz tahsis edilmemiştir.'},
+};
+
+/* ---------------------------------------------------------------- kur */
+$('bant').innerHTML = BANT.map((x, k) => `<button data-b="${k}">${x.ad}</button>`).join('');
+
+function isaretle(){
+  [...$('bant').children].forEach((el, k) => el.classList.toggle('on', k === i));
+}
+
+function guncelle(){ isaretle(); ciz(); kartlar(); duvarlar(); }
+
+$('bant').addEventListener('click', e => {
+  const t = e.target.closest('button'); if (!t) return;
+  i = +t.dataset.b; guncelle();
+});
+
+let seviye = 1;
+function metinCiz(){
+  const m = MET[seviye];
+  $('metin').innerHTML = '<h4>' + m.b + '</h4>' + m.p.map(x => '<p>' + x + '</p>').join('') +
+    '<div class="not">' + m.n + '</div>';
+}
+document.querySelectorAll('.tabs button').forEach(t => t.addEventListener('click', () => {
+  document.querySelectorAll('.tabs button').forEach(u => u.classList.remove('on'));
+  t.classList.add('on'); seviye = +t.dataset.l; metinCiz();
+}));
+
+window.addEventListener('resize', ciz);
+guncelle();
+metinCiz();
+</script>
+</body>
+</html>
